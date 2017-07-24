@@ -1,12 +1,11 @@
 package com.begin.Sensors;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class Temp {
     private String  temp;
-
-    public Temp(String temp) {
-        this.temp = temp;
-    }
-
+    public Temp() {}
+    
     public String getTemp() {
         return temp;
     }
