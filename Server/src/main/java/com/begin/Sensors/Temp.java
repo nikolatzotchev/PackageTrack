@@ -1,14 +1,31 @@
 package com.begin.Sensors;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 
+@Entity
 public class Temp {
-    private String  temp;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String temp;
 
     public Temp() {}
 
-    public String getTemp() {
+    public Temp(String temp) {
+        this.temp = temp;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTemp() {
         return temp;
     }
 
