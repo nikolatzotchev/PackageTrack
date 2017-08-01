@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TempRepository extends CrudRepository<Temp, Long> {
+public interface SensorRepository extends CrudRepository<Sensors, Long> {
 
 }

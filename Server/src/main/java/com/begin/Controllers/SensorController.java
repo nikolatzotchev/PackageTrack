@@ -1,7 +1,7 @@
 package com.begin.controllers;
 
-import com.begin.sensors.Temp;
-import com.begin.sensors.TempRepository;
+import com.begin.sensors.Sensors;
+import com.begin.sensors.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 public class SensorController {
 
     @Autowired
-    private TempRepository tmprepo;
+    private SensorRepository sensorRepository;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/temp")
-    public void addTemp(@RequestBody Temp temp) {
-        this.tmprepo.save(temp);
+    @RequestMapping(method = RequestMethod.POST, path = "/sensors")
+    public void addTemp(@RequestBody Sensors sensor) {
+        this.sensorRepository.save(sensor);
+        System.out.println("entry");
     }
-
 }
