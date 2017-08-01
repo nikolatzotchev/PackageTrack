@@ -1,19 +1,20 @@
-package com.begin.Controllers;
+package com.begin.controllers;
 
-import com.begin.Sensors.Temp;
-import com.begin.Services.TempService;
+import com.begin.sensors.Temp;
+import com.begin.sensors.TempRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/data")
 public class SensorController {
 
-    private TempService tempService;
+    @Autowired
+    private TempRepository tmprepo;
 
     @RequestMapping(method = RequestMethod.POST, path = "/temp")
     public void addTemp(@RequestBody Temp temp) {
-        this.tempService.addTemp(temp);
-        temp.displayTemp();
+        this.tmprepo.save(temp);
     }
 
 }

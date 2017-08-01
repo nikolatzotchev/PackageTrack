@@ -1,15 +1,14 @@
-package com.begin.Services;
+package com.begin.services;
 
-import com.begin.Sensors.Temp;
-import com.begin.Sensors.TempRepository;
+import com.begin.sensors.Temp;
+import com.begin.sensors.TempRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 public class TempService {
     @Autowired
     private TempRepository tmprepo;
 
     public void addTemp(Temp tmp){
-        tmprepo.save(new Temp(tmp.getTemp()));
+        tmprepo.save(tmp);
     }
 }

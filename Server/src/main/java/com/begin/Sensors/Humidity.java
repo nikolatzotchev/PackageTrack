@@ -1,4 +1,4 @@
-package com.begin.Sensors;
+package com.begin.sensors;
 
 public class Humidity {
     private String procent;

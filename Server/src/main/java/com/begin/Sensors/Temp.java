@@ -1,4 +1,4 @@
-package com.begin.Sensors;
+package com.begin.sensors;
 
 import javax.persistence.Id;
 import javax.persistence.Entity;

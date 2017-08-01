@@ -1,4 +1,4 @@
-package com.begin.Sensors;
+package com.begin.sensors;
 
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
