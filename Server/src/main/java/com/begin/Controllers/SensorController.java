@@ -15,6 +15,5 @@ public class SensorController {
     @RequestMapping(method = RequestMethod.POST, path = "/sensors")
     public void addTemp(@RequestBody Sensors sensor) {
         this.sensorRepository.save(sensor);
-        System.out.println("entry");
     }
 }
