@@ -17,9 +17,12 @@ public class Sensors {
 
     public Sensors(){}
 
-    public Sensors(Double temp, Double humid) {
+    public Sensors(Long id, Double temp, Double humid, Double latitude, Double longitude) {
+        this.id = id;
         this.temp = temp;
         this.humid = humid;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Long getId() {
