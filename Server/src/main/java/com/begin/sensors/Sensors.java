@@ -10,6 +10,7 @@ public class Sensors {
     @GeneratedValue
     private Long id;
 
+    private Long packageNumber;
     private Double temp;
     private Double humid;
     private Double latitude;
@@ -64,5 +65,13 @@ public class Sensors {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Long getPackageNumber() {
+        return packageNumber;
+    }
+
+    public void setPackageNumber(Long packageNumber) {
+        this.packageNumber = packageNumber;
     }
 }

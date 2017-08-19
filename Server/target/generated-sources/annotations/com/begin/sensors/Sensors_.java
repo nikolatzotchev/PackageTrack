@@ -12,6 +12,7 @@ public abstract class Sensors_ {
 	public static volatile SingularAttribute<Sensors, Double> latitude;
 	public static volatile SingularAttribute<Sensors, Long> id;
 	public static volatile SingularAttribute<Sensors, Double> humid;
+	public static volatile SingularAttribute<Sensors, Long> packageNumber;
 	public static volatile SingularAttribute<Sensors, Double> longitude;
 
 }
