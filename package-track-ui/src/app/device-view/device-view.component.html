@@ -1,0 +1,13 @@
+<p-gmap
+    [options]="options"
+    [overlays]="overlays"
+    [style]="{'width':'100%','height':'320px'}"
+    (onMapReady)="setGMap($event)"
+    (onOverlayClick)="handleOverlayClick($event)"
+>
+</p-gmap>
+
+<h1>Device Information</h1>
+<pre>
+{{deviceInfo}}
+</pre>
