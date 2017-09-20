@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Iterator;
 
 @RestController
-@RequestMapping("/data")
+@RequestMapping("/api/data")
 public class SensorController {
 
     private Long packageNumber;
