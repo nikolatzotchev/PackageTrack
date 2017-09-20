@@ -1,53 +1,8 @@
 {
-    "Device": {
-        "Serial Number": "54146d92-8b0d-410f-92c9-5069259f3a09",
-        "Battery Level": 80,
-        "Current Time": 1502696702
-    },
     "Path": [
-        {"lat": 34.890257, "lng": 35.707417},
-        {"lat": 38.890257, "lng": 30.707417},
-        {"lat": 42.65917, "lng": 23.31610}
-    ],
-    "Current": {
-        "Location": {
-            "Latitude": 42.65917,
-            "Longitude": 23.31610
-        },
-        "Temperature": {
-            "SensorValue": 23.0,
-            "Sensor Units": "C"
-        },
-        "Barometer": {
-            "Sensor Value": 300
-        }
-    },
-    "Incidends": [
-        {
-            "Location": {
-                "Latitude": 38.890257,
-                "Longitude": 30.707417
-            },
-            "Temperature": {
-                "SensorValue": 80.0,
-                "Sensor Units": "C"
-            },
-            "Barometer": {
-                "Sensor Value": 300
-            }
-        },
-        {
-            "Location": {
-                "Latitude": 34.890257,
-                "Longitude": 35.707417
-            },
-            "Temperature": {
-                "Sensor Value": -10.0,
-                "Sensor Units": "C"
-            },
-            "Barometer": {
-                "Sensor Value": 300
-            }
-        }
+      {
+        "lng": 12,
+        "lat": 23
+      }
     ]
 }

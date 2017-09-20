@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends --no-install-suggests gnupg wget && \
     wget http://deb.nodesource.com/setup_8.x -O /tmp/node_setup.sh && \
     bash /tmp/node_setup.sh && \
-    apt-get install nodejs && \
+    apt-get -y install nodejs && \
     echo "^^^^^^^^ Building the application..." \
     cd /tmp && \
     npm install && \

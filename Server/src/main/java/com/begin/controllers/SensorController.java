@@ -21,7 +21,7 @@ public class SensorController {
     @RequestMapping(method = RequestMethod.POST, path = "/newpackage")
     public String addPackage(@RequestParam Long number) {
         packageNumber = number;
-        return "New Path added.";
+        return "New Position added.";
     }
     @RequestMapping(method = RequestMethod.POST, path = "/sensors")
     public void addTemp(@RequestBody Sensors sensor) {
@@ -56,10 +56,10 @@ public class SensorController {
             }
         }
         if(arrayPath.length() == 0) {
-            return "No such Path.";
+            return "No such Position.";
         }
         try {
-            obj.put("Path", arrayPath);
+            obj.put("Position", arrayPath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
