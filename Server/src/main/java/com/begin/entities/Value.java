@@ -3,6 +3,7 @@ package com.begin.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@Entity
 public class Value {
 
     public enum Metric {
@@ -20,7 +21,7 @@ public class Value {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Enumerated( value = EnumType.ORDINAL)

@@ -1,13 +1,13 @@
 package com.begin.entities;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
+@Entity
 public class Position {
     @Id
     @GeneratedValue
@@ -27,7 +27,7 @@ public class Position {
 
     // optional, only if we have incident at the current position
     @OneToMany
-    private Value[] incidentValues;
+    private List<Value> incidentValues;
 
     public Long getId() {
         return id;
@@ -69,38 +69,33 @@ public class Position {
         this.trip = trip;
     }
 
-    public Value[] getIncidentValues() {
+    public List<Value> getIncidentValues() {
         return incidentValues;
     }
 
-    public void setIncidentValues(Value[] incidentValues) {
+    public void setIncidentValues(List<Value> incidentValues) {
         this.incidentValues = incidentValues;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Position position = (Position) o;
-
-        if (latitude != position.latitude) return false;
-        if (longitude != position.longitude) return false;
-        if (id != null ? !id.equals(position.id) : position.id != null) return false;
-        if (timestamp != null ? !timestamp.equals(position.timestamp) : position.timestamp != null) return false;
-        if (trip != null ? !trip.equals(position.trip) : position.trip != null) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(incidentValues, position.incidentValues);
+        return id == position.id &&
+                latitude == position.latitude &&
+                longitude == position.longitude &&
+                Objects.equals(timestamp, position.timestamp) &&
+                Objects.equals(trip, position.trip) &&
+                Objects.equals(incidentValues, position.incidentValues);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (int) (latitude ^ (latitude >>> 32));
-        result = 31 * result + (int) (longitude ^ (longitude >>> 32));
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
-        result = 31 * result + (trip != null ? trip.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(incidentValues);
-        return result;
+        return Objects.hash(id, latitude, longitude, timestamp, trip, incidentValues);
     }
 }

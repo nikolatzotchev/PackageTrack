@@ -1,10 +1,12 @@
 package com.begin.entities;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.time.ZonedDateTime;
 
+@Entity
 public class Trip {
     @Id
     @GeneratedValue
