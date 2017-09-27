@@ -17,6 +17,7 @@ public class Value {
         Metric(String unit) {
             this.unit = unit;
         }
+
     }
 
     @Id
@@ -30,4 +31,29 @@ public class Value {
     @NotNull
     private double value;
 
+    private String unit;
+
+    public Metric getMetric() {
+        return metric;
+    }
+
+    public void setMetric(Metric metric) {
+        this.metric = metric;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit() {
+        this.unit = getMetric().unit;
+    }
 }

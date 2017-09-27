@@ -38,10 +38,11 @@ public class TripController {
     }
 
     @PostMapping
-    public Trip createTrip (String desctiption, Long deviceId) {
+    public Trip createTrip (@RequestParam(required = false) String description,
+                            @RequestParam Long deviceId) {
         Device device = deviceRepository.findOne(deviceId);
         Trip newTrip = new Trip();
-        newTrip.setDescription(desctiption);
+        newTrip.setDescription(description);
         newTrip.setDevice(device);
         //trip is not started
         return tripRepository.save(newTrip);
@@ -63,6 +64,6 @@ public class TripController {
 
     @PostMapping(path = "/{id}/getPositions")
     public List<Position> getPostitions(@PathVariable Long id) {
-        return positionRepository.findByTripOrderByTimeStamp(getTrip(id));
+        return positionRepository.findByTripOrderByTimestamp(getTrip(id));
     }
 }
