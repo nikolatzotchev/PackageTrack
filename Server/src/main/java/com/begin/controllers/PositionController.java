@@ -9,6 +9,7 @@ import com.begin.repositories.ValueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -30,9 +31,16 @@ public class PositionController {
     }
 
     @PostMapping
-    public Position addPostion(@RequestBody Position position){//,@RequestBody List<Value> values) {
+    public Position addPostion(@RequestBody Position position) {
         Position newPosition = new Position();
         newPosition.setLatitude(position.getLatitude());
+        newPosition.setLongitude(position.getLongitude());
+        newPosition.setTimestamp(ZonedDateTime.now());
         return newPosition;
+    }
+
+    public List<Value> checkIfIncident(List<Value> values) {
+        //FIXME implement Ranges for valid values
+        return null;
     }
 }

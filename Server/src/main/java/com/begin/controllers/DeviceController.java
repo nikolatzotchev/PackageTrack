@@ -1,5 +1,6 @@
 package com.begin.controllers;
 
+import com.begin.ResourceNotFoundException;
 import com.begin.entities.Device;
 import com.begin.entities.Trip;
 import com.begin.repositories.DeviceRepository;
@@ -37,24 +38,38 @@ public class DeviceController {
     }
 
     @GetMapping(path = "/{id}/trips")
-    public List<Trip> allTrips(@PathVariable Long deviceId) {
-        Device device = getDivice(deviceId);
+    public List<Trip> allTrips(@PathVariable Long deviceId) throws ResourceNotFoundException {
+        Device device = getDevice(deviceId);
         return tripRepository.findByDevice(device);
     }
 
     @GetMapping(path = "/{id}/lastEndedTrip")
-    public Trip lastTrip(@PathVariable Long deviceId) {
-        Device device = getDivice(deviceId);
+    public Trip lastTrip(@PathVariable Long deviceId) throws ResourceNotFoundException {
+        Device device = getDevice(deviceId);
         return tripRepository.findByDeviceOrderByEndTime(device);
     }
 
     @GetMapping(path = "/{id}/trip")
-    public Trip currentTripe(@PathVariable Long deviceId) {
-        Device device = getDivice(deviceId);
+    public Trip currentTripe(@PathVariable Long deviceId) throws ResourceNotFoundException {
+        Device device = getDevice(deviceId);
         return tripRepository.findByDeviceOrderByEndTime(device);
 
     }
-    private Device getDivice(Long deviceId) {
-        return deviceRepository.findOne(deviceId);
+
+    //fixme not final just improvising
+    @PostMapping(path = "/assignDevice/")
+    private Long assignDevice() {
+        Device device = deviceRepository.findByAssignedTrue();
+        device.setAssign(Boolean.TRUE);
+        deviceRepository.saveAndFlush(device);
+        return device.getId();
+    }
+
+    private Device getDevice(Long deviceId) throws ResourceNotFoundException {
+        Device device = deviceRepository.findOne(deviceId);
+        if(device == null) {
+            throw new ResourceNotFoundException("Device not found");
+        }
+        return device;
     }
 }

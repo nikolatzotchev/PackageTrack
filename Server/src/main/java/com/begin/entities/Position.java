@@ -25,6 +25,9 @@ public class Position {
     @OneToOne
     private Trip trip;
 
+    @OneToOne
+    private Device device;
+
     // optional, only if we have incident at the current position
     @OneToMany
     private List<Value> incidentValues;
@@ -77,25 +80,39 @@ public class Position {
         this.incidentValues = incidentValues;
     }
 
+    public Device getDevice() {
+        return device;
+    }
+
+    public void setDevice(Device device) {
+        this.device = device;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+
         Position position = (Position) o;
-        return id == position.id &&
-                latitude == position.latitude &&
-                longitude == position.longitude &&
-                Objects.equals(timestamp, position.timestamp) &&
-                Objects.equals(trip, position.trip) &&
-                Objects.equals(incidentValues, position.incidentValues);
+
+        if (latitude != position.latitude) return false;
+        if (longitude != position.longitude) return false;
+        if (id != null ? !id.equals(position.id) : position.id != null) return false;
+        if (timestamp != null ? !timestamp.equals(position.timestamp) : position.timestamp != null) return false;
+        if (trip != null ? !trip.equals(position.trip) : position.trip != null) return false;
+        if (device != null ? !device.equals(position.device) : position.device != null) return false;
+        return incidentValues != null ? incidentValues.equals(position.incidentValues) : position.incidentValues == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, latitude, longitude, timestamp, trip, incidentValues);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (int) (latitude ^ (latitude >>> 32));
+        result = 31 * result + (int) (longitude ^ (longitude >>> 32));
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (trip != null ? trip.hashCode() : 0);
+        result = 31 * result + (device != null ? device.hashCode() : 0);
+        result = 31 * result + (incidentValues != null ? incidentValues.hashCode() : 0);
+        return result;
     }
 }

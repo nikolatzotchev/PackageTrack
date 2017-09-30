@@ -1,5 +1,6 @@
 package com.begin.controllers;
 
+import com.begin.ResourceNotFoundException;
 import com.begin.entities.Device;
 import com.begin.entities.Position;
 import com.begin.entities.Trip;
@@ -33,7 +34,10 @@ public class TripController {
     }
 
     @GetMapping(path = "/{id}/")
-    public Trip getTrip(@PathVariable Long id) {
+    public Trip getTrip(@PathVariable Long id) throws ResourceNotFoundException {
+        if (tripRepository.findOne(id) == null) {
+            throw new ResourceNotFoundException("No such trip");
+        }
         return tripRepository.findOne(id);
     }
 
@@ -49,21 +53,21 @@ public class TripController {
     }
 
     @PostMapping(path = "/{id}/startTrip")
-    public Trip startTrip(@PathVariable Long id) {
+    public Trip startTrip(@PathVariable Long id) throws ResourceNotFoundException {
         Trip trip = getTrip(id);
         trip.setStartTime(ZonedDateTime.now());
         return tripRepository.save(trip);
     }
 
     @PostMapping(path = "/{id}/endTrip")
-    public Trip endTrip(@PathVariable Long id) {
+    public Trip endTrip(@PathVariable Long id) throws ResourceNotFoundException {
         Trip trip = getTrip(id);
         trip.setEndTime(ZonedDateTime.now());
         return tripRepository.save(trip);
     }
 
     @PostMapping(path = "/{id}/getPositions")
-    public List<Position> getPostitions(@PathVariable Long id) {
+    public List<Position> getPostitions(@PathVariable Long id) throws ResourceNotFoundException {
         return positionRepository.findByTripOrderByTimestamp(getTrip(id));
     }
 }
