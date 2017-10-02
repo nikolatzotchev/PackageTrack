@@ -14,6 +14,7 @@ public abstract class Position_ {
 	public static volatile SingularAttribute<Position, Long> latitude;
 	public static volatile ListAttribute<Position, Value> incidentValues;
 	public static volatile SingularAttribute<Position, Long> id;
+	public static volatile SingularAttribute<Position, Device> device;
 	public static volatile SingularAttribute<Position, Long> longitude;
 	public static volatile SingularAttribute<Position, ZonedDateTime> timestamp;
 

@@ -9,7 +9,6 @@ public class Value {
     public enum Metric {
         Temperature("C"),
         Temperature_Fahrenheit("F"),
-        Pressure("Bar"),
         Humidity("%");
 
         private String unit;

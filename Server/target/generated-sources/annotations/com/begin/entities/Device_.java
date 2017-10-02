@@ -8,6 +8,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Device.class)
 public abstract class Device_ {
 
+	public static volatile SingularAttribute<Device, Boolean> assigned;
 	public static volatile SingularAttribute<Device, Long> id;
 
 }
