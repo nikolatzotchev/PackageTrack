@@ -1,5 +1,6 @@
 package com.begin.entities;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,6 +9,7 @@ import java.time.ZonedDateTime;
 
 @Entity
 public class Trip {
+
     @Id
     @GeneratedValue
     private Long Id;
@@ -20,6 +22,14 @@ public class Trip {
     private ZonedDateTime startTime;
 
     private ZonedDateTime endTime;
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
 
     public Device getDevice() {
         return device;
@@ -55,25 +65,22 @@ public class Trip {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Trip trip = (Trip) o;
-
-        if (Id != null ? !Id.equals(trip.Id) : trip.Id != null) return false;
-        if (device != null ? !device.equals(trip.device) : trip.device != null) return false;
-        if (description != null ? !description.equals(trip.description) : trip.description != null) return false;
-        if (startTime != null ? !startTime.equals(trip.startTime) : trip.startTime != null) return false;
-        return endTime != null ? endTime.equals(trip.endTime) : trip.endTime == null;
+        return Objects.equals(Id, trip.Id) &&
+            Objects.equals(device, trip.device) &&
+            Objects.equals(description, trip.description) &&
+            Objects.equals(startTime, trip.startTime) &&
+            Objects.equals(endTime, trip.endTime);
     }
 
     @Override
     public int hashCode() {
-        int result = Id != null ? Id.hashCode() : 0;
-        result = 31 * result + (device != null ? device.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        return result;
+        return Objects.hash(Id, device, description, startTime, endTime);
     }
 }
