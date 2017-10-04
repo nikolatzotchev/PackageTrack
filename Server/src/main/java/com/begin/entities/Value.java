@@ -1,5 +1,6 @@
 package com.begin.entities;
 
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -30,8 +31,6 @@ public class Value {
     @NotNull
     private double value;
 
-    private String unit;
-
     public Metric getMetric() {
         return metric;
     }
@@ -48,11 +47,22 @@ public class Value {
         this.value = value;
     }
 
-    public String getUnit() {
-        return unit;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Value value1 = (Value) o;
+        return Double.compare(value1.value, value) == 0 &&
+            Objects.equals(id, value1.id) &&
+            metric == value1.metric;
     }
 
-    public void setUnit() {
-        this.unit = getMetric().unit;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, metric, value);
     }
 }

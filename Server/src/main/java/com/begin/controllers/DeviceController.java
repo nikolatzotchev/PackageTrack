@@ -4,7 +4,7 @@ import com.begin.ResourceNotFoundException;
 import com.begin.entities.Device;
 import com.begin.entities.Trip;
 import com.begin.repositories.DeviceRepository;
-import com.begin.repositories.PositionRepository;
+import com.begin.repositories.ReportRepository;
 import com.begin.repositories.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +16,16 @@ import java.util.List;
 public class DeviceController {
     private final DeviceRepository deviceRepository;
     private final TripRepository tripRepository;
-    private final PositionRepository positionRepository;
+    private final ReportRepository reportRepository;
 
     @Autowired
     public DeviceController(DeviceRepository deviceRepository,
-                            TripRepository tripRepository, PositionRepository positionRepository) {
+                            TripRepository tripRepository,
+                            ReportRepository reportRepository) {
         this.deviceRepository = deviceRepository;
         this.tripRepository = tripRepository;
-        this.positionRepository = positionRepository;
+        this.reportRepository = reportRepository;
     }
-
 
     @GetMapping
     public List<Device> listDevices() {
@@ -33,7 +33,10 @@ public class DeviceController {
     }
 
     @PostMapping
-    public Device setupNewDevice(Device device) {
+    public Device registerNewDevice(
+        @RequestBody(required = false) String serialNo) {
+        Device device = new Device();
+        device.setSerialNo(serialNo);
         return deviceRepository.saveAndFlush(device);
     }
 
@@ -43,26 +46,15 @@ public class DeviceController {
         return tripRepository.findByDevice(device);
     }
 
-    @GetMapping(path = "/{id}/lastEndedTrip")
+    @GetMapping(path = "/{id}/lastTrip")
     public Trip lastTrip(@PathVariable Long deviceId) throws ResourceNotFoundException {
         Device device = getDevice(deviceId);
-        return tripRepository.findByDeviceOrderByEndTime(device);
-    }
-
-    @GetMapping(path = "/{id}/trip")
-    public Trip currentTripe(@PathVariable Long deviceId) throws ResourceNotFoundException {
-        Device device = getDevice(deviceId);
-        return tripRepository.findByDeviceOrderByEndTime(device);
-
-    }
-
-    //fixme not final just improvising
-    @PostMapping(path = "/assignDevice/")
-    private Long assignDevice() {
-        Device device = deviceRepository.findByAssignedTrue();
-        device.setAssign(Boolean.TRUE);
-        deviceRepository.saveAndFlush(device);
-        return device.getId();
+        Trip trip = tripRepository.findByDeviceOrderByEndTime(device);
+        if (null == trip) {
+            // there is no current trip with that device, so simply ignore the reportings
+            throw new ResourceNotFoundException("Trip not found");
+        }
+        return trip;
     }
 
     private Device getDevice(Long deviceId) throws ResourceNotFoundException {
