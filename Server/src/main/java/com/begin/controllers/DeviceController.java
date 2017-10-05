@@ -41,14 +41,14 @@ public class DeviceController {
     }
 
     @GetMapping(path = "/{id}/trips")
-    public List<Trip> allTrips(@PathVariable Long deviceId) throws ResourceNotFoundException {
-        Device device = getDevice(deviceId);
+    public List<Trip> allTrips(@PathVariable Long id) throws ResourceNotFoundException {
+        Device device = getDevice(id);
         return tripRepository.findByDevice(device);
     }
 
     @GetMapping(path = "/{id}/lastTrip")
-    public Trip lastTrip(@PathVariable Long deviceId) throws ResourceNotFoundException {
-        Device device = getDevice(deviceId);
+    public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
+        Device device = getDevice(id);
         Trip trip = tripRepository.findByDeviceOrderByEndTime(device);
         if (null == trip) {
             // there is no current trip with that device, so simply ignore the reportings
