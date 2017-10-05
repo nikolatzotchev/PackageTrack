@@ -27,9 +27,9 @@ public class TripController {
     private final DeviceRepository deviceRepository;
     private final TripRepository tripRepository;
     private final ReportRepository reportRepository;
-     private final ValueRepository valueRepository;
+    private final ValueRepository valueRepository;
 
-  @Autowired
+    @Autowired
     public TripController(DeviceRepository deviceRepository,
                             TripRepository tripRepository,
                             ReportRepository reportRepository,
@@ -40,15 +40,14 @@ public class TripController {
         this.valueRepository = valueRepository;
     }
 
-   @GetMapping
-   public List<Trip> listTrips(
+    @GetMapping
+    public List<Trip> listTrips(
        @RequestParam(required = false, defaultValue = "false") boolean includeCompletedTrips) {
        if (includeCompletedTrips) {
            return tripRepository.findAll();
        } else {
            return tripRepository.findByEndTimeIsNull();
        }
-
     }
 
     @GetMapping(path = "/{id}/")

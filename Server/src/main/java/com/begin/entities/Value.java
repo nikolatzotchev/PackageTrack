@@ -14,7 +14,11 @@ public class Value {
 
         private String unit;
 
-        Metric(String unit) {
+        public String getUnit() {
+            return unit;
+        }
+
+        private Metric(String unit) {
             this.unit = unit;
         }
 

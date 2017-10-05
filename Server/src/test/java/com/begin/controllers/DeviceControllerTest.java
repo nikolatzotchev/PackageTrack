@@ -1,9 +1,5 @@
 package com.begin.controllers;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.notNullValue;
-
 import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class) // start as spring application
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // bind to random HTTP port
@@ -28,49 +26,47 @@ public class DeviceControllerTest {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
   }
 
+
   @Test
-  public void register_with_SerialNo_should_Pass() {
+  public void register_device_with_SerialNo_should_Pass() {
     int deviceId = RestAssured
-        .given()
-          .body("aa-bb-cc-dd")
-        .when()
-          .post("/api/devices")
-        .then()
-          .statusCode(HttpStatus.OK.value())
-          .body("id", notNullValue())
-          .body("serialNo", equalTo("aa-bb-cc-dd"))
-        .extract()
-         .body().jsonPath().getInt("id");
+      .given()
+        .body("aa-bb-cc-dd")
+      .when()
+        .post("/api/devices/")
+      .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value())
+        .body("serialNo", equalTo("aa-bb-cc-dd"))
+      .extract().path("id");
 
-    // test if device can be listed
     RestAssured
-        .when()
-          .get("/api/devices")
-        .then()
-          .statusCode(HttpStatus.OK.value())
-          .body("id", hasItem(deviceId))
-          .body("serialNo", hasItem("aa-bb-cc-dd"));
-
+      .when()
+        .get("/api/devices")
+      .then()
+        .time(lessThan(2000L))
+        .body("serialNo", hasItem("aa-bb-cc-dd"))
+        .body("id", hasItem(deviceId));
   }
 
-  @Test
-  public void register_without_SerialNo_should_Pass() {
-    int deviceId = RestAssured
-        .when()
-          .post("/api/devices")
-        .then()
-          .statusCode(HttpStatus.OK.value())
-          .body("id", notNullValue())
-        .extract()
-          .body().jsonPath().getInt("id");
 
-    // test if device can be listed
+
+  @Test
+  public void register_device_without_SerialNo_should_Pass() {
+    int deviceId = RestAssured
+      .when()
+        .post("/api/devices/")
+      .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value())
+      .extract().path("id");
+
     RestAssured
-        .when()
-          .get("/api/devices")
-        .then()
-          .statusCode(HttpStatus.OK.value())
-          .body("id", hasItem(deviceId));
+      .when()
+        .get("/api/devices")
+      .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test
@@ -87,6 +83,7 @@ public class DeviceControllerTest {
         .then()
           .statusCode(HttpStatus.OK.value())
           .body("id", notNullValue())
+          .time(lessThan(2000L))
         .extract()
           .body().jsonPath().getInt("id");
 
@@ -94,7 +91,15 @@ public class DeviceControllerTest {
         .when()
           .get("/api/devices/" + deviceId + "/trips")
         .then()
-          .statusCode(HttpStatus.OK.value());
+          .statusCode(HttpStatus.OK.value())
+          .time(lessThan(2000L));
+
+    RestAssured
+         .when()
+           .get("/api/devices/" + deviceId + "/lastTrip")
+         .then()
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .time(lessThan(2000L));
   }
 
 }
