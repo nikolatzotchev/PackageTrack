@@ -5,6 +5,8 @@
 .idea/**/tasks.xml
 .idea/dictionaries
 
+#This project is build using maven so we can exclude also the idea/librery
+.idea/libraries
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
