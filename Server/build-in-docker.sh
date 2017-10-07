@@ -7,7 +7,7 @@ cd `dirname $0`
 case "$1" in
     "build")
         shift
-        $0 mvn clean package $*
+        $0 mvn clean verify $*
         ;;
     "build-quick")
         shift
