@@ -84,6 +84,10 @@ public class TripController {
     @PostMapping(path = "/{id}/startTrip")
     public Trip startTrip(@PathVariable Long id) throws ResourceNotFoundException {
         Trip trip = getTrip(id);
+        //check if trip can be started
+        if (tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(trip.getDevice()) != null) {
+            throw new IllegalStateException("One one trip on device can be in progress");
+        }
         trip.setStartTime(ZonedDateTime.now());
         return tripRepository.save(trip);
     }
@@ -100,36 +104,4 @@ public class TripController {
         Trip trip = getTrip(id);
         return reportRepository.findByTripOrderByTimestamp(trip);
     }
-
-    // FIXME: probably it's easier from device to use the device ID
-    // so it should be POST /api/devices/<id>/report. That will take the current started trip.
-    @PostMapping(path = "/{id}/reports")
-    public Report addReport(@PathVariable Long id, @RequestBody ReportDTO report) throws ResourceNotFoundException {
-      Trip trip = getTrip(id);
-
-      if (trip.getStartTime() == null) {
-        throw new IllegalStateException("This trip is not started yet, the report will not be saved!");
-      }
-
-      // store the values first
-      List<Value> savedValues = new ArrayList<>();
-      report.getIncidentValues().forEach( v -> {
-        savedValues.add(valueRepository.save(v));
-      });
-
-
-      // store the position
-      Report newPosition = new Report();
-      newPosition.setTrip(trip);
-      newPosition.setLatitude(report.getLatitude());
-      newPosition.setLongitude(report.getLongitude());
-      newPosition.setTimestamp(ZonedDateTime.now());
-      newPosition.setIncidentValues(savedValues);
-      newPosition = reportRepository.save(newPosition);
-
-      // store the reports now
-
-      return newPosition;
-    }
-
 }

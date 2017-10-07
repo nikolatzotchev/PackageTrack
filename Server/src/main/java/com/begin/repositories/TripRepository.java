@@ -12,4 +12,6 @@ public interface TripRepository extends JpaRepository<Trip, Long>{
         List<Trip> findByDevice(Device device);
         Trip findByDeviceOrderByEndTime(Device device);
         Trip findByEndTimeIsNullAndDevice(Device device);
+        Trip findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(Device device);
+        Trip findByDeviceOrderByIdDesc(Device device);
 }

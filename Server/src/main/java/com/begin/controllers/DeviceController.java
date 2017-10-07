@@ -1,14 +1,20 @@
 package com.begin.controllers;
 
 import com.begin.ResourceNotFoundException;
+import com.begin.dto.ReportDTO;
 import com.begin.entities.Device;
+import com.begin.entities.Report;
 import com.begin.entities.Trip;
+import com.begin.entities.Value;
 import com.begin.repositories.DeviceRepository;
 import com.begin.repositories.ReportRepository;
 import com.begin.repositories.TripRepository;
+import com.begin.repositories.ValueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,14 +23,17 @@ public class DeviceController {
     private final DeviceRepository deviceRepository;
     private final TripRepository tripRepository;
     private final ReportRepository reportRepository;
+    private final ValueRepository valueRepository;
 
     @Autowired
     public DeviceController(DeviceRepository deviceRepository,
                             TripRepository tripRepository,
-                            ReportRepository reportRepository) {
+                            ReportRepository reportRepository,
+                            ValueRepository valueRepository) {
         this.deviceRepository = deviceRepository;
         this.tripRepository = tripRepository;
         this.reportRepository = reportRepository;
+        this.valueRepository = valueRepository;
     }
 
     @GetMapping
@@ -55,6 +64,38 @@ public class DeviceController {
             throw new ResourceNotFoundException("Trip not found");
         }
         return trip;
+    }
+
+    @PostMapping(path = "/{id}/reports")
+    public Report addReport(@PathVariable Long id, @RequestBody ReportDTO report) throws ResourceNotFoundException {
+        Device device = getDevice(id);
+
+        Trip trip = tripRepository.findByDeviceOrderByIdDesc(device);
+        if (trip == null) {
+            throw new ResourceNotFoundException("Could not find a trip!");
+        }
+        if (trip.getStartTime() == null) {
+            throw new IllegalStateException("This trip is not started yet, the report will not be saved!");
+        }
+
+        // store the values first
+        List<Value> savedValues = new ArrayList<>();
+        report.getIncidentValues().forEach( v -> {
+            savedValues.add(valueRepository.save(v));
+        });
+
+        // store the position
+        Report newPosition = new Report();
+        newPosition.setTrip(trip);
+        newPosition.setLatitude(report.getLatitude());
+        newPosition.setLongitude(report.getLongitude());
+        newPosition.setTimestamp(ZonedDateTime.now());
+        newPosition.setIncidentValues(savedValues);
+        newPosition = reportRepository.save(newPosition);
+
+        // store the reports now
+
+        return newPosition;
     }
 
     private Device getDevice(Long deviceId) throws ResourceNotFoundException {

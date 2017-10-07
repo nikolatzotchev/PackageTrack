@@ -12,7 +12,7 @@ public class Trip {
 
     @Id
     @GeneratedValue
-    private Long Id;
+    private Long id;
 
     @OneToOne
     private Device device;
@@ -24,11 +24,11 @@ public class Trip {
     private ZonedDateTime endTime;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public Device getDevice() {
@@ -72,7 +72,7 @@ public class Trip {
             return false;
         }
         Trip trip = (Trip) o;
-        return Objects.equals(Id, trip.Id) &&
+        return Objects.equals(id, trip.id) &&
             Objects.equals(device, trip.device) &&
             Objects.equals(description, trip.description) &&
             Objects.equals(startTime, trip.startTime) &&
@@ -81,6 +81,6 @@ public class Trip {
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, device, description, startTime, endTime);
+        return Objects.hash(id, device, description, startTime, endTime);
     }
 }
