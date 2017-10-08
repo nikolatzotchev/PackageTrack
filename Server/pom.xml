@@ -91,7 +91,7 @@
 
     <profiles>
         <profile>
-            <id>static_analisys</id>
+            <id>static_analysis</id>
             <activation>
                 <property>
                     <name>!quickRun</name>

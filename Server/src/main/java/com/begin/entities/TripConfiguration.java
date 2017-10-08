@@ -32,16 +32,16 @@ public class TripConfiguration {
     return id;
   }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public Trip getTrip() {
     return trip;
   }
 
   public void setTrip(Trip trip) {
     this.trip = trip;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public Metric getMetric() {
@@ -67,8 +67,6 @@ public class TripConfiguration {
   public void setMax(Double max) {
     this.max = max;
   }
-
-
 
   @Override
   public boolean equals(Object o) {

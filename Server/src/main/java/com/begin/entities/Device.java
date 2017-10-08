@@ -8,43 +8,44 @@ import javax.persistence.Id;
 @Entity
 public class Device {
 
-    @Id@GeneratedValue
-    private Long id;
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    private String serialNo;
+  private String serialNo;
 
-    public String getSerialNo() {
-        return serialNo;
+  public String getSerialNo() {
+    return serialNo;
+  }
+
+  public void setSerialNo(String serialNo) {
+    this.serialNo = serialNo;
+  }
+
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Device device = (Device) o;
+    return Objects.equals(id, device.id) &&
+        Objects.equals(serialNo, device.serialNo);
+  }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Device device = (Device) o;
-        return Objects.equals(id, device.id) &&
-            Objects.equals(serialNo, device.serialNo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, serialNo);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, serialNo);
+  }
 }
