@@ -2,11 +2,14 @@ package com.begin.controllers;
 
 import com.begin.ResourceNotFoundException;
 import com.begin.dto.CreateTripDTO;
+import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.Device;
 import com.begin.entities.Report;
 import com.begin.entities.Trip;
+import com.begin.entities.TripConfiguration;
 import com.begin.repositories.DeviceRepository;
 import com.begin.repositories.ReportRepository;
+import com.begin.repositories.TripConfigurationRepository;
 import com.begin.repositories.TripRepository;
 import com.begin.repositories.ValueRepository;
 import java.time.ZonedDateTime;
@@ -14,6 +17,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,16 +34,19 @@ public class TripController {
   private final TripRepository tripRepository;
   private final ReportRepository reportRepository;
   private final ValueRepository valueRepository;
+  private final TripConfigurationRepository tripConfigurationRepository;
 
   @Autowired
   public TripController(DeviceRepository deviceRepository,
       TripRepository tripRepository,
       ReportRepository reportRepository,
-      ValueRepository valueRepository) {
+      ValueRepository valueRepository,
+      TripConfigurationRepository tripConfigurationRepository) {
     this.deviceRepository = deviceRepository;
     this.tripRepository = tripRepository;
     this.reportRepository = reportRepository;
     this.valueRepository = valueRepository;
+    this.tripConfigurationRepository = tripConfigurationRepository;
   }
 
   @GetMapping
@@ -106,5 +113,47 @@ public class TripController {
   public List<Report> getReports(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
     return reportRepository.findByTripOrderByTimestamp(trip);
+  }
+
+  @GetMapping(path = "/{id}/configurations")
+  public List<TripConfiguration> getConfiguration(@PathVariable Long id)
+      throws ResourceNotFoundException {
+    Trip trip = tripRepository.findOne(id);
+    if (trip == null) {
+      throw new ResourceNotFoundException("Cannot find trip with this id.");
+    }
+    return tripConfigurationRepository.findByTrip(trip);
+  }
+
+  @PostMapping(path = "/{id}/configurations")
+  public TripConfiguration setConfiguration(@PathVariable Long id,
+     @RequestBody TripConfigurationDTO tripConfigurationDTO) throws ResourceNotFoundException {
+
+    Trip trip = tripRepository.findOne(id);
+    if (trip == null) {
+      throw new ResourceNotFoundException("Cannot find trip with this id."
+          + " Consider adding a trip before setting the Configuration");
+    }
+
+    if (trip.getStartTime() != null) {
+      throw new IllegalStateException("Trip has already started.");
+    }
+    TripConfiguration tripConfiguration = new TripConfiguration();
+    tripConfiguration.setMetric(tripConfigurationDTO.getMetric());
+    tripConfiguration.setMin(tripConfigurationDTO.getMin());
+    tripConfiguration.setMax(tripConfigurationDTO.getMax());
+    tripConfiguration.setTrip(trip);
+    tripConfigurationRepository.save(tripConfiguration);
+
+    return tripConfiguration;
+  }
+
+  @DeleteMapping(path = "/{id}/configurations")
+  public void deleteConfiguration(@PathVariable Long id){
+    Trip trip = tripRepository.findOne(id);
+    if (trip.getStartTime() != null) {
+      throw new IllegalStateException("Cannot delete Configuration when trip is started.");
+    }
+    tripConfigurationRepository.delete(tripConfigurationRepository.findByTrip(trip));
   }
 }

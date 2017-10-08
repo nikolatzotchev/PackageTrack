@@ -1,10 +1,14 @@
 package com.begin.controllers;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 
 import com.begin.dto.CreateTripDTO;
+import com.begin.dto.TripConfigurationDTO;
+import com.begin.entities.TripConfiguration;
+import com.begin.entities.Value.Metric;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.Before;
@@ -75,5 +79,51 @@ public class TripControllerTest {
         .then()
         .time(lessThan(2000L))
         .body("startTime", notNullValue());
+  }
+
+  @Test
+  public void trip_configuration_should_pass() {
+
+    int deviceId = RestAssured
+        .when()
+        .post("/api/v1/devices")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("id", notNullValue())
+        .time(lessThan(2000L))
+        .extract()
+        .body().jsonPath().getInt("id");
+
+    CreateTripDTO createTripDTO = new CreateTripDTO();
+    createTripDTO.setDeviceId(Long.valueOf(deviceId));
+    createTripDTO.setDescription("trip to sofia");
+
+    int tripId = RestAssured
+        .given()
+        .body(createTripDTO)
+        .contentType(ContentType.JSON)
+        .when()
+        .post("/api/v1/trips")
+        .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value())
+        .body("description", equalTo("trip to sofia"))
+        .extract().jsonPath().getInt("id");
+
+    TripConfigurationDTO tripConfigurationDTO = new TripConfigurationDTO();
+    tripConfigurationDTO.setMetric(Metric.Temperature);
+    tripConfigurationDTO.setMin(12.0);
+    tripConfigurationDTO.setMax(14.5);
+
+    RestAssured
+        .given()
+        .body(tripConfigurationDTO)
+        .contentType(ContentType.JSON)
+        .when()
+        .post("/api/v1/trips/" + tripId + "/configurations")
+        .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value())
+        .body( "metric", equalTo(Metric.Temperature.toString()));
   }
 }
