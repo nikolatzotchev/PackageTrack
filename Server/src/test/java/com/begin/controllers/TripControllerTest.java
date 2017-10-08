@@ -27,6 +27,9 @@ public class TripControllerTest {
   @LocalServerPort
   private int port;
 
+  private static final String deviceControllerUrl = "/api/v1/devices";
+  private static final String tripControllerUrl = "/api/v1/trips";
+
   @Before
   public void setup() {
     RestAssured.port = port;
@@ -38,7 +41,7 @@ public class TripControllerTest {
 
     int deviceId = RestAssured
         .when()
-        .post("/api/devices")
+        .post(deviceControllerUrl)
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
@@ -55,7 +58,7 @@ public class TripControllerTest {
         .body(createTripDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/trips")
+        .post(tripControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -64,7 +67,7 @@ public class TripControllerTest {
 
     RestAssured
         .when()
-        .get("/api/trips/" + tripId + "/")
+        .get(tripControllerUrl + "/" + tripId + "/")
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -75,7 +78,7 @@ public class TripControllerTest {
         .given()
         .body(tripId)
         .when()
-        .post("/api/trips/" + tripId + "/startTrip")
+        .post(tripControllerUrl +"/" + tripId + "/startTrip")
         .then()
         .time(lessThan(2000L))
         .body("startTime", notNullValue());
@@ -86,7 +89,7 @@ public class TripControllerTest {
 
     int deviceId = RestAssured
         .when()
-        .post("/api/v1/devices")
+        .post(deviceControllerUrl)
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
@@ -103,7 +106,7 @@ public class TripControllerTest {
         .body(createTripDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/v1/trips")
+        .post(tripControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -120,7 +123,7 @@ public class TripControllerTest {
         .body(tripConfigurationDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/v1/trips/" + tripId + "/configurations")
+        .post(tripControllerUrl + "/" + tripId + "/configurations")
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())

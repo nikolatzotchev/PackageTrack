@@ -30,6 +30,9 @@ public class DeviceControllerTest {
   @LocalServerPort
   private int port;
 
+  private static final String deviceControllerUrl = "/api/v1/devices";
+  private static final String tripControllerUrl = "/api/v1/trips";
+
   @Before
   public void setup() {
     RestAssured.port = port;
@@ -43,7 +46,7 @@ public class DeviceControllerTest {
         .given()
         .body("aa-bb-cc-dd")
         .when()
-        .post("/api/devices/")
+        .post(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -52,7 +55,7 @@ public class DeviceControllerTest {
 
     RestAssured
         .when()
-        .get("/api/devices")
+        .get(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .body("serialNo", hasItem("aa-bb-cc-dd"))
@@ -64,7 +67,7 @@ public class DeviceControllerTest {
   public void register_device_without_SerialNo_should_Pass() {
     int deviceId = RestAssured
         .when()
-        .post("/api/devices/")
+        .post(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -72,7 +75,7 @@ public class DeviceControllerTest {
 
     RestAssured
         .when()
-        .get("/api/devices")
+        .get(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
@@ -82,13 +85,13 @@ public class DeviceControllerTest {
   public void allTrips_with_InexistentDevice_should_404() {
     RestAssured
         .when()
-        .get("/api/devices/123456789/trips")
+        .get(deviceControllerUrl +"/123456789/trips")
         .then()
         .statusCode(HttpStatus.NOT_FOUND.value());
 
     int deviceId = RestAssured
         .when()
-        .post("/api/devices")
+        .post(deviceControllerUrl)
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
@@ -98,14 +101,14 @@ public class DeviceControllerTest {
 
     RestAssured
         .when()
-        .get("/api/devices/" + deviceId + "/trips")
+        .get(deviceControllerUrl + "/" + deviceId + "/trips")
         .then()
         .statusCode(HttpStatus.OK.value())
         .time(lessThan(2000L));
 
     RestAssured
         .when()
-        .get("/api/devices/" + deviceId + "/lastTrip")
+        .get(deviceControllerUrl + deviceId + "/lastTrip")
         .then()
         .statusCode(HttpStatus.NOT_FOUND.value())
         .time(lessThan(2000L));
@@ -115,7 +118,7 @@ public class DeviceControllerTest {
   public void addReport_should_404() {
     int deviceId = RestAssured
         .when()
-        .post("/api/devices/")
+        .post(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -128,7 +131,7 @@ public class DeviceControllerTest {
         .body(reportDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/devices/" + deviceId + "/reports")
+        .post(deviceControllerUrl + deviceId + "/reports")
         .then()
         .statusCode(HttpStatus.NOT_FOUND.value());
   }
@@ -138,7 +141,7 @@ public class DeviceControllerTest {
     //register device
     int deviceId = RestAssured
         .when()
-        .post("/api/devices/")
+        .post(deviceControllerUrl)
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
@@ -154,7 +157,7 @@ public class DeviceControllerTest {
         .body(createTripDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/trips")
+        .post(tripControllerUrl)
         .then()
         .time(lessThan(2000L))
         .extract().jsonPath().getInt("id");
@@ -162,7 +165,7 @@ public class DeviceControllerTest {
     //start trip
     RestAssured
         .when()
-        .post("/api/trips/" + tripId + "/startTrip")
+        .post(tripControllerUrl + "/" + tripId + "/startTrip")
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
@@ -181,7 +184,7 @@ public class DeviceControllerTest {
         .body(reportDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post("/api/devices/" + deviceId + "/reports")
+        .post(deviceControllerUrl + "/" + deviceId + "/reports")
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
