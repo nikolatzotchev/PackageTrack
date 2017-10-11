@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import com.begin.dto.CreateTripDTO;
 import com.begin.dto.ReportDTO;
+import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.Value;
 import com.begin.entities.Value.Metric;
 import io.restassured.RestAssured;
@@ -162,6 +163,21 @@ public class DeviceControllerTest {
         .time(lessThan(2000L))
         .extract().jsonPath().getInt("id");
 
+    TripConfigurationDTO tripConfigurationDTO = new TripConfigurationDTO();
+    tripConfigurationDTO.setMetric(Metric.Temperature);
+    tripConfigurationDTO.setMax(30.0);
+    tripConfigurationDTO.setMin(Double.valueOf(10));
+
+    RestAssured
+        .given()
+        .body(tripConfigurationDTO)
+        .contentType(ContentType.JSON)
+        .when()
+        .post(tripControllerUrl + "/" + tripId + "/configurations")
+        .then()
+        .time(lessThan(2000L))
+        .statusCode(HttpStatus.OK.value());
+
     //start trip
     RestAssured
         .when()
@@ -169,7 +185,6 @@ public class DeviceControllerTest {
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
-
     ReportDTO reportDTO = new ReportDTO();
     Value value = new Value();
     value.setMetric(Metric.Temperature);

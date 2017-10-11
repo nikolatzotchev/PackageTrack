@@ -5,9 +5,12 @@ import com.begin.dto.ReportDTO;
 import com.begin.entities.Device;
 import com.begin.entities.Report;
 import com.begin.entities.Trip;
+import com.begin.entities.TripConfiguration;
 import com.begin.entities.Value;
+import com.begin.entities.Value.Metric;
 import com.begin.repositories.DeviceRepository;
 import com.begin.repositories.ReportRepository;
+import com.begin.repositories.TripConfigurationRepository;
 import com.begin.repositories.TripRepository;
 import com.begin.repositories.ValueRepository;
 import java.time.ZonedDateTime;
@@ -29,16 +32,19 @@ public class DeviceController {
   private final TripRepository tripRepository;
   private final ReportRepository reportRepository;
   private final ValueRepository valueRepository;
+  private final TripConfigurationRepository tripConfigurationRepository;
 
   @Autowired
   public DeviceController(DeviceRepository deviceRepository,
       TripRepository tripRepository,
       ReportRepository reportRepository,
-      ValueRepository valueRepository) {
+      ValueRepository valueRepository,
+      TripConfigurationRepository tripConfigurationRepository) {
     this.deviceRepository = deviceRepository;
     this.tripRepository = tripRepository;
     this.reportRepository = reportRepository;
     this.valueRepository = valueRepository;
+    this.tripConfigurationRepository = tripConfigurationRepository;
   }
 
   @GetMapping
@@ -86,21 +92,38 @@ public class DeviceController {
     }
 
     // store the values first
-    List<Value> savedValues = new ArrayList<>();
-    report.getIncidentValues().forEach(v -> savedValues.add(valueRepository.save(v)));
+//        List<Value> incidentValues = new ArrayList<>();
+//        report.getIncidentValues().forEach(v -> incidentValues.add(valueRepository.save(v)));
+    List<Value> incidentValues = new ArrayList<>();
+    report.getIncidentValues().forEach(v ->
+    {
+      if (checkIfIncident(v, trip) == true) {
+        valueRepository.save(v);
+        incidentValues.add(v);
+      }
+    });
     // store the position
     Report newPosition = new Report();
     newPosition.setTrip(trip);
     newPosition.setLatitude(report.getLatitude());
     newPosition.setLongitude(report.getLongitude());
     newPosition.setTimestamp(ZonedDateTime.now());
-    newPosition.setIncidentValues(savedValues);
+    newPosition.setIncidentValues(incidentValues);
     newPosition = reportRepository.save(newPosition);
 
     // store the reports now
 
     return newPosition;
   }
+
+  private boolean checkIfIncident(Value value, Trip trip) {
+    Metric metric = value.getMetric();
+    TripConfiguration tripConfiguration = tripConfigurationRepository
+        .findByTripAndMetric(trip, metric);
+    //check if the value is in the range of valid values
+    return tripConfiguration.checkValidValue(value.getValue());
+  }
+
 
   private Device getDevice(Long deviceId) throws ResourceNotFoundException {
     Device device = deviceRepository.findOne(deviceId);

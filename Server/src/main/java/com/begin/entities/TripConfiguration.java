@@ -68,6 +68,10 @@ public class TripConfiguration {
     this.max = max;
   }
 
+  public boolean checkValidValue(Double value) {
+    return value >= getMin() && value <= getMax();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
