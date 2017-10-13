@@ -27,12 +27,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // bind to random HTTP port
 public class DeviceControllerTest {
 
+  private static final String deviceControllerUrl = "/api/v1/devices";
+  private static final String tripControllerUrl = "/api/v1/trips";
   // This is automatically set by spring test runner.
   @LocalServerPort
   private int port;
-
-  private static final String deviceControllerUrl = "/api/v1/devices";
-  private static final String tripControllerUrl = "/api/v1/trips";
 
   @Before
   public void setup() {
@@ -86,7 +85,7 @@ public class DeviceControllerTest {
   public void allTrips_with_InexistentDevice_should_404() {
     RestAssured
         .when()
-        .get(deviceControllerUrl +"/123456789/trips")
+        .get(deviceControllerUrl + "/123456789/trips")
         .then()
         .statusCode(HttpStatus.NOT_FOUND.value());
 
@@ -185,6 +184,7 @@ public class DeviceControllerTest {
         .then()
         .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
+
     ReportDTO reportDTO = new ReportDTO();
     Value value = new Value();
     value.setMetric(Metric.Temperature);

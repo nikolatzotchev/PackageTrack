@@ -91,9 +91,7 @@ public class DeviceController {
           "This trip is not started yet, the report will not be saved!");
     }
 
-    // store the values first
-//        List<Value> incidentValues = new ArrayList<>();
-//        report.getIncidentValues().forEach(v -> incidentValues.add(valueRepository.save(v)));
+    // check if the values are in the range and then add them
     List<Value> incidentValues = new ArrayList<>();
     report.getIncidentValues().forEach(v ->
     {

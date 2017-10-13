@@ -69,6 +69,14 @@ public class TripConfiguration {
   }
 
   public boolean checkValidValue(Double value) {
+    //if the min and max are both null will return true for now, will think about it later
+    if (getMax() == null && getMin() == null) {
+      return true;
+    } else if (getMax() == null) {
+      return value >= getMin();
+    } else if (getMin() == null) {
+      return value <= getMax();
+    }
     return value >= getMin() && value <= getMax();
   }
 
