@@ -1,22 +1,3 @@
-### Intellij ###
-
-# User-specific stuff:
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/dictionaries
-
-#This project is build using maven so we can exclude also the idea/libraries #
-.idea/libraries
-
-# Sensitive or high-churn files:
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.xml
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-
 ### Java ###
 # Compiled class file
 *.class
@@ -68,6 +49,7 @@ buildNumber.properties
 *.la
 *.lo
 
+### Angular ###
 ## Angular ##
 # compiled output
 /dist
@@ -76,21 +58,26 @@ buildNumber.properties
 /app/**/*.js.map
 
 # dependencies
-/node_modules
-/bower_components
+**/node_modules/**
+**/bower_components
+
+# IDEs and editors
+**/.idea
+**/.settings
+**/.project
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage/*
-/libpeerconnection.log
+**/.sass-cache
+**/connect.lock
+**/coverage/*
+**/libpeerconnection.log
 npm-debug.log
 testem.log
-/typings
+**/typings
 
 # e2e
-/e2e/*.js
-/e2e/*.map
+**/e2e/*.js
+**/e2e/*.map
 
 #System Files
 .DS_Store
