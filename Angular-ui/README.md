@@ -35,22 +35,6 @@ npm update --save
 
 1. PrimeNG (https://www.primefaces.org/primeng/)
 
-# Примерни данни
-В момента web приложението зарежда примерните данни от `/assets/device.json`. Данните там са структурирани по следният начин:
-```
-{
-    "Device": <Device Object> (http://devtoolkit.openmobilealliance.org/OEditor/LWMOView?url=http%3A%2F%2Fwww.openmobilealliance.org%2Ftech%2Fprofiles%2FLWM2M_Device-v1_0_1.xml)
-    "Path": <Array of {"lon", "lat"}
-    "Current": {
-        "Location": <Location Object> (http://devtoolkit.openmobilealliance.org/OEditor/LWMOView?url=http%3A%2F%2Fwww.openmobilealliance.org%2Ftech%2Fprofiles%2FLWM2M_Location-v1_0.xml)
-        "Temperature": <Temperature Object>
-        ...etc, any LWM2M object
-    }
-}
-```
-
-За да работи с истински данни, кодът трябва да се промени да вика съотвеното REST API.
-
 # Контейнеризация на проекта
 Проекта е готов за работа в cloud-a. За целта има добавена поддръжка за създаване на Docker Image.
 

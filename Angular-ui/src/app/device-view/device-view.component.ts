@@ -29,7 +29,7 @@ export class DeviceViewComponent implements OnInit {
 
   ngOnInit() {
         this.http.get('/api/data/path/1').subscribe(
-        //this.http.get('/assets/device.json').subscribe(
+        // this.http.get('/assets/device.json').subscribe(
           response => {
               const j = response.json();
               const bounds = new google.maps.LatLngBounds();
@@ -51,22 +51,22 @@ export class DeviceViewComponent implements OnInit {
                   this.gmap.setCenter(current.getPosition());
               }
 
-              // if (j.Path) {
-              //     const flightPath = new google.maps.Polyline({
-              //         path: j.Path,
-              //         geodesic: true,
-              //         strokeColor: '#FF0000',
-              //         strokeOpacity: 1.0,
-              //         strokeWeight: 2
-              //     });
-              //     flightPath.setMap(this.gmap);
-              // }
+              if (j.Path) {
+                  const flightPath = new google.maps.Polyline({
+                      path: j.Path,
+                      geodesic: true,
+                      strokeColor: '#FF0000',
+                      strokeOpacity: 1.0,
+                      strokeWeight: 2
+                  });
+                  flightPath.setMap(this.gmap);
+              }
 
               // center the map to see all the overlays
               setTimeout( () => { // map will need some time to load
                   this.gmap.fitBounds(bounds); // Map object used directly
               }, 1000);
-              this.deviceInfo = j.Path[0].lng//JSON.stringify(j.Path, null , 2);
+              this.deviceInfo = j.Path[0].lng; // JSON.stringify(j.Path, null , 2);
           },
           error => {
               console.log(error);
@@ -99,5 +99,4 @@ export class DeviceViewComponent implements OnInit {
       this.infoWindow.open(event.map, event.overlay);
       event.map.setCenter(event.overlay.getPosition());
   }
-
 }
