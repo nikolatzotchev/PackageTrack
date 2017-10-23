@@ -47,7 +47,7 @@ import {
   MatFormFieldModule
 } from '@angular/material';
 
-import { DeviceConfigComponent, DeviceDialogComponent } from './device-config/device-config.component';
+import { DeviceConfigComponent, SetDeviceDialogComponent, DeleteDeviceDialogComponent } from './device-config/device-config.component';
 import {CdkTableModule} from '@angular/cdk/table';
 
 // primeng modules
@@ -60,8 +60,10 @@ import {GrowlModule} from 'primeng/primeng';
   declarations: [
     AppComponent,
     DeviceViewComponent,
+    // device components
     DeviceConfigComponent,
-    DeviceDialogComponent
+    SetDeviceDialogComponent,
+    DeleteDeviceDialogComponent
   ],
   imports: [
     // angular modules
@@ -80,9 +82,11 @@ import {GrowlModule} from 'primeng/primeng';
     InputTextModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
+    MatIconModule,
     GrowlModule
   ],
-  entryComponents: [DeviceDialogComponent],
+  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],

@@ -1,0 +1,8 @@
+.device_button {
+    align-items: center;
+    justify-content: space-around;
+  }
+
+.device_button button {
+  width: 200px;
+}

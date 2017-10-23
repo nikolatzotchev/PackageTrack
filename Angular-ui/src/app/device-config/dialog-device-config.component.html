@@ -6,5 +6,6 @@
   <mat-hint align="end">{{input.value?.length || 0}}/30</mat-hint>
 </mat-form-field>
 </div>
- <p-growl [(value)]="msgs"></p-growl>
-<button mat-raised-button (click)="onConfirmClick()">Set</button>
+
+<p-growl [(value)]="msgs"></p-growl>
+<button mat-raised-button color = "accent" (click)="onConfirmClick()">Set</button>
