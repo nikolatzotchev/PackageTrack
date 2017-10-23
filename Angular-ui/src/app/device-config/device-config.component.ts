@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import {SelectItem} from 'primeng/components/common/api';
 import {Message} from 'primeng/components/common/api';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-device-config',
@@ -40,24 +41,41 @@ export class DeviceConfigComponent implements OnInit {
   templateUrl: './delete-device-config.component.html'
 })
 export class DeleteDeviceDialogComponent implements OnInit {
-  noDevice = false;
-  displayedColumns = ['position', 'name', 'actions'];
-  dataSource = new ExampleDataSource();
+  exampleDatabase = new ExampleDatabase();
+  displayTable = false;
+  isDataAvailible = false;
+  displayedColumns = ['id', 'serialNo', 'actions'];
+  dataSource: ExampleDataSource;
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http ) {}
+    public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.getAllDevices();
+    this.dataSource = new ExampleDataSource(this.exampleDatabase);
+  }
+
+  getAllDevices() {
     this.http.get('http://192.168.1.107:8080/api/v1/devices')
     .map(res => res.json())
     .subscribe(
-      data => {
-          data.forEach(m => data.push({'id': m.id, 'serialNo': m.serialNo}));
-      }
+      resp => {
+          if (resp.length > 0) {
+            this.displayTable = true;
+            resp.forEach(m => this.exampleDatabase.data.push({'id': m.id, 'serialNo': m.serialNo}));
+          } else {
+            this.displayTable = false;
+          }
+      },
+      (err) => console.error(err),
+      () => this.isDataAvailible = true
     );
-    if (data.length === 0) {
-      this.noDevice = true;
-    }
+
+  }
+
+  removeDevice(id, serialNo) {
+    this.http.delete(`http://192.168.1.107:8080/api/v1/devices/${id}/`).subscribe();
+    this.dataSource = new ExampleDataSource(this.exampleDatabase);
   }
 
   onNoClick(): void {
@@ -70,14 +88,20 @@ export interface Element {
   id: number;
 }
 
-const data: Element[] = [
- // {id: 5, serialNo: '12312'}
-];
+export class ExampleDatabase {
+  dataChange: BehaviorSubject<Element[]> = new BehaviorSubject<Element[]>([]);
+  get data(): Element[] {
+    return this.dataChange.value;
+  }
+}
 
 export class ExampleDataSource extends DataSource<any> {
+  constructor(private data: ExampleDatabase) {
+    super();
+  }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Element[]> {
-    return Observable.of(data);
+    return this.data.dataChange;
   }
 
   disconnect() {}
