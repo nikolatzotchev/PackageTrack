@@ -25,34 +25,32 @@ export class DeviceConfigComponent implements OnInit {
 
   setDevice(): void {
     const dialogRef = this.dialog.open(SetDeviceDialogComponent, {
-      width: '500px',
     });
   }
 
   deleteDevice(): void {
     const dialogRef = this.dialog.open(DeleteDeviceDialogComponent, {
-      width: '500px',
     });
   }
 }
 
 @Component({
   selector: 'app-delete-device-config',
-  templateUrl: './delete-device-config.component.html'
+  templateUrl: './delete-device-config.component.html',
+  styleUrls: ['./delete-device-config.component.css']
 })
 export class DeleteDeviceDialogComponent implements OnInit {
-  exampleDatabase = new ExampleDatabase();
-  displayTable = false;
+  exampleDatabase = new TableDatabase();
   isDataAvailible = false;
   displayedColumns = ['id', 'serialNo', 'actions'];
-  dataSource: ExampleDataSource;
+  dataSource: TableDataSource;
 
   constructor(
     public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.getAllDevices();
-    this.dataSource = new ExampleDataSource(this.exampleDatabase);
+
   }
 
   getAllDevices() {
@@ -60,22 +58,24 @@ export class DeleteDeviceDialogComponent implements OnInit {
     .map(res => res.json())
     .subscribe(
       resp => {
-          if (resp.length > 0) {
-            this.displayTable = true;
+
             resp.forEach(m => this.exampleDatabase.data.push({'id': m.id, 'serialNo': m.serialNo}));
-          } else {
-            this.displayTable = false;
-          }
+
       },
       (err) => console.error(err),
       () => this.isDataAvailible = true
     );
+    this.dataSource = new TableDataSource(this.exampleDatabase);
+  }
 
+  checkSize(): number {
+     return this.exampleDatabase.data.length;
   }
 
   removeDevice(id, serialNo) {
     this.http.delete(`http://192.168.1.107:8080/api/v1/devices/${id}/`).subscribe();
-    this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    this.exampleDatabase.data.splice(this.exampleDatabase.data.findIndex(item => item.id === id), 1);
+    this.dataSource = new TableDataSource(this.exampleDatabase);
   }
 
   onNoClick(): void {
@@ -88,15 +88,15 @@ export interface Element {
   id: number;
 }
 
-export class ExampleDatabase {
+export class TableDatabase {
   dataChange: BehaviorSubject<Element[]> = new BehaviorSubject<Element[]>([]);
   get data(): Element[] {
     return this.dataChange.value;
   }
 }
 
-export class ExampleDataSource extends DataSource<any> {
-  constructor(private data: ExampleDatabase) {
+export class TableDataSource extends DataSource<any> {
+  constructor(private data: TableDatabase) {
     super();
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */

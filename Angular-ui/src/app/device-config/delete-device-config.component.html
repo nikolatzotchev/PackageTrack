@@ -1,11 +1,11 @@
 <!-- if we dont have any devises configured -->
-<label *ngIf = "displayTable === false; else display_table" class = "mat-typography">No device configured.</label>
+<label *ngIf = "checkSize() === 0; else display_table" class = "mat-display-1">No devices configured.</label>
 <!-- else -->
 <ng-template #display_table>
 <div *ngIf = "isDataAvailible === true">
 <h1 mat-dialog-title>Delete Device</h1>
 
-<div class="example-container mat-elevation-z8">
+<div class="example-container mat-elevation-z8" >
   <mat-table #table [dataSource]="dataSource">
 
 
