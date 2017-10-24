@@ -10,6 +10,7 @@ import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {ConfirmDeleteComponent} from './dialogs/device-dialog-config.component';
 
 @Component({
   selector: 'app-device-config',
@@ -37,16 +38,19 @@ export class DeviceConfigComponent implements OnInit {
 @Component({
   selector: 'app-delete-device-config',
   templateUrl: './delete-device-config.component.html',
-  styleUrls: ['./delete-device-config.component.css']
+  styleUrls: ['./delete-device-config.component.css'],
+  providers: [ConfirmDeleteComponent]
 })
 export class DeleteDeviceDialogComponent implements OnInit {
   exampleDatabase = new TableDatabase();
-  isDataAvailible = false;
+  displayTable = false;
   displayedColumns = ['id', 'serialNo', 'actions'];
   dataSource: TableDataSource;
+  msgs: Message[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http, private ref: ChangeDetectorRef) {}
+    public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http,
+     public dialog: MatDialog, private deleteComp: ConfirmDeleteComponent) {}
 
   ngOnInit() {
     this.getAllDevices();
@@ -63,19 +67,35 @@ export class DeleteDeviceDialogComponent implements OnInit {
 
       },
       (err) => console.error(err),
-      () => this.isDataAvailible = true
+      () => this.displayTable = true
     );
     this.dataSource = new TableDataSource(this.exampleDatabase);
   }
 
+  // see if there is data to display
   checkSize(): number {
      return this.exampleDatabase.data.length;
   }
 
-  removeDevice(id, serialNo) {
-    this.http.delete(`http://192.168.1.107:8080/api/v1/devices/${id}/`).subscribe();
-    this.exampleDatabase.data.splice(this.exampleDatabase.data.findIndex(item => item.id === id), 1);
-    this.dataSource = new TableDataSource(this.exampleDatabase);
+  removeDevice(id, serialNo): void {
+    // open new dialog
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {});
+    // getting the reference to the opened dialog
+    this.deleteComp = dialogRef.componentInstance;
+    dialogRef.afterClosed().subscribe(
+      selection => {
+        // only deleting when yes is pressed
+        if (this.deleteComp.confirm === true) {
+          this.http.delete(`http://192.168.1.107:8080/api/v1/devices/${id}/`).subscribe();
+          this.msgs = [];
+          this.msgs.push({severity: 'success', summary: 'Device Deleted'});
+          this.exampleDatabase.data.splice(this.exampleDatabase.data.findIndex(item => item.id === id), 1);
+          this.dataSource = new TableDataSource(this.exampleDatabase);
+        } else {
+          this.msgs = [];
+          this.msgs.push({severity: 'warn', summary: 'Deletion canceled.'});
+        }
+      });
   }
 
   onNoClick(): void {

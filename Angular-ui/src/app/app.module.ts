@@ -48,6 +48,8 @@ import {
 } from '@angular/material';
 
 import { DeviceConfigComponent, SetDeviceDialogComponent, DeleteDeviceDialogComponent } from './device-config/device-config.component';
+import {ConfirmDeleteComponent} from './device-config/dialogs/device-dialog-config.component';
+
 import {CdkTableModule} from '@angular/cdk/table';
 
 // primeng modules
@@ -63,7 +65,8 @@ import {GrowlModule} from 'primeng/primeng';
     // device components
     DeviceConfigComponent,
     SetDeviceDialogComponent,
-    DeleteDeviceDialogComponent
+    DeleteDeviceDialogComponent,
+    ConfirmDeleteComponent
   ],
   imports: [
     // angular modules
@@ -86,7 +89,7 @@ import {GrowlModule} from 'primeng/primeng';
     MatIconModule,
     GrowlModule
   ],
-  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent],
+  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent, ConfirmDeleteComponent],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],

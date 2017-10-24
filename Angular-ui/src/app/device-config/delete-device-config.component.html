@@ -2,34 +2,37 @@
 <label *ngIf = "checkSize() === 0; else display_table" class = "mat-display-1">No devices configured.</label>
 <!-- else -->
 <ng-template #display_table>
-<div *ngIf = "isDataAvailible === true">
+<div *ngIf = "displayTable === true">
 <h1 mat-dialog-title>Delete Device</h1>
 
-<div class="example-container mat-elevation-z8" >
-  <mat-table #table [dataSource]="dataSource">
+  <div class="example-container mat-elevation-z8" >
+    <mat-table #table [dataSource]="dataSource">
 
 
-    <!-- id Column -->
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> Id. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-    </ng-container>
+      <!-- id Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> Id. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
 
-    <!-- serial Column -->
-    <ng-container matColumnDef="serialNo">
-      <mat-header-cell *matHeaderCellDef> Serial No </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.serialNo}} </mat-cell>
-    </ng-container>
+      <!-- serial Column -->
+      <ng-container matColumnDef="serialNo">
+        <mat-header-cell *matHeaderCellDef> Serial No </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.serialNo}} </mat-cell>
+      </ng-container>
 
-    <!-- button delete Colum -->
-    <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-    <mat-cell *matCellDef = "let element"> <button mat-raised-button clicked (click)="removeDevice(element.id, element.serialNo)" > Delete </button> </mat-cell>
-    </ng-container>
+      <!-- button delete Colum -->
+      <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef = "let element"> <button mat-raised-button clicked (click)="removeDevice(element.id, element.serialNo);" > Delete </button> </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
 </div>
 </ng-template>
+<!-- for primeng growl messages -->
+<p-growl [(value)]="msgs"></p-growl>
+
