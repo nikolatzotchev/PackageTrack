@@ -1,6 +1,7 @@
 package com.begin.repositories;
 
 
+import com.begin.entities.Device;
 import com.begin.entities.Trip;
 import com.begin.entities.TripConfiguration;
 import com.begin.entities.Value.Metric;
@@ -11,5 +12,5 @@ public interface TripConfigurationRepository extends JpaRepository<TripConfigura
 
   List<TripConfiguration> findByTrip(Trip trip);
   TripConfiguration findByTripAndMetric(Trip trip, Metric metric);
-
+  List<TripConfigurationRepository> deleteByTripIn(List<Trip> trips);
 }

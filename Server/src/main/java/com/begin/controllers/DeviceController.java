@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,16 @@ public class DeviceController {
     return deviceRepository.saveAndFlush(device);
   }
 
+  @DeleteMapping(path = "/{id}/")
+  public void deleteDevice(@PathVariable Long id) throws ResourceNotFoundException {
+    Device device = getDevice(id);
+    List<Trip> trips = tripRepository.findByDevice(device);
+    tripRepository.deleteByDevice(device);
+    reportRepository.deleteByTripIn(trips);
+    tripConfigurationRepository.deleteByTripIn(trips);
+    deviceRepository.delete(id);
+  }
+
   @GetMapping(path = "/{id}/trips")
   public List<Trip> allTrips(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
@@ -95,7 +106,7 @@ public class DeviceController {
     List<Value> incidentValues = new ArrayList<>();
     report.getIncidentValues().forEach(v ->
     {
-      if (checkIfIncident(v, trip) == true) {
+      if (checkIfIncident(v, trip)) {
         valueRepository.save(v);
         incidentValues.add(v);
       }
