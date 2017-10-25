@@ -10,12 +10,15 @@ import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ConfirmDeleteComponent} from './dialogs/device-dialog-config.component';
+import {SetDeviceDialogComponent} from './set-device-config/set-device-config.component';
+import { ConfirmDeleteDeviceComponent } from './confirm-delete-device/confirm-delete-device.component';
+
 
 @Component({
   selector: 'app-device-config',
   templateUrl: './device-config.component.html',
-  styleUrls: ['./device-config.component.css']
+  styleUrls: ['./device-config.component.css'],
+  providers: [SetDeviceDialogComponent]
 })
 export class DeviceConfigComponent implements OnInit {
 
@@ -39,7 +42,7 @@ export class DeviceConfigComponent implements OnInit {
   selector: 'app-delete-device-config',
   templateUrl: './delete-device-config.component.html',
   styleUrls: ['./delete-device-config.component.css'],
-  providers: [ConfirmDeleteComponent]
+  providers: [ConfirmDeleteDeviceComponent]
 })
 export class DeleteDeviceDialogComponent implements OnInit {
   exampleDatabase = new TableDatabase();
@@ -50,7 +53,7 @@ export class DeleteDeviceDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http,
-     public dialog: MatDialog, private deleteComp: ConfirmDeleteComponent) {}
+     public dialog: MatDialog, private deleteComp: ConfirmDeleteDeviceComponent) {}
 
   ngOnInit() {
     this.getAllDevices();
@@ -79,7 +82,7 @@ export class DeleteDeviceDialogComponent implements OnInit {
 
   removeDevice(id, serialNo): void {
     // open new dialog
-    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {});
+    const dialogRef = this.dialog.open(ConfirmDeleteDeviceComponent, {});
     // getting the reference to the opened dialog
     this.deleteComp = dialogRef.componentInstance;
     dialogRef.afterClosed().subscribe(
@@ -125,36 +128,4 @@ export class TableDataSource extends DataSource<any> {
   }
 
   disconnect() {}
-}
-
-@Component({
-  selector: 'app-dialog-device-config',
-  templateUrl: './dialog-device-config.component.html',
-  styleUrls: ['./dialog-device-config.component.css']
-})
-export class SetDeviceDialogComponent implements OnInit {
-
-  msgs: Message[] = [];
-  deviceId: string;
-
-  ngOnInit() {
-  }
-
-  constructor(
-    public dialogRef: MatDialogRef<SetDeviceDialogComponent>, private http: Http) {}
-
-  onConfirmClick(): void {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({headers: headers});
-
-    this.http.post('/api/v1/devices', this.deviceId, options).subscribe();
-    this.msgs = [];
-    this.msgs.push({severity: 'success', summary: 'Device Set'});
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
 }

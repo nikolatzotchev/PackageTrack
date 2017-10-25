@@ -47,8 +47,7 @@ import {
   MatFormFieldModule
 } from '@angular/material';
 
-import { DeviceConfigComponent, SetDeviceDialogComponent, DeleteDeviceDialogComponent } from './device-config/device-config.component';
-import {ConfirmDeleteComponent} from './device-config/dialogs/device-dialog-config.component';
+import { DeviceConfigComponent, DeleteDeviceDialogComponent } from './device-config/device-config.component';
 
 import {CdkTableModule} from '@angular/cdk/table';
 
@@ -56,6 +55,8 @@ import {CdkTableModule} from '@angular/cdk/table';
 import { GMapModule } from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {GrowlModule} from 'primeng/primeng';
+import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
+import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-device/confirm-delete-device.component';
 
 
 @NgModule({
@@ -64,9 +65,9 @@ import {GrowlModule} from 'primeng/primeng';
     DeviceViewComponent,
     // device components
     DeviceConfigComponent,
-    SetDeviceDialogComponent,
     DeleteDeviceDialogComponent,
-    ConfirmDeleteComponent
+    SetDeviceDialogComponent,
+    ConfirmDeleteDeviceComponent
   ],
   imports: [
     // angular modules
@@ -89,7 +90,7 @@ import {GrowlModule} from 'primeng/primeng';
     MatIconModule,
     GrowlModule
   ],
-  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent, ConfirmDeleteComponent],
+  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],
