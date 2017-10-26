@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
   List<Report> findByTripOrderByTimestamp(Trip trip);
-  List<Report> deleteByTripIn(List<Trip> trips);
+  void deleteByTripIn(List<Trip> trips);
 }

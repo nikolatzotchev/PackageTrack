@@ -65,9 +65,9 @@ public class DeviceController {
   public void deleteDevice(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     List<Trip> trips = tripRepository.findByDevice(device);
+    tripConfigurationRepository.deleteByTripIn(trips);
     tripRepository.deleteByDevice(device);
     reportRepository.deleteByTripIn(trips);
-    tripConfigurationRepository.deleteByTripIn(trips);
     deviceRepository.delete(id);
   }
 

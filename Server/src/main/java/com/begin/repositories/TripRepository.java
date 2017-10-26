@@ -19,5 +19,5 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
   Trip findByDeviceOrderByIdDesc(Device device);
 
-  List<Trip> deleteByDevice(Device device);
+  void deleteByDevice(Device device);
 }
