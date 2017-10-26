@@ -8,9 +8,9 @@ describe('TripConfigComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeviceConfigComponent ]
+      declarations: [DeviceConfigComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
