@@ -1,7 +1,10 @@
 .confir-button button{
     width: 100px;
+    margin-left: 20px;
 }
 .confir-button {
-    float: right;
+    float: middle;
     padding-top: 5px;
+    display: flex;
+    justify-content: center;
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import {SelectItem} from 'primeng/components/common/api';
 import {Message} from 'primeng/components/common/api';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+
 import { Http, Request, RequestOptionsArgs, RequestOptions,
     Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend } from '@angular/http';
 
@@ -29,6 +30,7 @@ export class DeviceConfigComponent implements OnInit {
 
   setDevice(): void {
     const dialogRef = this.dialog.open(SetDeviceDialogComponent, {
+      width: '350px'
     });
   }
 

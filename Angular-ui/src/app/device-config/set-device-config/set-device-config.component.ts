@@ -27,9 +27,10 @@ export class SetDeviceDialogComponent implements OnInit {
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({headers: headers});
 
-    this.http.post('/api/v1/devices', this.deviceId, options).subscribe();
+    this.http.post('http://192.168.1.107:8080/api/v1/devices', this.deviceId, options).subscribe();
     this.msgs = [];
     this.msgs.push({severity: 'success', summary: 'Device Set'});
+    this.onNoClick();
   }
 
   onNoClick(): void {

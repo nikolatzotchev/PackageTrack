@@ -1,11 +1,11 @@
-<div class="example-container">
-
 <h1 mat-dialog-title>Set new Device</h1>
-<mat-form-field color="warn">
-  <textarea matInput [(ngModel)] = "deviceId" #input maxlength="30" placeholder="Device Id(not required)"></textarea>
+
+<div class="example-container">
+<mat-form-field color="primary">
+  <input matInput [(ngModel)] = "deviceId" #input maxlength="30" placeholder="Device Id(not required)">
   <mat-hint align="end">{{input.value?.length || 0}}/30</mat-hint>
 </mat-form-field>
+<button mat-raised-button color = "primary" (click)="onConfirmClick()">Set</button>  
 </div>
 
 <p-growl [(value)]="msgs"></p-growl>
-<button mat-raised-button color = "accent" (click)="onConfirmClick()">Set</button>

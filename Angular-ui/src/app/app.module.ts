@@ -90,7 +90,7 @@ import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-dev
     MatIconModule,
     GrowlModule
   ],
-  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent],
+  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent, ConfirmDeleteDeviceComponent],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],
