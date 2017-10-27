@@ -57,6 +57,8 @@ import {InputTextModule} from 'primeng/primeng';
 import {GrowlModule} from 'primeng/primeng';
 import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
 import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-device/confirm-delete-device.component';
+import { TripComponent } from './trip/trip.component';
+import { CreateTripComponent } from './trip/create-trip/create-trip.component';
 
 
 @NgModule({
@@ -67,7 +69,9 @@ import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-dev
     DeviceConfigComponent,
     DeleteDeviceDialogComponent,
     SetDeviceDialogComponent,
-    ConfirmDeleteDeviceComponent
+    ConfirmDeleteDeviceComponent,
+    TripComponent,
+    CreateTripComponent
   ],
   imports: [
     // angular modules
@@ -77,6 +81,7 @@ import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-dev
     HttpModule,
     // primeng modules
     GMapModule,
+    GrowlModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
@@ -88,9 +93,15 @@ import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-dev
     MatInputModule,
     MatTableModule,
     MatIconModule,
-    GrowlModule
+    MatStepperModule,
+    MatSelectModule,
   ],
-  entryComponents: [SetDeviceDialogComponent, DeleteDeviceDialogComponent, ConfirmDeleteDeviceComponent],
+  entryComponents: [
+    SetDeviceDialogComponent,
+    DeleteDeviceDialogComponent,
+    ConfirmDeleteDeviceComponent,
+    CreateTripComponent
+  ],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],
