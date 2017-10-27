@@ -1,0 +1,9 @@
+.trip_buttons {
+    align-items: center;
+    justify-content: space-around;
+  }
+
+.trip_buttons button {
+  width: 200px;
+}
+

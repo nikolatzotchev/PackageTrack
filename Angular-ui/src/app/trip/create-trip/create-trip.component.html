@@ -1,0 +1,40 @@
+<mat-horizontal-stepper [linear]="true">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Select Device</ng-template>
+
+      <mat-form-field>
+        <mat-select placeholder="Devices" [(ngModel)]="selectedDevice" formControlName="firstCtrl" required>
+          <mat-option *ngFor="let device of devices" [value]="device.id">
+            {{device.id}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Describe the trip</ng-template>
+      <mat-form-field class="description_text_area">
+        <textarea matInput [(ngModel)]="tripDescription" placeholder="description" #input maxlength="150" formControlName="secondCtrl"
+          required></textarea>
+        <mat-hint align="end">{{input.value?.length || 0}}/150</mat-hint>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Finish</ng-template>
+    <div>
+      <button mat-raised-button collor="primary" (click)="createTrip()">Create Trip</button>
+      <button mat-raised-button matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
