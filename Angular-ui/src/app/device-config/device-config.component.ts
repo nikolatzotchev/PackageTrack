@@ -11,8 +11,8 @@ import {
 import 'rxjs/add/operator/map';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 import { SetDeviceDialogComponent } from './set-device-config/set-device-config.component';
 import { ConfirmDeleteDeviceComponent } from './confirm-delete-device/confirm-delete-device.component';
 

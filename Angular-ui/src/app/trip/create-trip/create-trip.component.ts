@@ -58,6 +58,7 @@ export class CreateTripComponent implements OnInit {
     .subscribe(() => {},
     (error) => {
       console.log(error.json().message);
+      this.dialogRef.close(false);
     });
     this.dialogRef.close(true);
   }

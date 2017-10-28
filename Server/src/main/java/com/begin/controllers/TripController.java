@@ -58,6 +58,11 @@ public class TripController {
     }
   }
 
+  @GetMapping(path = "/not-started")
+  public List<Trip> listNotStartedTrips() {
+    return tripRepository.findByStartTimeIsNull();
+  }
+
   @GetMapping(path = "/{id}/")
   public Trip getTrip(@PathVariable Long id) throws ResourceNotFoundException {
     if (tripRepository.findOne(id) == null) {
