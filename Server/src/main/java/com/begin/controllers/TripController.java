@@ -16,7 +16,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,15 +67,14 @@ public class TripController {
   }
 
   @PostMapping
-  @Transactional
   public Trip createTrip(@RequestBody @Valid CreateTripDTO request) {
     Device device = deviceRepository.findOne(request.getDeviceId());
     if (null == device) {
       throw new IllegalStateException("There is no device with the specified ID!");
     }
 
-    Trip oldTrip = tripRepository.findByEndTimeIsNullAndDevice(device);
-    if (oldTrip != null) {
+    Trip tripInProgress = tripRepository.findByEndTimeIsNullAndDevice(device);
+    if (tripInProgress != null) {
       throw new IllegalStateException(
           "This device is already used in another trip, please end the old trip, before starting a new one!");
     }
