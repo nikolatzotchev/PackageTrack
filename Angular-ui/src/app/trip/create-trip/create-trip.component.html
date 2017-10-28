@@ -5,6 +5,9 @@
 
       <mat-form-field>
         <mat-select placeholder="Devices" [(ngModel)]="selectedDevice" formControlName="firstCtrl" required>
+          <mat-option *ngIf = "devices?.length === 0">
+              Pls configure a device first!
+          </mat-option>
           <mat-option *ngFor="let device of devices" [value]="device.id">
             {{device.id}}
           </mat-option>
@@ -32,8 +35,8 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Finish</ng-template>
-    <div>
-      <button mat-raised-button collor="primary" (click)="createTrip()">Create Trip</button>
+    <div class = "finish_buttons">
+      <button mat-raised-button color="primary" (click)="createTrip()">Create Trip</button>
       <button mat-raised-button matStepperPrevious>Back</button>
     </div>
   </mat-step>

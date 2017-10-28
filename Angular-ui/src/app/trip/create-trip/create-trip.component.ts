@@ -40,7 +40,7 @@ export class CreateTripComponent implements OnInit {
     .subscribe(
     resp => {
 
-      resp.forEach(m => this.devices.push({ 'id': m.id, 'serialNo': m.serialNo }));
+      resp.forEach(m => this.devices.push({ 'id': m.id }));
 
     },
     (err) => console.error(err),

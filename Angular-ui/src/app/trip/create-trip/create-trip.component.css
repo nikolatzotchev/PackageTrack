@@ -1,3 +1,15 @@
 .description_text_area {
     width: 100%;
 }
+
+.finish_buttons {
+    float: middle;
+    padding-top: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.finish_buttons button{
+    width: 100px;
+    margin-left: 20px;
+}
