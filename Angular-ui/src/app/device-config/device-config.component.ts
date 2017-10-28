@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { SetDeviceDialogComponent } from './set-device-config/set-device-config.component';
-import { ConfirmDeleteDeviceComponent } from './confirm-delete-device/confirm-delete-device.component';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -56,8 +56,7 @@ export class DeviceConfigComponent implements OnInit {
 @Component({
   selector: 'app-delete-device-config',
   templateUrl: './delete-device-config.component.html',
-  styleUrls: ['./delete-device-config.component.css'],
-  providers: [ConfirmDeleteDeviceComponent]
+  styleUrls: ['./delete-device-config.component.css']
 })
 export class DeleteDeviceDialogComponent implements OnInit {
   exampleDatabase = new TableDatabase();
@@ -68,7 +67,7 @@ export class DeleteDeviceDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteDeviceDialogComponent>, private http: Http,
-    public dialog: MatDialog, private deleteComp: ConfirmDeleteDeviceComponent) { }
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.getAllDevices();
@@ -97,13 +96,13 @@ export class DeleteDeviceDialogComponent implements OnInit {
 
   removeDevice(id, serialNo): void {
     // open new dialog
-    const dialogRef = this.dialog.open(ConfirmDeleteDeviceComponent, {});
-    // getting the reference to the opened dialog
-    this.deleteComp = dialogRef.componentInstance;
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+       data: `Are you sure you want to remove device ${id}`
+    });
     dialogRef.afterClosed().subscribe(
-      selection => {
+      result => {
         // only deleting when yes is pressed
-        if (this.deleteComp.confirm === true) {
+        if (result === true) {
           this.http.delete(`http://192.168.1.107:8080/api/v1/devices/${id}/`).subscribe();
           this.msgs = [];
           this.msgs.push({ severity: 'success', summary: 'Device Deleted' });

@@ -56,7 +56,6 @@ import { GMapModule } from 'primeng/primeng';
 import {InputTextModule} from 'primeng/primeng';
 import {GrowlModule} from 'primeng/primeng';
 import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
-import { ConfirmDeleteDeviceComponent } from './device-config/confirm-delete-device/confirm-delete-device.component';
 import { TripComponent } from './trip/trip.component';
 import { CreateTripComponent } from './trip/create-trip/create-trip.component';
 import { StartTripComponent } from './trip/start-trip/start-trip.component';
@@ -71,7 +70,6 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     DeviceConfigComponent,
     DeleteDeviceDialogComponent,
     SetDeviceDialogComponent,
-    ConfirmDeleteDeviceComponent,
     TripComponent,
     CreateTripComponent,
     StartTripComponent,
@@ -103,7 +101,6 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
   entryComponents: [
     SetDeviceDialogComponent,
     DeleteDeviceDialogComponent,
-    ConfirmDeleteDeviceComponent,
     CreateTripComponent,
     StartTripComponent,
     ConfirmDialogComponent
