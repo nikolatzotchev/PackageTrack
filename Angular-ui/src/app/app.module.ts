@@ -61,6 +61,7 @@ import { CreateTripComponent } from './trip/create-trip/create-trip.component';
 import { StartTripComponent } from './trip/start-trip/start-trip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
+import { ErrorHandlingComponent } from './error-handling/error-handling.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog
     TripComponent,
     CreateTripComponent,
     StartTripComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ErrorHandlingComponent
   ],
   imports: [
     // angular modules
@@ -106,7 +108,8 @@ import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog
     DeleteDeviceDialogComponent,
     CreateTripComponent,
     StartTripComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ErrorHandlingComponent
   ],
   providers: [
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work

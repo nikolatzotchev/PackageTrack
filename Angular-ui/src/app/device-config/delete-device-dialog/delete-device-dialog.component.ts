@@ -11,7 +11,8 @@ import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import {ConfirmDialogComponent} from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ErrorHandlingComponent } from '../../error-handling/error-handling.component';
 
 @Component({
   selector: 'app-delete-device-dialog',
@@ -44,7 +45,11 @@ export class DeleteDeviceDialogComponent implements OnInit {
         resp.forEach(m => this.exampleDatabase.data.push({ 'id': m.id, 'serialNo': m.serialNo }));
 
       },
-      (err) => console.error(err),
+      (error) => {
+        const dialogRef = this.dialog.open(ErrorHandlingComponent, {
+          data: error.json().message
+        });
+      },
       () => this.displayTable = true
       );
     this.dataSource = new TableDataSource(this.exampleDatabase);
@@ -58,7 +63,7 @@ export class DeleteDeviceDialogComponent implements OnInit {
   removeDevice(id, serialNo): void {
     // open new dialog
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-       data: `Are you sure you want to remove device ${id}`
+      data: `Are you sure you want to remove device ${id}`
     });
     dialogRef.afterClosed().subscribe(
       result => {

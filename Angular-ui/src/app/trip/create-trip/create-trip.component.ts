@@ -6,6 +6,7 @@ import {
   Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
 } from '@angular/http';
 import 'rxjs/add/operator/catch';
+import {ErrorHandlingComponent} from '../../error-handling/error-handling.component';
 @Component({
   selector: 'app-create-trip',
   templateUrl: './create-trip.component.html',
@@ -24,7 +25,7 @@ export class CreateTripComponent implements OnInit {
   startTrip = false;
 
   constructor(public dialogRef: MatDialogRef<CreateTripComponent>,
-     private _formBuilder: FormBuilder, private http: Http ) { }
+     private _formBuilder: FormBuilder, private http: Http, public dialog: MatDialog ) { }
 
   ngOnInit() {
     this.getDevicesId();
@@ -45,7 +46,12 @@ export class CreateTripComponent implements OnInit {
       resp.forEach(m => this.devices.push({ 'id': m.id }));
 
     },
-    (err) => console.error(err),
+    (error) => {
+      console.log(error);
+      const dialogRef = this.dialog.open(ErrorHandlingComponent, {
+        data: error.json()
+      });
+    }
     );
   }
 
@@ -56,16 +62,22 @@ export class CreateTripComponent implements OnInit {
     // push device id and description
     this.data = { 'deviceId': this.selectedDevice, 'description': this.tripDescription} ;
     this.http.post('http://192.168.1.107:8080/api/v1/trips', JSON.stringify(this.data), options)
-    .subscribe((resp) => {
+    .subscribe(
+    (resp) => {
       // if we wont to start the trip right after it is created
       if (this.startTrip === true) {
         this.http.post(`http://192.168.1.107:8080/api/v1/trips/${resp.json().id}/startTrip`, options).subscribe();
       }
-     },
+    },
     (error) => {
-      console.log(error.json().message);
-      this.dialogRef.close(false);
-    });
-    this.dialogRef.close(true);
+      const dialogRef = this.dialog.open(ErrorHandlingComponent, {
+        data: error.json().message
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.dialogRef.close(false);
+      });
+    },
+    () =>  this.dialogRef.close(true)
+    );
   }
 }
