@@ -98,6 +98,8 @@ import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog
     MatIconModule,
     MatStepperModule,
     MatSelectModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   entryComponents: [
     SetDeviceDialogComponent,

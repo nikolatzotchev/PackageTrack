@@ -2,14 +2,22 @@
     width: 100%;
 }
 
-.finish_buttons {
+.steps_buttons {
     float: middle;
-    padding-top: 5px;
     display: flex;
     justify-content: center;
 }
 
-.finish_buttons button{
+.final_step {
+    margin: 10px 0;
+    align-items: center;
+}
+
+.steps_buttons button{
     width: 100px;
     margin-left: 20px;
+}
+
+.select_device {
+    width: 350px;
 }

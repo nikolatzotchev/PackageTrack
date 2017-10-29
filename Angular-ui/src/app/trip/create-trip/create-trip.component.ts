@@ -20,6 +20,8 @@ export class CreateTripComponent implements OnInit {
   devices = [];
   // body of create trip post
   data = {};
+  // true if you want a trip to be started when created
+  startTrip = false;
 
   constructor(public dialogRef: MatDialogRef<CreateTripComponent>,
      private _formBuilder: FormBuilder, private http: Http ) { }
@@ -53,9 +55,13 @@ export class CreateTripComponent implements OnInit {
     const options = new RequestOptions({ headers: headers });
     // push device id and description
     this.data = { 'deviceId': this.selectedDevice, 'description': this.tripDescription} ;
-    console.log(JSON.stringify(this.data));
     this.http.post('http://192.168.1.107:8080/api/v1/trips', JSON.stringify(this.data), options)
-    .subscribe(() => {},
+    .subscribe((resp) => {
+      // if we wont to start the trip right after it is created
+      if (this.startTrip === true) {
+        this.http.post(`http://192.168.1.107:8080/api/v1/trips/${resp.json().id}/startTrip`, options).subscribe();
+      }
+     },
     (error) => {
       console.log(error.json().message);
       this.dialogRef.close(false);
