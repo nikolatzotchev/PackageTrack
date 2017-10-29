@@ -47,7 +47,7 @@ import {
   MatFormFieldModule
 } from '@angular/material';
 
-import { DeviceConfigComponent, DeleteDeviceDialogComponent } from './device-config/device-config.component';
+import { DeviceConfigComponent} from './device-config/device-config.component';
 
 import {CdkTableModule} from '@angular/cdk/table';
 
@@ -60,6 +60,7 @@ import { TripComponent } from './trip/trip.component';
 import { CreateTripComponent } from './trip/create-trip/create-trip.component';
 import { StartTripComponent } from './trip/start-trip/start-trip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
 
 
 @NgModule({
