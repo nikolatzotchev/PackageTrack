@@ -4,6 +4,8 @@ import { Message } from 'primeng/components/common/api';
 
 import { CreateTripComponent } from './create-trip/create-trip.component';
 import { StartTripComponent } from './start-trip/start-trip.component';
+import { ManageTripsComponent } from './manage-trips/manage-trips.component';
+
 
 @Component({
   selector: 'app-trip',
@@ -42,6 +44,10 @@ export class TripComponent implements OnInit {
         this.msgs.push({ severity: 'warn', summary: 'Did not start trip' });
       }
     });
+  }
+
+  manageStartedTrip() {
+    const dialogRef = this.dialog.open(ManageTripsComponent);
   }
 
 }
