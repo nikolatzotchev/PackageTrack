@@ -18,10 +18,10 @@ public class Report {
   private Long id;
 
   @NotNull
-  private long latitude;
+  private double latitude;
 
   @NotNull
-  private long longitude;
+  private double longitude;
 
   @NotNull
   private ZonedDateTime timestamp;
@@ -41,19 +41,19 @@ public class Report {
     this.id = id;
   }
 
-  public long getLatitude() {
+  public double getLatitude() {
     return latitude;
   }
 
-  public void setLatitude(long latitude) {
+  public void setLatitude(double latitude) {
     this.latitude = latitude;
   }
 
-  public long getLongitude() {
+  public double getLongitude() {
     return longitude;
   }
 
-  public void setLongitude(long longitude) {
+  public void setLongitude(double longitude) {
     this.longitude = longitude;
   }
 
