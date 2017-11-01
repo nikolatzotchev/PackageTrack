@@ -73,11 +73,11 @@ public class TripConfiguration {
     if (getMax() == null && getMin() == null) {
       return true;
     } else if (getMax() == null) {
-      return value >= getMin();
+      return value < getMin();
     } else if (getMin() == null) {
-      return value <= getMax();
+      return value > getMax();
     }
-    return value >= getMin() && value <= getMax();
+    return value < getMin() || value > getMax();
   }
 
   @Override
