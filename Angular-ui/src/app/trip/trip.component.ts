@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Message } from 'primeng/components/common/api';
 
@@ -13,7 +13,7 @@ import { ManageTripsComponent } from './manage-trips/manage-trips.component';
   styleUrls: ['./trip.component.css']
 })
 export class TripComponent implements OnInit {
-
+  @Output() displayTrip = new EventEmitter();
   constructor(public dialog: MatDialog) { }
   msgs: Message[] = [];
 
@@ -46,8 +46,11 @@ export class TripComponent implements OnInit {
     });
   }
 
-  manageStartedTrip() {
+  manageTrips() {
     const dialogRef = this.dialog.open(ManageTripsComponent);
+    const sub = dialogRef.componentInstance.displayOnGmap.subscribe(
+      (data) => (this.displayTrip.emit(data))
+    );
   }
 
 }

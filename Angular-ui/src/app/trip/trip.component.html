@@ -2,7 +2,10 @@
     <button mat-raised-button color="primary" (click)="createTrip()">Create Trip</button>
     <button mat-raised-button color="primary" (click)="startTrip()">Start Trip</button>
     <span matTooltip="Manage started trips">
-        <button mat-raised-button color="primary" (click)="manageStartedTrip()">Started Trips</button>
+        <button mat-raised-button color="primary" (click)="manageTrips()">Started Trips</button>
+    </span>
+    <span matTooltip="Manage ended trips">
+        <button mat-raised-button color="primary" (click)="manageTrips()">Ended Trips</button>
     </span>
 </div>
 <p-growl [(value)]="msgs"></p-growl>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import {
   Http, Request, RequestOptionsArgs, RequestOptions,
@@ -20,6 +20,7 @@ export class ManageTripsComponent implements OnInit {
   tableDatabase = new TableDatabase();
   dataSource: TableDataSource;
   displayedColumns = ['tripId', 'description', 'deviceId', 'displayTrip', 'endTrip'];
+  displayOnGmap = new EventEmitter();
 
   constructor(public dialogRef: MatDialogRef<ManageTripsComponent>,
     private http: Http, public dialog: MatDialog) { }
@@ -30,7 +31,6 @@ export class ManageTripsComponent implements OnInit {
       .subscribe(
         resp => {
           resp.forEach(element => {
-            console.log(element);
             this.tableDatabase.data.push({'tripId': element.id, 'deviceId': element.device.id, 'description': element.description});
           });
         },
@@ -60,6 +60,10 @@ export class ManageTripsComponent implements OnInit {
         this.dataSource = new TableDataSource(this.tableDatabase);
       }
     });
+  }
+
+  displayTrip(id) {
+    this.displayOnGmap.emit(id);
   }
 }
 export interface Element {

@@ -3,6 +3,9 @@ import { Http, Request, RequestOptionsArgs, RequestOptions,
     Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend } from '@angular/http';
 import { GMapModule } from 'primeng/primeng';
 
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+
+
 declare var google: any;
 
 @Component({
@@ -20,11 +23,40 @@ export class DeviceViewComponent implements OnInit {
 
   // own data
   deviceInfo: any;
+  path = [];
 
   constructor(private http: Http) { }
 
   setGMap(event) {
       this.gmap = event.map;
+  }
+
+  displayTrip(tripId) {
+    console.log(tripId);
+    this.http.get(`http://192.168.1.107:8080/api/v1/trips/${tripId}/reports`)
+            .subscribe(
+                response => {
+                    const res = response.json();
+                    res.forEach(element => {
+                        console.log(element);
+                        if (element.incidentValues.length !== 0) {
+                            console.log('asfasfa');
+                        }
+                        this.path.push({'lat': element.latitude, 'lng': element.longitude});
+                    });
+                },
+                (err) => (console.log(err)),
+                () => {
+                    const flightPath = new google.maps.Polyline({
+                    path: this.path,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+                flightPath.setMap(this.gmap);
+            }
+            );
   }
 
   ngOnInit() {
@@ -78,6 +110,7 @@ export class DeviceViewComponent implements OnInit {
       };
 
       this.infoWindow = new google.maps.InfoWindow();
+      // TimerObservable.create(0, 1000).subscribe(() => console.log(1));
   }
 
   private toMarker(incident): any {

@@ -30,7 +30,7 @@
         <ng-container matColumnDef="displayTrip">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button class="table_button" mat-raised-button clicked color="primary" (click)="displayTrip(element)" > Display Trip </button>
+            <button class="table_button" mat-raised-button clicked color="primary" (click)="displayTrip(element.tripId)" > Display Trip </button>
           </mat-cell>
         </ng-container>
 
