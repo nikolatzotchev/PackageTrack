@@ -52,9 +52,16 @@ import { DeviceConfigComponent} from './device-config/device-config.component';
 import {CdkTableModule} from '@angular/cdk/table';
 
 // primeng modules
-import { GMapModule } from 'primeng/primeng';
-import {InputTextModule} from 'primeng/primeng';
-import {GrowlModule} from 'primeng/primeng';
+import { GMapModule,
+         InputTextModule,
+         GrowlModule,
+         ProgressBarModule,
+         DataGridModule,
+         PanelModule,
+         ButtonModule,
+         DialogModule
+         } from 'primeng/primeng';
+
 import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
 import { TripComponent } from './trip/trip.component';
 import { CreateTripComponent } from './trip/create-trip/create-trip.component';
@@ -63,6 +70,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
 import { ErrorHandlingComponent } from './error-handling/error-handling.component';
 import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component';
+import { DeviceDisplayComponent } from './devices-display/devices-display.component';
 
 
 @NgModule({
@@ -78,7 +86,8 @@ import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component
     StartTripComponent,
     ConfirmDialogComponent,
     ErrorHandlingComponent,
-    ManageTripsComponent
+    ManageTripsComponent,
+    DeviceDisplayComponent
   ],
   imports: [
     // angular modules
@@ -89,13 +98,18 @@ import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component
     // primeng modules
     GMapModule,
     GrowlModule,
+    ProgressBarModule,
+    DataGridModule,
+    PanelModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
     MatNativeDateModule,
-    InputTextModule,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
@@ -103,7 +117,9 @@ import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component
     MatStepperModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatCardModule
   ],
   entryComponents: [
     SetDeviceDialogComponent,

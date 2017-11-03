@@ -1,0 +1,15 @@
+li {
+    display: inline-block;
+    list-style-type: none;
+}
+
+.dialog_buttons button {
+    width: 5em;
+}
+
+.dialog_buttons {
+    padding-top: 1em;    
+    float: middle;
+    display: flex;
+    justify-content: center;
+}
