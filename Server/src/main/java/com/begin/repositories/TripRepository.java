@@ -13,7 +13,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
   List<Trip> findByStartTimeIsNull();
 
-  Trip findByDeviceOrderByEndTime(Device device);
+  Trip findFirstByDeviceOrderByEndTime(Device device);
 
   Trip findByEndTimeIsNullAndDevice(Device device);
 
