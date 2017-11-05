@@ -63,7 +63,7 @@ public class TripController {
     return tripRepository.findByStartTimeIsNull();
   }
 
-  @GetMapping(path = "/{id}/")
+  @GetMapping(path = "/{id}")
   public Trip getTrip(@PathVariable Long id) throws ResourceNotFoundException {
     if (tripRepository.findOne(id) == null) {
       throw new ResourceNotFoundException("No such trip");

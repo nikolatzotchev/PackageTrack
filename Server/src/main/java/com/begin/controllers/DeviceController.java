@@ -63,7 +63,7 @@ public class DeviceController {
   }
 
   @Transactional
-  @DeleteMapping(path = "/{id}/")
+  @DeleteMapping(path = "/{id}")
   public void deleteDevice(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     List<Trip> trips = tripRepository.findByDevice(device);
@@ -82,7 +82,7 @@ public class DeviceController {
   @GetMapping(path = "/{id}/lastTrip")
   public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
-    Trip trip = tripRepository.findByDeviceOrderByEndTime(device);
+    Trip trip = tripRepository.findFirstByDeviceOrderByEndTime(device);
     if (null == trip) {
       // there is no current trip with that device, so simply ignore the reportings
       throw new ResourceNotFoundException("Trip not found");
