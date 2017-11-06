@@ -5,6 +5,7 @@ import {
 } from '@angular/http';
 import { Router } from '@angular/router';
 import {GrowlModule} from 'primeng/primeng';
+import {MenuItem} from 'primeng/primeng';
 import { Message } from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
 
@@ -20,6 +21,13 @@ export class DeviceDisplayComponent implements OnInit {
   progressSpinner = true;
   display = false;
   serialNum: string;
+  // messege to display when there are no devices configured
+  emptyMsg = 'Database is empty, please add a devece first!';
+  // breadcrumb stuff
+  home: MenuItem  = {icon: 'fa fa-home'};
+  breadcrumb: MenuItem[] = [
+    { label: 'Devices', routerLink: '/devices-display' }
+  ];
   constructor(private http: Http, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
@@ -48,9 +56,12 @@ export class DeviceDisplayComponent implements OnInit {
 
     this.http.post(environment.baseUrl + 'devices', this.serialNum, options).subscribe(
       () => {},
-      (error) => (console.log(error)),
+      (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
       () => (
+        // close dialog
         this.display = false,
+        this.messageService.add({severity: 'success', summary: 'device added', detail: this.serialNum}),
+        this.serialNum = null,
         this.ngOnInit()
       )
     );

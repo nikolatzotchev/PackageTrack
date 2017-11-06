@@ -5,7 +5,7 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'device-view', pathMatch: 'full' },
+  { path: '', redirectTo: 'devices-display', pathMatch: 'full' },
   { path: 'device-view', component: DeviceViewComponent},
   { path: 'devices-display', component: DeviceDisplayComponent}
 ];

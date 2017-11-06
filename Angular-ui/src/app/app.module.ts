@@ -60,7 +60,8 @@ import { GMapModule,
          PanelModule,
          ButtonModule,
          DialogModule,
-         ProgressSpinnerModule
+         ProgressSpinnerModule,
+         BreadcrumbModule,
          } from 'primeng/primeng';
 
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -107,6 +108,7 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
     DialogModule,
     InputTextModule,
     ProgressSpinnerModule,
+    BreadcrumbModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
