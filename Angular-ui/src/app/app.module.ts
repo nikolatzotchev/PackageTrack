@@ -59,9 +59,11 @@ import { GMapModule,
          DataGridModule,
          PanelModule,
          ButtonModule,
-         DialogModule
+         DialogModule,
+         ProgressSpinnerModule
          } from 'primeng/primeng';
 
+import { MessageService } from 'primeng/components/common/messageservice';
 import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
 import { TripComponent } from './trip/trip.component';
 import { CreateTripComponent } from './trip/create-trip/create-trip.component';
@@ -104,6 +106,7 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
     ButtonModule,
     DialogModule,
     InputTextModule,
+    ProgressSpinnerModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
@@ -131,6 +134,7 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
     ManageTripsComponent
   ],
   providers: [
+       MessageService,
       { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
   ],
   bootstrap:  [AppComponent]

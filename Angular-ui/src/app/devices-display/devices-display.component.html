@@ -1,25 +1,34 @@
-<li *ngIf="progressSpinner"><mat-spinner></mat-spinner></li>
-<p-dataGrid [value]="devices">
-  <p-header>
-      <button pButton type="button" (click)="addDevice()" label="Add Device" icon="fa-plus-square"></button>
-  </p-header>
-  <ng-template let-device pTemplate="item">
-      <div class="ui-g-1">
-          <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo()">
-              <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
-              <div>{{device.serialNo}}</div>
-              <hr class="ui-widget-content" style="border-top:0">
-          </p-panel>          
-      </div>
-  </ng-template>
-</p-dataGrid>
+<li *ngIf="progressSpinner;else deviceList">
+    <div class = "spiner">
+     <p-progressSpinner [style]="{ width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s">
+      </p-progressSpinner>
+    </div>
+</li>
+<p-growl></p-growl>
 
-<p-dialog header="Add new Device" [(visible)]="display" [modal]="true" [dismissableMask]="true">
-    <div class="ui-inputgroup">
-        <input type="text" pInputText placeholder="SerialNumber" [(ngModel)] = "serialNum" #input maxlength="15">
-    </div>
-    <div class="dialog_buttons">
-      <button pButton type="button" (click)="setNewDevice()" label="set"></button>
-      <button pButton type="button" (click)="display=false" label="cancel"  class="ui-button-danger"></button>
-    </div>
-</p-dialog>
+<ng-template #deviceList>
+    <p-dataGrid [value]="devices">
+        <p-header>
+            <button pButton type="button" (click)="addDevice()" label="Add Device" icon="fa-plus-square"></button>
+        </p-header>
+        <ng-template let-device pTemplate="item">
+            <div class="ui-g-1">
+                <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo()">
+                    <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
+                    <div>{{device.serialNo}}</div>
+                    <hr class="ui-widget-content" style="border-top:0">
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataGrid>
+
+    <p-dialog header="Add new Device" [(visible)]="display" [modal]="true" [dismissableMask]="true">
+        <div class="ui-inputgroup">
+            <input type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="15">
+        </div>
+        <div class="dialog_buttons">
+            <button pButton type="button" (click)="setNewDevice()" label="set"></button>
+            <button pButton type="button" (click)="display=false" label="cancel" class="ui-button-danger"></button>
+        </div>
+    </p-dialog>
+</ng-template>

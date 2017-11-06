@@ -4,6 +4,12 @@ import {
   Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
 } from '@angular/http';
 import { Router } from '@angular/router';
+import {GrowlModule} from 'primeng/primeng';
+import { Message } from 'primeng/components/common/api';
+import {MessageService} from 'primeng/components/common/messageservice';
+
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-devices-display',
   templateUrl: './devices-display.component.html',
@@ -14,19 +20,18 @@ export class DeviceDisplayComponent implements OnInit {
   progressSpinner = true;
   display = false;
   serialNum: string;
-  constructor(private http: Http, private router: Router) { }
+  constructor(private http: Http, private router: Router, private messageService: MessageService) { }
 
   ngOnInit() {
     // get all devices
-    this.http.get('http://192.168.1.107:8080/api/v1/devices')
+    this.http.get(environment.baseUrl + 'devices')
       .map(resp => resp.json())
       .subscribe(
         response => {
           this.devices = response;
         },
-        (error) => console.log(error),
+        (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
         () =>  {
-          console.log(this.devices);
           this.progressSpinner = false;
         }
       );
@@ -41,7 +46,7 @@ export class DeviceDisplayComponent implements OnInit {
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
 
-    this.http.post('http://192.168.1.107:8080/api/v1/devices', this.serialNum, options).subscribe(
+    this.http.post(environment.baseUrl + 'devices', this.serialNum, options).subscribe(
       () => {},
       (error) => (console.log(error)),
       () => (
