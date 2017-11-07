@@ -26,7 +26,7 @@ export class DeviceDisplayComponent implements OnInit {
   // breadcrumb stuff
   home: MenuItem  = {icon: 'fa fa-home'};
   breadcrumb: MenuItem[] = [
-    { label: 'Devices', routerLink: '/devices-display' }
+    {label: 'Devices'}
   ];
   constructor(private http: Http, private router: Router, private messageService: MessageService) { }
 

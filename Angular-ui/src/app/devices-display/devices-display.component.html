@@ -1,22 +1,20 @@
-<p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
-<li *ngIf="progressSpinner;else deviceList">
-    <div class = "spiner">
-     <p-progressSpinner [style]="{ width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration=".5s">
+<div class="spinner" *ngIf="progressSpinner;else deviceList">
+  <p-progressSpinner strokeWidth="3" animationDuration="1s">
       </p-progressSpinner>
-    </div>
-</li>
+</div>
 <p-growl></p-growl>
 
 <ng-template #deviceList>
-    <p-dataGrid [value]="devices" [paginator]="true" [emptyMessage]="emptyMsg" [alwaysShowPaginator]="false" [rows]="12">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-dataGrid [value]="devices" [paginator]="true" [emptyMessage]="emptyMsg" [alwaysShowPaginator]="false" [rows]="12">
         <p-header>
             <button pButton type="button" (click)="addDevice()" label="Add Device" icon="fa-plus-square"></button>
         </p-header>
         <ng-template let-device pTemplate="item">
-            <div class="ui-g-2">
+          <div class="ui-g-3">
                 <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo(device.id)">
                     <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
-                    <div>{{device.serialNo}}</div>
+                  <div class="serialNo">{{device.serialNo}}</div>
                     <hr class="ui-widget-content" style="border-top:0">
                 </p-panel>
             </div>
@@ -28,7 +26,7 @@
             <input type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="10">
         </div>
         <div class="dialog_buttons">
-            <button pButton type="button" (click)="setNewDevice()" label="set"></button>
+          <button class="mat-typography heading" pButton type="button" (click)="setNewDevice()" label="set"></button>
             <button pButton type="button" (click)="display=false" label="cancel" class="ui-button-danger"></button>
         </div>
     </p-dialog>
