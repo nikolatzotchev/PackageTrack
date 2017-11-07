@@ -1,1 +1,7 @@
-<app-device-view></app-device-view>
+<app-device-view [deviceId]="deviceId"></app-device-view>
+<div class="device_info_center">
+  <div class="device_info">
+    <i class="fa fa-mobile fa-5x" aria-hidden="true"></i>
+    <div class="ui-widget" style="font-size: 3em">Device-{{deviceId}}</div>
+  </div>
+</div>

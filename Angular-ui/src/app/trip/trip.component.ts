@@ -6,6 +6,7 @@ import { CreateTripComponent } from './create-trip/create-trip.component';
 import { StartTripComponent } from './start-trip/start-trip.component';
 import { ManageTripsComponent } from './manage-trips/manage-trips.component';
 
+import {ButtonModule} from 'primeng/primeng';
 
 @Component({
   selector: 'app-trip',
