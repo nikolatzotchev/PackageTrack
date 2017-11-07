@@ -62,7 +62,8 @@ import { GMapModule,
          DialogModule,
          ProgressSpinnerModule,
          BreadcrumbModule,
-         } from 'primeng/primeng';
+  TooltipModule,
+} from 'primeng/primeng';
 
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
@@ -74,6 +75,7 @@ import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog
 import { ErrorHandlingComponent } from './error-handling/error-handling.component';
 import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component';
 import { DeviceDisplayComponent } from './devices-display/devices-display.component';
+import {DeviceInfoComponent} from './device-info/device-info.component';
 
 
 @NgModule({
@@ -90,7 +92,8 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
     ConfirmDialogComponent,
     ErrorHandlingComponent,
     ManageTripsComponent,
-    DeviceDisplayComponent
+    DeviceDisplayComponent,
+    DeviceInfoComponent
   ],
   imports: [
     // angular modules
@@ -109,6 +112,7 @@ import { DeviceDisplayComponent } from './devices-display/devices-display.compon
     InputTextModule,
     ProgressSpinnerModule,
     BreadcrumbModule,
+    TooltipModule,
     // material modules
     MatDialogModule,
     MatButtonModule,

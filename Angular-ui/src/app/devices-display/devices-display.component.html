@@ -1,33 +1,49 @@
 <div class="spinner" *ngIf="progressSpinner;else deviceList">
   <p-progressSpinner strokeWidth="3" animationDuration="1s">
-      </p-progressSpinner>
+  </p-progressSpinner>
 </div>
 <p-growl></p-growl>
 
 <ng-template #deviceList>
   <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
   <p-dataGrid [value]="devices" [paginator]="true" [emptyMessage]="emptyMsg" [alwaysShowPaginator]="false" [rows]="12">
-        <p-header>
-            <button pButton type="button" (click)="addDevice()" label="Add Device" icon="fa-plus-square"></button>
-        </p-header>
-        <ng-template let-device pTemplate="item">
-          <div class="ui-g-3">
-                <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo(device.id)">
-                    <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
-                  <div class="serialNo">{{device.serialNo}}</div>
-                    <hr class="ui-widget-content" style="border-top:0">
-                </p-panel>
-            </div>
-        </ng-template>
-    </p-dataGrid>
+    <p-header>
+      <button pButton type="button" (click)="addDeviceDialog()" label="Add Device" icon="fa-plus-square"></button>
+    </p-header>
+    <ng-template let-device pTemplate="item">
+      <div class="ui-g-3">
+        <p-panel [header]="device.id" [style]="{'text-align':'center'}">
+          <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
+          <div class="serialNo">{{device.serialNo}}</div>
+          <hr class="ui-widget-content" style="border-top:0">
+          <button pButton type="button" (click)="deviceInfo(device.id)" icon="fa fa-info-circle"
+                  pTooltip="Device Info"></button>
+          <button pButton type="button" (click)="dellDeviceDialog(device.id)" icon="fa fa-ban" pTooltip="Delete Device"
+                  class="ui-button-danger"></button>
+        </p-panel>
+      </div>
+    </ng-template>
+  </p-dataGrid>
 
-    <p-dialog header="Add new Device" [(visible)]="display" [modal]="true" [dismissableMask]="true">
-        <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="10">
-        </div>
-        <div class="dialog_buttons">
-          <button class="mat-typography heading" pButton type="button" (click)="setNewDevice()" label="set"></button>
-            <button pButton type="button" (click)="display=false" label="cancel" class="ui-button-danger"></button>
-        </div>
-    </p-dialog>
+  <p-dialog header="Add new Device" [(visible)]="displayConfirmDialogSet" [modal]="true" [dismissableMask]="true">
+    <div class="ui-inputgroup">
+      <input type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="10">
+    </div>
+    <div class="dialog_buttons">
+      <button class="mat-typography heading" pButton type="button" (click)="setNewDevice()" label="set"></button>
+      <button pButton type="button" (click)="displayConfirmDialogSet=false" label="cancel"
+              class="ui-button-danger"></button>
+    </div>
+  </p-dialog>
+
+  <p-dialog header="Delete device" [(visible)]="displayConfirmDialogDel" [modal]="true" [dismissableMask]="true">
+    <div class="ui-widget" style="font-size: 1em">Are you sure you want to delete device {{deviceId}}</div>
+    <div class="dialog_buttons">
+      <button class="mat-typography heading" pButton type="button" (click)="deleteDevice(deviceId)"
+              label="Yes"></button>
+      <button pButton type="button" (click)="displayConfirmDialogDel=false" label="No"
+              class="ui-button-danger"></button>
+    </div>
+  </p-dialog>
+
 </ng-template>

@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   Http, Request, RequestOptionsArgs, RequestOptions,
   Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
 } from '@angular/http';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {GrowlModule} from 'primeng/primeng';
 import {MenuItem} from 'primeng/primeng';
-import { Message } from 'primeng/components/common/api';
+import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
 
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-devices-display',
@@ -19,17 +19,23 @@ import { environment } from '../../environments/environment';
 export class DeviceDisplayComponent implements OnInit {
   devices: Device[];
   progressSpinner = true;
-  display = false;
+  displayConfirmDialogSet = false;
+  displayConfirmDialogDel = false
+  // when adding new device
   serialNum: string;
+  // id when deleting device
+  deviceId: number;
 
   // messege to display when there are no devices configured
   emptyMsg = 'Database is empty, please add a devece first!';
   // breadcrumb stuff
-  home: MenuItem  = {icon: 'fa fa-home'};
+  home: MenuItem = {icon: 'fa fa-home'};
   breadcrumb: MenuItem[] = [
     {label: 'Devices'}
   ];
-  constructor(private http: Http, private router: Router, private messageService: MessageService) { }
+
+  constructor(private http: Http, private router: Router, private messageService: MessageService) {
+  }
 
   ngOnInit() {
     // get all devices
@@ -40,37 +46,58 @@ export class DeviceDisplayComponent implements OnInit {
           this.devices = response;
         },
         (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
-        () =>  {
+        () => {
           this.progressSpinner = false;
         }
       );
   }
 
-  addDevice() {
-    this.display = true;
+  addDeviceDialog() {
+    this.displayConfirmDialogSet = true;
+  }
+
+  dellDeviceDialog(id) {
+    this.deviceId = id;
+    this.displayConfirmDialogDel = true;
   }
 
   setNewDevice(): void {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({headers: headers});
 
     this.http.post(environment.baseUrl + 'devices', this.serialNum, options).subscribe(
-      () => {},
+      () => {
+      },
       (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
       () => (
         // close dialog
-        this.display = false,
-        this.messageService.add({severity: 'success', summary: 'device added', detail: this.serialNum}),
-        this.serialNum = null,
-        this.ngOnInit()
+        this.displayConfirmDialogSet = false,
+          this.messageService.add({severity: 'success', summary: 'device added', detail: this.serialNum}),
+          this.serialNum = null,
+          this.ngOnInit()
       )
     );
   }
+
+  deleteDevice(id) {
+    this.http.delete(environment.baseUrl + `devices/${id}/`).subscribe(
+      () => {
+      },
+      (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
+      () => (
+        this.displayConfirmDialogDel = false,
+          this.messageService.add({severity: 'success', summary: 'device deleted', detail: id}),
+          this.ngOnInit()
+      )
+    );
+  }
+
   deviceInfo(deviceId) {
     this.router.navigate(['/device-info', deviceId]);
   }
 }
+
 export interface Device {
   id;
   serialNo;
