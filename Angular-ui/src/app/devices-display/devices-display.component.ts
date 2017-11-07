@@ -21,6 +21,7 @@ export class DeviceDisplayComponent implements OnInit {
   progressSpinner = true;
   display = false;
   serialNum: string;
+
   // messege to display when there are no devices configured
   emptyMsg = 'Database is empty, please add a devece first!';
   // breadcrumb stuff
@@ -67,7 +68,7 @@ export class DeviceDisplayComponent implements OnInit {
     );
   }
   deviceInfo(deviceId) {
-    this.router.navigate(['/device-view']);
+    this.router.navigate(['/device-info', deviceId]);
   }
 }
 export interface Device {
