@@ -14,7 +14,7 @@
         </p-header>
         <ng-template let-device pTemplate="item">
             <div class="ui-g-2">
-                <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo()">
+                <p-panel [header]="device.id" [style]="{'text-align':'center'}" (click)="deviceInfo(device.id)">
                     <i class="fa fa-mobile fa-3x" aria-hidden="true"></i>
                     <div>{{device.serialNo}}</div>
                     <hr class="ui-widget-content" style="border-top:0">

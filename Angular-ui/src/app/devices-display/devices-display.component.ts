@@ -66,6 +66,9 @@ export class DeviceDisplayComponent implements OnInit {
       )
     );
   }
+  deviceInfo(deviceId) {
+    this.router.navigate(['/device-view']);
+  }
 }
 export interface Device {
   id;
