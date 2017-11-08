@@ -1,9 +1,10 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import {Component, OnInit, Injectable, Input} from '@angular/core';
 import { Http, Request, RequestOptionsArgs, RequestOptions,
     Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend } from '@angular/http';
 import { GMapModule } from 'primeng/primeng';
 
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import {MenuItem} from 'primeng/primeng';
 
 
 declare var google: any;
@@ -25,6 +26,9 @@ export class DeviceViewComponent implements OnInit {
   deviceInfo: any;
   path = [];
 
+  // inputs
+  @Input() deviceId: any;
+
   constructor(private http: Http) { }
 
   setGMap(event) {
@@ -32,7 +36,6 @@ export class DeviceViewComponent implements OnInit {
   }
 
   displayTrip(tripId) {
-    console.log(tripId);
     this.http.get(`http://192.168.1.107:8080/api/v1/trips/${tripId}/reports`)
             .subscribe(
                 response => {
@@ -60,6 +63,7 @@ export class DeviceViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.deviceId);
         this.http.get('/api/data/path/1').subscribe(
         // this.http.get('/assets/device.json').subscribe(
           response => {

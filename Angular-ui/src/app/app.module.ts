@@ -76,6 +76,7 @@ import { ErrorHandlingComponent } from './error-handling/error-handling.componen
 import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component';
 import { DeviceDisplayComponent } from './devices-display/devices-display.component';
 import {DeviceInfoComponent} from './device-info/device-info.component';
+import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import {DeviceInfoComponent} from './device-info/device-info.component';
     ErrorHandlingComponent,
     ManageTripsComponent,
     DeviceDisplayComponent,
-    DeviceInfoComponent
+    DeviceInfoComponent,
+    BreadcrumbComponent
   ],
   imports: [
     // angular modules

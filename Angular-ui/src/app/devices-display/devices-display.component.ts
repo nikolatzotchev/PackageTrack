@@ -20,19 +20,14 @@ export class DeviceDisplayComponent implements OnInit {
   devices: Device[];
   progressSpinner = true;
   displayConfirmDialogSet = false;
-  displayConfirmDialogDel = false
+  displayConfirmDialogDel = false;
   // when adding new device
   serialNum: string;
   // id when deleting device
   deviceId: number;
 
   // messege to display when there are no devices configured
-  emptyMsg = 'Database is empty, please add a devece first!';
-  // breadcrumb stuff
-  home: MenuItem = {icon: 'fa fa-home'};
-  breadcrumb: MenuItem[] = [
-    {label: 'Devices'}
-  ];
+  emptyMsg = 'Database is empty, please add a device first!';
 
   constructor(private http: Http, private router: Router, private messageService: MessageService) {
   }
