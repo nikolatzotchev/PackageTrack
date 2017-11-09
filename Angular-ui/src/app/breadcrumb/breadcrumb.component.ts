@@ -15,12 +15,16 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.snapshot.url.forEach(m => console.log(m.path));
-    if (this.router.url === '/devices-display') {
+    const path = this.activatedRoute.snapshot.url;
+    if (path[0].path === 'devices-display') {
       this.breadcrumb.push({label: 'Devices'});
-    } else {
-      this.breadcrumb.push({label: 'Devices', routerLink: '/devices-display'});
+    }
+    if (path[0].path === 'device-info') {
+      this.breadcrumb.push(
+        {label: 'Devices', routerLink: '/devices-display'},
+        {label: path[1].path},
+        {label: 'Info'}
+      );
     }
   }
-
 }

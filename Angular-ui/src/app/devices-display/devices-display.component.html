@@ -1,4 +1,3 @@
-<app-breadcrumb></app-breadcrumb>
 <div class="spinner" *ngIf="progressSpinner;else deviceList">
   <p-progressSpinner strokeWidth="3" animationDuration="1s">
   </p-progressSpinner>
@@ -6,6 +5,7 @@
 <p-growl></p-growl>
 
 <ng-template #deviceList>
+  <app-breadcrumb></app-breadcrumb>
   <p-dataGrid [value]="devices" [paginator]="true" [emptyMessage]="emptyMsg" [alwaysShowPaginator]="false" [rows]="12">
     <p-header>
       <button pButton type="button" (click)="addDeviceDialog()" label="Add Device" icon="fa-plus-square"></button>
