@@ -1,46 +1,57 @@
-<mat-horizontal-stepper [linear]="true">
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Select Device</ng-template>
+<!--<mat-horizontal-stepper [linear]="true">-->
+<!--<mat-step [stepControl]="firstFormGroup">-->
+<!--<form [formGroup]="firstFormGroup">-->
+<!--<ng-template matStepLabel>Select Device</ng-template>-->
 
-      <mat-form-field class="select_device">
-        <mat-select placeholder="Devices" [(ngModel)]="selectedDevice" formControlName="firstCtrl" required>
-          <mat-option *ngIf="devices?.length === 0">
-            Pls configure a device first!
-          </mat-option>
-          <mat-option *ngFor="let device of devices" [value]="device.id">
-            {{device.id}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-button color="primary" matStepperNext>Next</button>
-      <div class="steps_buttons">
-        <!-- <button mat-button color = "primary" matStepperNext>Next</button> -->
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Describe the trip</ng-template>
-      <mat-form-field class="description_text_area">
-        <textarea matInput [(ngModel)]="tripDescription" placeholder="description" #input maxlength="150" formControlName="secondCtrl"
-          required></textarea>
-        <mat-hint align="end">{{input.value?.length || 0}}/150</mat-hint>
-      </mat-form-field>
-      <div class="steps_buttons">
-        <button mat-button color="primary" matStepperPrevious>Back</button>
-        <button mat-button color="primary" matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Finish</ng-template>
-    <div class="steps_buttons final_step">
-      <span matTooltip="Do you want to start the trip when created?">
-        <mat-checkbox color="primary" class="start_trip" [(ngModel)]="startTrip">Start trip?</mat-checkbox>
-      </span>
-      <button mat-raised-button color="primary" (click)="createTrip()">Create Trip</button>
-      <button mat-raised-button matStepperPrevious>Back</button>
-    </div>
-  </mat-step>
-</mat-horizontal-stepper>
+<!--<mat-form-field class="select_device">-->
+<!--<mat-select placeholder="Devices" [(ngModel)]="selectedDevice" formControlName="firstCtrl" required>-->
+<!--<mat-option *ngIf="devices?.length === 0">-->
+<!--Pls configure a device first!-->
+<!--</mat-option>-->
+<!--<mat-option *ngFor="let device of devices" [value]="device.id">-->
+<!--{{device.id}}-->
+<!--</mat-option>-->
+<!--</mat-select>-->
+<!--</mat-form-field>-->
+<!--<button mat-button color="primary" matStepperNext>Next</button>-->
+<!--<div class="steps_buttons">-->
+<!--&lt;!&ndash; <button mat-button color = "primary" matStepperNext>Next</button> &ndash;&gt;-->
+<!--</div>-->
+<!--</form>-->
+<!--</mat-step>-->
+<!--<mat-step [stepControl]="secondFormGroup">-->
+<!--<form [formGroup]="secondFormGroup">-->
+<!--<ng-template matStepLabel>Describe the trip</ng-template>-->
+<!--<mat-form-field class="description_text_area">-->
+<!--<textarea matInput [(ngModel)]="tripDescription" placeholder="description" #input maxlength="150" formControlName="secondCtrl"-->
+<!--required></textarea>-->
+<!--<mat-hint align="end">{{input.value?.length || 0}}/150</mat-hint>-->
+<!--</mat-form-field>-->
+<!--<div class="steps_buttons">-->
+<!--<button mat-button color="primary" matStepperPrevious>Back</button>-->
+<!--<button mat-button color="primary" matStepperNext>Next</button>-->
+<!--</div>-->
+<!--</form>-->
+<!--</mat-step>-->
+<!--<mat-step>-->
+<!--<ng-template matStepLabel>Finish</ng-template>-->
+<!--<div class="steps_buttons final_step">-->
+<!--<span matTooltip="Do you want to start the trip when created?">-->
+<!--<mat-checkbox color="primary" class="start_trip" [(ngModel)]="startTrip">Start trip?</mat-checkbox>-->
+<!--</span>-->
+<!--<button mat-raised-button color="primary" (click)="createTrip()">Create Trip</button>-->
+<!--<button mat-raised-button matStepperPrevious>Back</button>-->
+<!--</div>-->
+<!--</mat-step>-->
+<!--</mat-horizontal-stepper>-->
+
+<p-dialog header="Godfather I" [visible]="true" [modal]="true" [dismissableMask]="true" [responsive]="true"
+          (onHide)="closeDialog()">
+  <div class="ui-widget">Desciption</div>
+  <textarea rows="2" [cols]="20" pInputTextarea autoResize="autoResize" maxlength="100"
+            [(ngModel)]="tripDescription"></textarea>
+  <p-footer>
+    <button type="button" pButton icon="fa-check" (click)="createTrip()" label="Create"></button>
+    <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"></button>
+  </p-footer>
+</p-dialog>

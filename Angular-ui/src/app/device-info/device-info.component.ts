@@ -17,7 +17,6 @@ export class DeviceInfoComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.deviceId = +params['deviceId']; // (+) converts string 'id' to a number
-      // In a real app: dispatch action to load the details here.
     });
   }
 

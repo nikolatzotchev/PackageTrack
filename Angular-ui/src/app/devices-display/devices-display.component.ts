@@ -40,7 +40,9 @@ export class DeviceDisplayComponent implements OnInit {
         response => {
           this.devices = response;
         },
-        (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
+        (error) => this.messageService.add(
+          {severity: 'error', summary: 'Request Error', detail: error.json().error}
+        ),
         () => {
           this.progressSpinner = false;
         }
@@ -48,6 +50,7 @@ export class DeviceDisplayComponent implements OnInit {
   }
 
   addDeviceDialog() {
+    this.serialNum = null;
     this.displayConfirmDialogSet = true;
   }
 

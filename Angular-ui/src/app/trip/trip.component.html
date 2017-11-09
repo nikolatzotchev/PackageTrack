@@ -6,3 +6,4 @@
   <button pButton type="button" (click)="manageTrips()" label="Ended Trips"></button>
 </div>
 <p-growl [(value)]="msgs"></p-growl>
+<app-create-trip *ngIf="displayCreateTrip" (notifyTrip)="closeCreateTrip($event)"></app-create-trip>

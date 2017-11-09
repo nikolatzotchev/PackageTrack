@@ -62,7 +62,9 @@ import { GMapModule,
          DialogModule,
          ProgressSpinnerModule,
          BreadcrumbModule,
+  InputTextareaModule,
   TooltipModule,
+  CheckboxModule,
 } from 'primeng/primeng';
 
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -115,6 +117,8 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     ProgressSpinnerModule,
     BreadcrumbModule,
     TooltipModule,
+    InputTextareaModule,
+    CheckboxModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
