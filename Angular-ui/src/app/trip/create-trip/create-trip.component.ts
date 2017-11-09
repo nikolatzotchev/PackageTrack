@@ -1,10 +1,9 @@
-import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
   Http, Request, RequestOptionsArgs, RequestOptions,
   Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
 } from '@angular/http';
-import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {environment} from '../../../environments/environment';
 
@@ -33,7 +32,7 @@ export class CreateTripComponent implements OnInit {
   createTrip() {
     this.activatedRoute.params.subscribe(params => {
       this.deviceId = +params['deviceId'];
-    })
+    });
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers });
@@ -44,7 +43,6 @@ export class CreateTripComponent implements OnInit {
       () => {
       },
     (error) => {
-      console.log(error.json());
       this.messageService.add({severity: 'error', summary: 'Request Error', detail: error.json().message});
     },
       () => this.notifyTrip.emit(true)

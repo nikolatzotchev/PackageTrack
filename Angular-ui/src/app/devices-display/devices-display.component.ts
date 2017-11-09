@@ -4,9 +4,6 @@ import {
   Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
 } from '@angular/http';
 import {Router} from '@angular/router';
-import {GrowlModule} from 'primeng/primeng';
-import {MenuItem} from 'primeng/primeng';
-import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
 
 import {environment} from '../../environments/environment';
