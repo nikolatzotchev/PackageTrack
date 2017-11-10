@@ -15,6 +15,7 @@ export class CreateTripComponent implements OnInit {
   deviceId: any;
   rangeTemperatureValues: number[] = [5, 25];
   rangeHumidityValues: number[] = [30, 80];
+  startTrip: boolean;
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -29,6 +30,7 @@ export class CreateTripComponent implements OnInit {
   }
 
   createTrip() {
+    // get device id
     this.activatedRoute.params.subscribe(params => {
       this.deviceId = +params['deviceId'];
     });
@@ -40,13 +42,20 @@ export class CreateTripComponent implements OnInit {
     this.http.post(environment.baseUrl + 'trips', JSON.stringify(data), options)
     .subscribe(
       (response) => {
-        this.http.post(environment.baseUrl + `trips/${response.json().id}/configurations`,
+        const tripId = response.json().id;
+        // start the trip if wanted
+        if (this.startTrip === true) {
+          this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
+        }
+        // setting range for temperature
+        this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
           JSON.stringify(this.getConfig('Temp')), options).subscribe();
-
-        this.http.post(environment.baseUrl + `trips/${response.json().id}/configurations`,
+        // setting range for humidity
+        this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
           JSON.stringify(this.getConfig('Humid')), options).subscribe();
       },
     (error) => {
+      // display error message
       this.messageService.add({severity: 'error', summary: 'Request Error', detail: error.json().message});
     },
       () => this.notifyTrip.emit(true)

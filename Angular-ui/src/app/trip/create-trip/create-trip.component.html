@@ -14,6 +14,9 @@
       <p-slider [(ngModel)]="rangeHumidityValues" [range]="true" [min]="10" [max]="100"></p-slider>
     </p-accordionTab>
   </p-accordion>
+  <div class="ui-g-12">
+    <p-checkbox label="Start Trip Now?" [(ngModel)]="startTrip" [binary]="true"></p-checkbox>
+  </div>
   <p-footer>
     <button type="button" pButton icon="fa-check" (click)="createTrip()" label="Create"></button>
     <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"
