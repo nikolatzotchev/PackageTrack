@@ -1,16 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HttpModule, Http} from '@angular/http';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 
-import { DeviceViewComponent } from './device-view/device-view.component';
+import {DeviceViewComponent} from './device-view/device-view.component';
 
 import {
   MatAutocompleteModule,
@@ -47,36 +47,39 @@ import {
   MatFormFieldModule
 } from '@angular/material';
 
-import { DeviceConfigComponent} from './device-config/device-config.component';
+import {DeviceConfigComponent} from './device-config/device-config.component';
 
 import {CdkTableModule} from '@angular/cdk/table';
 
 // primeng modules
-import { GMapModule,
-         InputTextModule,
-         GrowlModule,
-         ProgressBarModule,
-         DataGridModule,
-         PanelModule,
-         ButtonModule,
-         DialogModule,
-         ProgressSpinnerModule,
-         BreadcrumbModule,
+import {
+  GMapModule,
+  InputTextModule,
+  GrowlModule,
+  ProgressBarModule,
+  DataGridModule,
+  PanelModule,
+  ButtonModule,
+  DialogModule,
+  ProgressSpinnerModule,
+  BreadcrumbModule,
   InputTextareaModule,
   TooltipModule,
   CheckboxModule,
+  SliderModule,
+  AccordionModule,
 } from 'primeng/primeng';
 
-import { MessageService } from 'primeng/components/common/messageservice';
-import { SetDeviceDialogComponent } from './device-config/set-device-config/set-device-config.component';
-import { TripComponent } from './trip/trip.component';
-import { CreateTripComponent } from './trip/create-trip/create-trip.component';
-import { StartTripComponent } from './trip/start-trip/start-trip.component';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
-import { ErrorHandlingComponent } from './error-handling/error-handling.component';
-import { ManageTripsComponent } from './trip/manage-trips/manage-trips.component';
-import { DeviceDisplayComponent } from './devices-display/devices-display.component';
+import {MessageService} from 'primeng/components/common/messageservice';
+import {SetDeviceDialogComponent} from './device-config/set-device-config/set-device-config.component';
+import {TripComponent} from './trip/trip.component';
+import {CreateTripComponent} from './trip/create-trip/create-trip.component';
+import {StartTripComponent} from './trip/start-trip/start-trip.component';
+import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
+import {ErrorHandlingComponent} from './error-handling/error-handling.component';
+import {ManageTripsComponent} from './trip/manage-trips/manage-trips.component';
+import {DeviceDisplayComponent} from './devices-display/devices-display.component';
 import {DeviceInfoComponent} from './device-info/device-info.component';
 import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
 
@@ -119,6 +122,8 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     TooltipModule,
     InputTextareaModule,
     CheckboxModule,
+    SliderModule,
+    AccordionModule,
     // material modules
     MatDialogModule,
     MatButtonModule,
@@ -146,9 +151,10 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     ManageTripsComponent
   ],
   providers: [
-       MessageService,
-      { provide: LocationStrategy, useClass: HashLocationStrategy } // othwise nging reload doesn't work
+    MessageService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy} // othwise nging reload doesn't work
   ],
-  bootstrap:  [AppComponent]
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

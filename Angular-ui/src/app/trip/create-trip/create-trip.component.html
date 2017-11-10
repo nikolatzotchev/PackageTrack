@@ -3,6 +3,17 @@
   <div class="ui-widget">Description</div>
   <textarea rows="2" [cols]="20" pInputTextarea autoResize="autoResize" maxlength="100"
             [(ngModel)]="tripDescription"></textarea>
+  <p-accordion>
+    <p-accordionTab header="Set Ranges">
+      <div class="ui-widget">Temperature:</div>
+      {{'min:' + rangeTemperatureValues[0] + ' max:' + rangeTemperatureValues[1]}}
+      <p-slider [(ngModel)]="rangeTemperatureValues" [range]="true" [min]="-20" [max]="45"></p-slider>
+      <br>
+      <div class="ui-widget">Humidity:</div>
+      {{'min:' + rangeHumidityValues[0] + '% max:' + rangeHumidityValues[1] + '%'}}
+      <p-slider [(ngModel)]="rangeHumidityValues" [range]="true" [min]="10" [max]="100"></p-slider>
+    </p-accordionTab>
+  </p-accordion>
   <p-footer>
     <button type="button" pButton icon="fa-check" (click)="createTrip()" label="Create"></button>
     <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"

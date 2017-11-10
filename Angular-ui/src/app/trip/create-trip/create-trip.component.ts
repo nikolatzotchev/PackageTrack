@@ -1,9 +1,6 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {
-  Http, Request, RequestOptionsArgs, RequestOptions,
-  Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
-} from '@angular/http';
+import {Http, RequestOptions, Headers} from '@angular/http';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {environment} from '../../../environments/environment';
 
@@ -16,6 +13,8 @@ export class CreateTripComponent implements OnInit {
   @Output() notifyTrip = new EventEmitter<boolean>();
   tripDescription: string;
   deviceId: any;
+  rangeTemperatureValues: number[] = [5, 25];
+  rangeHumidityValues: number[] = [30, 80];
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -40,13 +39,34 @@ export class CreateTripComponent implements OnInit {
     const data = {'deviceId': this.deviceId, 'description': this.tripDescription};
     this.http.post(environment.baseUrl + 'trips', JSON.stringify(data), options)
     .subscribe(
-      () => {
+      (response) => {
+        this.http.post(environment.baseUrl + `trips/${response.json().id}/configurations`,
+          JSON.stringify(this.getConfig('Temp')), options).subscribe();
+
+        this.http.post(environment.baseUrl + `trips/${response.json().id}/configurations`,
+          JSON.stringify(this.getConfig('Humid')), options).subscribe();
       },
     (error) => {
       this.messageService.add({severity: 'error', summary: 'Request Error', detail: error.json().message});
     },
       () => this.notifyTrip.emit(true)
     );
+  }
+
+  getConfig(opt): any {
+    if (opt === 'Temp') {
+      return {
+        'metric': 'Temperature',
+        'min': this.rangeTemperatureValues[0],
+        'max': this.rangeTemperatureValues[1]
+      };
+    } else if (opt === 'Humid') {
+      return {
+        'metric': 'Humidity',
+        'min': this.rangeHumidityValues[0],
+        'max': this.rangeHumidityValues[1]
+      };
+    }
   }
 
 }
