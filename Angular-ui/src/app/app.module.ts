@@ -68,6 +68,7 @@ import {
   CheckboxModule,
   SliderModule,
   AccordionModule,
+  TabViewModule
 } from 'primeng/primeng';
 
 import {MessageService} from 'primeng/components/common/messageservice';
@@ -124,6 +125,7 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     CheckboxModule,
     SliderModule,
     AccordionModule,
+    TabViewModule,
     // material modules
     MatDialogModule,
     MatButtonModule,

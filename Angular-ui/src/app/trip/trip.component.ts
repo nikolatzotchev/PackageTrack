@@ -8,7 +8,7 @@ import {MessageService} from 'primeng/components/common/messageservice';
 export class TripComponent implements OnInit {
   @Output() displayTrip = new EventEmitter();
   displayCreateTrip = false;
-  displayStartTrip = false;
+  displayManageTrips = false;
 
   constructor(private messageService: MessageService) {
   }
@@ -29,12 +29,12 @@ export class TripComponent implements OnInit {
     this.displayCreateTrip = false;
   }
 
-  startTrip() {
-    this.displayStartTrip = true;
+  manageTrips() {
+    this.displayManageTrips = true;
   }
 
-  manageTrips() {
-
+  closeManageTrips() {
+    this.displayManageTrips = false;
   }
 
 }

@@ -1,50 +1,10 @@
-<label *ngIf = "checkSize() === 0; else display_table" class = "mat-display-1">No trips are started.</label>
+<p-dialog header="Manage Trips" [visible]="true" [modal]="true" [dismissableMask]="true" [responsive]="true"
+          (onHide)="closeDialog()">
+  <p-tabView>
+    <p-tabPanel header="Started Trips" leftIcon="fa-hourglass-start">
+    </p-tabPanel>
+    <p-tabPanel header="Ended Trips" leftIcon="fa-hourglass-end">
+    </p-tabPanel>
+  </p-tabView>
 
-<ng-template #display_table>
-  <div *ngIf="displayTable === true">
-    <h1 mat-dialog-title>Manage Trips</h1>
-
-    <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
-
-
-        <!-- id Column -->
-        <ng-container matColumnDef="tripId">
-          <mat-header-cell *matHeaderCellDef> TripId. </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.tripId}} </mat-cell>
-        </ng-container>
-
-        <!-- descriptions Column -->
-        <ng-container matColumnDef="description">
-          <mat-header-cell *matHeaderCellDef> Desctiption </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
-        </ng-container>
-
-        <!-- device id Column -->
-        <ng-container matColumnDef="deviceId">
-          <mat-header-cell *matHeaderCellDef> Device id </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.deviceId}} </mat-cell>
-        </ng-container>
-
-        <!-- button display trip -->
-        <ng-container matColumnDef="displayTrip">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <button class="table_button" mat-raised-button clicked color="primary" (click)="displayTrip(element.tripId)" > Display Trip </button>
-          </mat-cell>
-        </ng-container>
-
-        <!-- button end trip -->
-        <ng-container matColumnDef="endTrip">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <button class="table_button" mat-raised-button clicked color="warn" (click)="endTrip(element.tripId)" > End Trip </button>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-    </div>
-  </div>
-</ng-template>
+</p-dialog>
