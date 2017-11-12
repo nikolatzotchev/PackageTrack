@@ -1,10 +1,56 @@
-<p-dialog header="Manage Trips" [visible]="true" [modal]="true" [dismissableMask]="true" [responsive]="true"
+<p-growl></p-growl>
+<p-dialog header="Manage Trips" [visible]="true" [modal]="true" [dismissableMask]="true"
+          [responsive]="true"
           (onHide)="closeDialog()">
+
   <p-tabView>
-    <p-tabPanel header="Started Trips" leftIcon="fa-hourglass-start">
+    <p-tabPanel header="Current Trip" leftIcon="fa-plane">
+      <div *ngIf="currentTrip; else noTripMessage">
+        <div class="current_trip">
+          <span class="ui-g-5">TripId: {{currentTrip.tripId}}</span>
+          <span class="ui-g-5">DeviceId: {{currentTrip.deviceId}}</span>
+          <span class="ui-g-5" pTooltip="{{currentTrip.description}}" tooltipPosition="bottom">
+            Description
+          </span>
+          <span class="ui-g-5">StartTime: {{currentTrip.startTime.toLocaleString()}}</span>
+        </div>
+        <br>
+        <div class="dialog_buttons">
+          <button type="button" pButton icon="fa fa-map" (click)="displayTrip()"
+                  label="Display Trip On Gmap"></button>
+          <button class="ui-button-warning" type="button" pButton icon="fa-hourglass-end"
+                  (click)="endTrip(currentTrip.tripId)" label="End Trip"></button>
+        </div>
+      </div>
+      <ng-template #noTripMessage>
+        <span class="no_trip_message">No trip is currently in progress</span>
+      </ng-template>
     </p-tabPanel>
     <p-tabPanel header="Ended Trips" leftIcon="fa-hourglass-end">
+      <ng-template pTemplate="content">
+        <p-dataTable [immutable]="false" [value]="endedTrips" [rows]="5" [paginator]="true">
+          <p-column [style]="{width: '75px'}" field="deviceId" header="DeviceId"></p-column>
+          <p-column [style]="{width: '75px'}" field="tripId" header="TripId"></p-column>
+          <p-column [style]="{'word-wrap': 'break-word'}" field="description"
+                    header="Description"></p-column>
+          <p-column field="startTime" header="Start Time">
+            <ng-template let-col let-trip="rowData" pTemplate="body">
+              <span>{{dateToLocalString(trip[col.field])}}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="endTime" header="End Time">
+            <ng-template let-col let-trip="rowData" pTemplate="body">
+              <span>{{dateToLocalString(trip[col.field])}}</span>
+            </ng-template>
+          </p-column>
+          <p-column [style]="{'text-align': 'center'}" header="Delete Trip">
+            <ng-template style="" let-trip="rowData" pTemplate="body">
+              <button type="button" pButton icon="fa-ban" class="ui-button-danger"
+                      (click)="deleteTrip(trip)"></button>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </ng-template>
     </p-tabPanel>
   </p-tabView>
-
 </p-dialog>

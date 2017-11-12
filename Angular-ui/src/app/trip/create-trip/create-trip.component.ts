@@ -36,28 +36,34 @@ export class CreateTripComponent implements OnInit {
     });
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers });
+    const options = new RequestOptions({headers: headers});
     // push device id and description
     const data = {'deviceId': this.deviceId, 'description': this.tripDescription};
     this.http.post(environment.baseUrl + 'trips', JSON.stringify(data), options)
     .subscribe(
       (response) => {
         const tripId = response.json().id;
-        // start the trip if wanted
-        if (this.startTrip === true) {
-          this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
+        {
+          // setting range for temperature
+          this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
+            JSON.stringify(this.getConfig('Temp')), options).subscribe();
+          // setting range for humidity
+          this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
+            JSON.stringify(this.getConfig('Humid')), options).subscribe();
+          // start the trip if wanted
+          if (this.startTrip === true) {
+            this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
+          }
         }
-        // setting range for temperature
-        this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-          JSON.stringify(this.getConfig('Temp')), options).subscribe();
-        // setting range for humidity
-        this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-          JSON.stringify(this.getConfig('Humid')), options).subscribe();
       },
-    (error) => {
-      // display error message
-      this.messageService.add({severity: 'error', summary: 'Request Error', detail: error.json().message});
-    },
+      (error) => {
+        // display error message
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Request Error',
+          detail: error.json().message
+        });
+      },
       () => this.notifyTrip.emit(true)
     );
   }
