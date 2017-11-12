@@ -25,3 +25,11 @@
   font-size: 20px;
   background-color: #ff9e72;
 }
+
+.table_trips {
+
+}
+
+/deep/ .ui-datatable table{
+  width: auto;
+}

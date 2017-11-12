@@ -28,28 +28,31 @@
     </p-tabPanel>
     <p-tabPanel header="Ended Trips" leftIcon="fa-hourglass-end">
       <ng-template pTemplate="content">
-        <p-dataTable [immutable]="false" [value]="endedTrips" [rows]="5" [paginator]="true">
-          <p-column [style]="{width: '75px'}" field="deviceId" header="DeviceId"></p-column>
-          <p-column [style]="{width: '75px'}" field="tripId" header="TripId"></p-column>
-          <p-column [style]="{'word-wrap': 'break-word'}" field="description"
-                    header="Description"></p-column>
-          <p-column field="startTime" header="Start Time">
-            <ng-template let-col let-trip="rowData" pTemplate="body">
-              <span>{{dateToLocalString(trip[col.field])}}</span>
-            </ng-template>
-          </p-column>
-          <p-column field="endTime" header="End Time">
-            <ng-template let-col let-trip="rowData" pTemplate="body">
-              <span>{{dateToLocalString(trip[col.field])}}</span>
-            </ng-template>
-          </p-column>
-          <p-column [style]="{'text-align': 'center'}" header="Delete Trip">
-            <ng-template style="" let-trip="rowData" pTemplate="body">
-              <button type="button" pButton icon="fa-ban" class="ui-button-danger"
-                      (click)="deleteTrip(trip)"></button>
-            </ng-template>
-          </p-column>
-        </p-dataTable>
+        <div class="table_trips" >
+          <p-dataTable [immutable]="false" [value]="endedTrips" [rows]="5"
+                       [paginator]="true">
+            <p-column [style]="{width: '75px'}" field="deviceId" header="DeviceId"></p-column>
+            <p-column [style]="{width: '75px'}" field="tripId" header="TripId"></p-column>
+            <p-column field="description"
+                      header="Description"></p-column>
+            <p-column field="startTime" header="Start Time">
+              <ng-template let-col let-trip="rowData" pTemplate="body">
+                <span>{{dateToLocalString(trip[col.field])}}</span>
+              </ng-template>
+            </p-column>
+            <p-column field="endTime" header="End Time">
+              <ng-template let-col let-trip="rowData" pTemplate="body">
+                <span>{{dateToLocalString(trip[col.field])}}</span>
+              </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align': 'center'}" header="Delete Trip">
+              <ng-template style="" let-trip="rowData" pTemplate="body">
+                <button type="button" pButton icon="fa-ban" class="ui-button-danger"
+                        (click)="deleteTrip(trip)"></button>
+              </ng-template>
+            </p-column>
+          </p-dataTable>
+        </div>
       </ng-template>
     </p-tabPanel>
   </p-tabView>
