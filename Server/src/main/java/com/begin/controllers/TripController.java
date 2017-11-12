@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,6 +92,14 @@ public class TripController {
     trip = tripRepository.save(trip);
 
     return trip;
+  }
+
+  @Transactional
+  @DeleteMapping(path="/{id}/deleteTrip")
+  public void deleteTrip(@PathVariable Long id) throws ResourceNotFoundException {
+    Trip trip = getTrip(id);
+    this.tripConfigurationRepository.deleteByTrip(trip);
+    this.tripRepository.delete(trip);
   }
 
   @PostMapping(path = "/{id}/startTrip")

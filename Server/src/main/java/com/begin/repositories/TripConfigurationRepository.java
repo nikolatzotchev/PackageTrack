@@ -13,4 +13,5 @@ public interface TripConfigurationRepository extends JpaRepository<TripConfigura
   List<TripConfiguration> findByTrip(Trip trip);
   TripConfiguration findByTripAndMetric(Trip trip, Metric metric);
   void deleteByTripIn(List<Trip> trips);
+  void deleteByTrip(Trip trip);
 }

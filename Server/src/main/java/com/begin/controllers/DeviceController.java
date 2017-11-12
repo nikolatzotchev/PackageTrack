@@ -79,6 +79,21 @@ public class DeviceController {
     return tripRepository.findByDevice(device);
   }
 
+  @GetMapping(path = "/{id}/currentTrip")
+  public Trip currentTrip(@PathVariable Long id) throws ResourceNotFoundException {
+    Device device = getDevice(id);
+    Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
+    if(trip == null) {
+      throw new ResourceNotFoundException("Could not find current trip!");
+    }
+    return tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
+  }
+
+  @GetMapping(path = "/{id}/endedTrips")
+  public List<Trip> endedTrips(@PathVariable Long id) throws ResourceNotFoundException {
+    Device device = getDevice(id);
+    return tripRepository.findByEndTimeIsNotNullAndDevice(device);
+  }
   @GetMapping(path = "/{id}/lastTrip")
   public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
