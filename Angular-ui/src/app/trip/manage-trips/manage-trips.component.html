@@ -1,22 +1,19 @@
 <p-growl></p-growl>
-<p-dialog header="Manage Trips" [visible]="true" [modal]="true" [dismissableMask]="true"
-          [responsive]="true"
+<p-dialog header="Manage Trips" [visible]="display" [modal]="true" [dismissableMask]="true"
           (onHide)="closeDialog()">
 
   <p-tabView>
     <p-tabPanel header="Current Trip" leftIcon="fa-plane">
       <div *ngIf="currentTrip; else noTripMessage">
         <div class="current_trip">
-          <span class="ui-g-5">TripId: {{currentTrip.tripId}}</span>
-          <span class="ui-g-5">DeviceId: {{currentTrip.deviceId}}</span>
-          <span class="ui-g-5" pTooltip="{{currentTrip.description}}" tooltipPosition="bottom">
-            Description
-          </span>
+          <span class="ui-g-5 id_deviceid_current">TripId: {{currentTrip.tripId}}</span>
+          <span class="ui-g-5 id_deviceid_current">DeviceId: {{currentTrip.deviceId}}</span>
+          <span class="ui-g-5 description_current">{{currentTrip.description}}</span>
           <span class="ui-g-5">StartTime: {{currentTrip.startTime.toLocaleString()}}</span>
         </div>
         <br>
         <div class="dialog_buttons">
-          <button type="button" pButton icon="fa fa-map" (click)="displayTrip()"
+          <button type="button" pButton icon="fa fa-map"
                   label="Display Trip On Gmap"></button>
           <button class="ui-button-warning" type="button" pButton icon="fa-hourglass-end"
                   (click)="endTrip(currentTrip.tripId)" label="End Trip"></button>
@@ -28,7 +25,7 @@
     </p-tabPanel>
     <p-tabPanel header="Ended Trips" leftIcon="fa-hourglass-end">
       <ng-template pTemplate="content">
-        <div class="table_trips" >
+        <div class="table_trips">
           <p-dataTable [immutable]="false" [value]="endedTrips" [rows]="5"
                        [paginator]="true">
             <p-column [style]="{width: '75px'}" field="deviceId" header="DeviceId"></p-column>

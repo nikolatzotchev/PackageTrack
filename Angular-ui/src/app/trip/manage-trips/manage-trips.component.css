@@ -1,3 +1,4 @@
+/* tabview remove padding*/
 /deep/ .ui-tabview-panel {
   padding: 0 !important;
 }
@@ -26,10 +27,17 @@
   background-color: #ff9e72;
 }
 
-.table_trips {
-
+/* table width not 100% like default*/
+/deep/ .ui-datatable table {
+  width: auto;
 }
 
-/deep/ .ui-datatable table{
-  width: auto;
+/* current trip tabs */
+.description_current {
+  word-wrap: break-word;
+  width: 15em;
+}
+
+.id_deviceid_current {
+  width: 8em;
 }

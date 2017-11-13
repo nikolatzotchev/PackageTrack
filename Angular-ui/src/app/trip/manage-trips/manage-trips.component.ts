@@ -17,6 +17,7 @@ export class ManageTripsComponent implements OnInit {
   endedTrips: Trip[] = [];
   currentTrip: Trip;
   deviceId: number;
+  display = false;
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -29,6 +30,10 @@ export class ManageTripsComponent implements OnInit {
     });
     this.getCurrentTrip();
     this.getEndedTrip();
+    // needed for dialog to be centered ugly solution but nothing else works
+    setTimeout(() => {
+      this.display = true;
+    }, 50);
   }
 
   getCurrentTrip() {
@@ -75,7 +80,10 @@ export class ManageTripsComponent implements OnInit {
   }
 
   endTrip(id) {
-    this.http.post(environment.baseUrl + `trips/${id}/endTrip`).subscribe(
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({headers: headers});
+    this.http.post(environment.baseUrl + `trips/${id}/endTrip`, options).subscribe(
       () => {
       },
       (error) => this.messageService.add({
