@@ -15,7 +15,6 @@ export class CreateTripComponent implements OnInit {
   deviceId: any;
   rangeTemperatureValues: number[] = [5, 25];
   rangeHumidityValues: number[] = [30, 80];
-  startTrip: boolean;
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -51,9 +50,7 @@ export class CreateTripComponent implements OnInit {
           this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
             JSON.stringify(this.getConfig('Humid')), options).subscribe();
           // start the trip if wanted
-          if (this.startTrip === true) {
-            this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
-          }
+          this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
         }
       },
       (error) => {

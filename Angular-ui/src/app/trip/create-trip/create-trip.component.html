@@ -2,7 +2,7 @@
 <p-dialog header="Create Trip" [visible]="true" [modal]="true" [dismissableMask]="true" [responsive]="true"
           (onHide)="closeDialog()">
   <div class="ui-widget">Description</div>
-  <textarea rows="2" [cols]="20" pInputTextarea autoResize="autoResize" maxlength="100"
+  <textarea [rows]="1" [cols]="30" pInputTextarea autoResize="autoResize" maxlength="100"
             [(ngModel)]="tripDescription"></textarea>
   <p-accordion>
     <p-accordionTab header="Set Ranges">
@@ -15,11 +15,9 @@
       <p-slider [(ngModel)]="rangeHumidityValues" [range]="true" [min]="10" [max]="100"></p-slider>
     </p-accordionTab>
   </p-accordion>
-  <div class="ui-g-12">
-    <p-checkbox label="Start Trip Now?" [(ngModel)]="startTrip" [binary]="true"></p-checkbox>
-  </div>
   <p-footer>
-    <button type="button" pButton icon="fa-check" (click)="createTrip()" label="Create"></button>
+    <button type="button" pButton icon="fa-check" (click)="createTrip()"
+            label="Create and Start Trip"></button>
     <button type="button" pButton icon="fa-close" (click)="closeDialog()" label="Close"
             class="ui-button-danger"></button>
   </p-footer>
