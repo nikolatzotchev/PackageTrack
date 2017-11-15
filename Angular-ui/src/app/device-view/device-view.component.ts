@@ -6,6 +6,8 @@ import { GMapModule } from 'primeng/primeng';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import {MenuItem} from 'primeng/primeng';
 
+import {environment} from '../../environments/environment';
+
 
 declare var google: any;
 
@@ -36,7 +38,7 @@ export class DeviceViewComponent implements OnInit {
   }
 
   displayTrip(tripId) {
-    this.http.get(`http://192.168.1.107:8080/api/v1/trips/${tripId}/reports`)
+    this.http.get(environment.baseUrl + `trips/${tripId}/reports`)
             .subscribe(
                 response => {
                     const res = response.json();
