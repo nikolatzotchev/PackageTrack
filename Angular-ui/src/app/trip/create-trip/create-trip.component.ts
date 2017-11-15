@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Http, RequestOptions, Headers} from '@angular/http';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {environment} from '../../../environments/environment';
+import {Observable} from 'rxjs/Rx';
 
 @Component({
   selector: 'app-create-trip',
@@ -42,16 +43,7 @@ export class CreateTripComponent implements OnInit {
     .subscribe(
       (response) => {
         const tripId = response.json().id;
-        {
-          // setting range for temperature
-          this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-            JSON.stringify(this.getConfig('Temp')), options).subscribe();
-          // setting range for humidity
-          this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-            JSON.stringify(this.getConfig('Humid')), options).subscribe();
-          // start the trip if wanted
-          this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options).subscribe();
-        }
+        this.setRangesAndStart(tripId, options);
       },
       (error) => {
         // display error message
@@ -62,6 +54,28 @@ export class CreateTripComponent implements OnInit {
         });
       },
       () => this.notifyTrip.emit(true)
+    );
+  }
+
+  setRangesAndStart(tripId, options) {
+    Observable.forkJoin(
+      this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
+        JSON.stringify(this.getConfig('Temp')), options),
+      // setting range for humidity
+      this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
+        JSON.stringify(this.getConfig('Humid')), options),
+      // start the trip if wanted
+      this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options)
+    ).subscribe(
+      () => {},
+      (error) => {
+        // display error message
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Request Error',
+          detail: error.json().message
+        });
+      }
     );
   }
 

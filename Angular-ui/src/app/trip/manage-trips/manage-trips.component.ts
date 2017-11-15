@@ -53,7 +53,7 @@ export class ManageTripsComponent implements OnInit {
         this.tabIndex = 0;
       },
       (error) => {
-        this.tabIndex = 1
+        this.tabIndex = 1;
         this.messageService.add({
           severity: 'error',
           summary: 'Request Error',
