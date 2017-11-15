@@ -92,6 +92,10 @@ public class DeviceController {
   @GetMapping(path = "/{id}/endedTrips")
   public List<Trip> endedTrips(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
+    List<Trip> trips = tripRepository.findByEndTimeIsNotNullAndDevice(device);
+    if (trips == null) {
+      throw new ResourceNotFoundException("Could not find any completed trips!");
+    }
     return tripRepository.findByEndTimeIsNotNullAndDevice(device);
   }
   @GetMapping(path = "/{id}/lastTrip")
