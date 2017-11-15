@@ -77,7 +77,6 @@ import {MessageService} from 'primeng/components/common/messageservice';
 import {SetDeviceDialogComponent} from './device-config/set-device-config/set-device-config.component';
 import {TripComponent} from './trip/trip.component';
 import {CreateTripComponent} from './trip/create-trip/create-trip.component';
-import {StartTripComponent} from './trip/start-trip/start-trip.component';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
 import {ErrorHandlingComponent} from './error-handling/error-handling.component';
@@ -97,7 +96,6 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     SetDeviceDialogComponent,
     TripComponent,
     CreateTripComponent,
-    StartTripComponent,
     ConfirmDialogComponent,
     ErrorHandlingComponent,
     ManageTripsComponent,
@@ -151,7 +149,6 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     SetDeviceDialogComponent,
     DeleteDeviceDialogComponent,
     CreateTripComponent,
-    StartTripComponent,
     ConfirmDialogComponent,
     ErrorHandlingComponent,
     ManageTripsComponent
