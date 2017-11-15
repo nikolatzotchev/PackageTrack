@@ -37,4 +37,8 @@ export class TripComponent implements OnInit {
     this.displayManageTrips = false;
   }
 
+  notifyGmap(tripId) {
+    this.displayTrip.emit(tripId);
+  }
+
 }

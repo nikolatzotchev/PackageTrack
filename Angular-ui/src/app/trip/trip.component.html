@@ -1,8 +1,10 @@
 <div class="trip_buttons">
-  <button pButton type="button" (click)="createTrip()" label="Create Trip" icon="fa fa-suitcase"></button>
+  <button pButton type="button" (click)="createTrip()" label="Create Trip"
+          icon="fa fa-suitcase"></button>
   <button pButton type="button" tooltipPosition="bottom" (click)="manageTrips()"
           label="ManageTrips"></button>
 </div>
 <p-growl [(value)]="msgs"></p-growl>
 <app-create-trip *ngIf="displayCreateTrip" (notifyTrip)="closeCreateTrip($event)"></app-create-trip>
-<app-manage-trips *ngIf="displayManageTrips" (notifyTrip)="closeManageTrips($event)"></app-manage-trips>
+<app-manage-trips *ngIf="displayManageTrips" (notifyTrip)="closeManageTrips($event)"
+                  (notifyGmap)="notifyGmap($event)"></app-manage-trips>

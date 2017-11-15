@@ -6,6 +6,7 @@ import {
 import {environment} from '../../../environments/environment';
 import {ActivatedRoute} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
+import 'rxjs/add/operator/toPromise';
 
 @Component({
   selector: 'app-manage-trips',
@@ -14,10 +15,12 @@ import {MessageService} from 'primeng/components/common/messageservice';
 })
 export class ManageTripsComponent implements OnInit {
   @Output() notifyTrip = new EventEmitter();
+  @Output() notifyGmap = new EventEmitter<number>();
   endedTrips: Trip[] = [];
   currentTrip: Trip;
   deviceId: number;
   display = false;
+  tabIndex: number;
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -36,6 +39,7 @@ export class ManageTripsComponent implements OnInit {
     }, 50);
   }
 
+
   getCurrentTrip() {
     this.http.get(environment.baseUrl + `devices/${this.deviceId}/currentTrip`).subscribe(
       resp => {
@@ -46,18 +50,22 @@ export class ManageTripsComponent implements OnInit {
           'startTime': new Date(resp.json().startTime * 1000),
           'endTime': null
         };
+        this.tabIndex = 0;
       },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error.json().message
-      }),
+      (error) => {
+        this.tabIndex = 1
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Request Error',
+          detail: error.json().message
+        });
+      }
     );
   }
 
   getEndedTrip() {
     this.http.get(environment.baseUrl + `devices/${this.deviceId}/endedTrips`).subscribe(
-      resp => {
+      (resp) => {
         resp.json().forEach(trip => {
           this.endedTrips.push({
             'tripId': trip.id,
@@ -67,7 +75,12 @@ export class ManageTripsComponent implements OnInit {
             'endTime': new Date(trip.endTime * 1000)
           });
         });
-      }
+      },
+      (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Request Error',
+        detail: error.json().message
+      }),
     );
   }
 
@@ -75,8 +88,8 @@ export class ManageTripsComponent implements OnInit {
     this.notifyTrip.emit();
   }
 
-  displayTrip() {
-
+  displayTrip(trip) {
+    this.notifyGmap.emit(trip.tripId);
   }
 
   endTrip(id) {

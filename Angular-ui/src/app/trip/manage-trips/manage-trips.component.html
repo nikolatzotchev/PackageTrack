@@ -2,7 +2,7 @@
 <p-dialog header="Manage Trips" [visible]="display" [modal]="true" [dismissableMask]="true"
           (onHide)="closeDialog()">
 
-  <p-tabView>
+  <p-tabView [activeIndex]="tabIndex">
     <p-tabPanel header="Current Trip" leftIcon="fa-plane">
       <div *ngIf="currentTrip; else noTripMessage">
         <div class="current_trip">
@@ -43,9 +43,15 @@
               </ng-template>
             </p-column>
             <p-column [style]="{'text-align': 'center'}" header="Delete Trip">
-              <ng-template style="" let-trip="rowData" pTemplate="body">
+              <ng-template let-trip="rowData" pTemplate="body">
                 <button type="button" pButton icon="fa-ban" class="ui-button-danger"
                         (click)="deleteTrip(trip)"></button>
+              </ng-template>
+            </p-column>
+            <p-column [style]="{'text-align': 'center'}" header="Display Trip">
+              <ng-template let-trip="rowData" pTemplate="body">
+                <button type="button" pButton icon="fa-map"
+                        (click)="displayTrip(trip)"></button>
               </ng-template>
             </p-column>
           </p-dataTable>
