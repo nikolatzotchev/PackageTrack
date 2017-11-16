@@ -124,7 +124,11 @@ public class TripController {
   @GetMapping(path = "/{id}/reports")
   public List<Report> getReports(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
-    return reportRepository.findByTripOrderByTimestamp(trip);
+    List<Report> reports = reportRepository.findByTripOrderByTimestamp(trip);
+    if (reports.size() == 0) {
+      throw new ResourceNotFoundException("No reports found for trip.");
+    }
+    return reports;
   }
 
   @GetMapping(path = "/{id}/configurations")
