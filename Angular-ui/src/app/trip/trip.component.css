@@ -8,3 +8,32 @@
   width: 200px;
 }
 
+/* current trip tabs */
+.ui-g-5 {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.current_trip {
+  width: 50%;
+  background-color: #ebedf0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.description_current {
+  word-wrap: break-word;
+  width: 15em;
+}
+
+.id_deviceid_current {
+  width: 8em;
+  white-space: nowrap;
+}
+
+.dialog_buttons {
+  display: flex;
+  justify-content: center;
+}

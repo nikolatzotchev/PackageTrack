@@ -17,10 +17,8 @@ export class ManageTripsComponent implements OnInit {
   @Output() notifyTrip = new EventEmitter();
   @Output() notifyGmap = new EventEmitter<number>();
   endedTrips: Trip[] = [];
-  currentTrip: Trip;
   deviceId: number;
   display = false;
-  tabIndex: number;
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
@@ -31,36 +29,7 @@ export class ManageTripsComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.deviceId = +params['deviceId'];
     });
-    this.getCurrentTrip();
     this.getEndedTrip();
-    // needed for dialog to be centered ugly solution but nothing else works
-    setTimeout(() => {
-      this.display = true;
-    }, 50);
-  }
-
-
-  getCurrentTrip() {
-    this.http.get(environment.baseUrl + `devices/${this.deviceId}/currentTrip`).subscribe(
-      resp => {
-        this.currentTrip = {
-          'tripId': resp.json().id,
-          'deviceId': resp.json().device.id,
-          'description': resp.json().description,
-          'startTime': new Date(resp.json().startTime * 1000),
-          'endTime': null
-        };
-        this.tabIndex = 0;
-      },
-      (error) => {
-        this.tabIndex = 1;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Request Error',
-          detail: error.json().message
-        });
-      }
-    );
   }
 
   getEndedTrip() {
@@ -81,6 +50,7 @@ export class ManageTripsComponent implements OnInit {
         summary: 'Request Error',
         detail: error.json().message
       }),
+      () => this.display = true
     );
   }
 
@@ -90,25 +60,6 @@ export class ManageTripsComponent implements OnInit {
 
   displayTrip(trip) {
     this.notifyGmap.emit(trip.tripId);
-  }
-
-  endTrip(id) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({headers: headers});
-    this.http.post(environment.baseUrl + `trips/${id}/endTrip`, options).subscribe(
-      () => {
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error.json().message
-      }),
-      () => {
-        this.currentTrip = null;
-        this.getEndedTrip();
-      }
-    );
   }
 
   deleteTrip(trip) {

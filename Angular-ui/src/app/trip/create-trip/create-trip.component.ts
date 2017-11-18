@@ -53,7 +53,6 @@ export class CreateTripComponent implements OnInit {
           detail: error.json().message
         });
       },
-      () => this.notifyTrip.emit(true)
     );
   }
 
@@ -75,7 +74,8 @@ export class CreateTripComponent implements OnInit {
           summary: 'Request Error',
           detail: error.json().message
         });
-      }
+      },
+      () => this.notifyTrip.emit(true)
     );
   }
 
