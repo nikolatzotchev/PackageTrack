@@ -10,6 +10,8 @@ import {MenuItem} from 'primeng/primeng';
 import {MessageService} from 'primeng/components/common/messageservice';
 
 import {environment} from '../../environments/environment';
+import {ActivatedRoute} from '@angular/router';
+
 
 
 declare var google: any;
@@ -28,13 +30,13 @@ export class DeviceViewComponent implements OnInit {
   infoWindow: any;
 
   // own data
-  deviceInfo: any;
   path = [];
 
   // inputs
   @Input() deviceId: any;
 
-  constructor(private http: Http, private messageService: MessageService) {
+  constructor(private http: Http, private messageService: MessageService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   setGMap(event) {
@@ -45,12 +47,21 @@ export class DeviceViewComponent implements OnInit {
     this.http.get(environment.baseUrl + `trips/${tripId}/reports`)
     .subscribe(
       response => {
+        this.path = [];
+        this.overlays = [];
+        const bounds = new google.maps.LatLngBounds();
         const res = response.json();
         res.forEach(element => {
           if (element.incidentValues.length !== 0) {
-            this.overlays.push(this.toMarker(element));
+            const marker = this.toMarker(element)
+            this.overlays.push(marker);
           }
-          this.path.push({'lat': element.latitude, 'lng': element.longitude});
+          const position = {'lat': element.latitude, 'lng': element.longitude};
+          this.path.push(position);
+          bounds.extend(position);
+          setTimeout(() => { // map will need some time to load
+            this.gmap.fitBounds(bounds); // Make the whole trip visible on map.
+          }, 1000);
         });
       },
       (error) => {
@@ -61,71 +72,32 @@ export class DeviceViewComponent implements OnInit {
         });
       },
       () => {
-        const flightPath = new google.maps.Polyline({
+        const tripPath = new google.maps.Polyline({
           path: this.path,
           geodesic: true,
           strokeColor: '#FF0000',
           strokeOpacity: 1.0,
           strokeWeight: 2
         });
-        flightPath.setMap(this.gmap);
+        this.overlays.push(tripPath);
       }
     );
   }
 
   ngOnInit() {
-    console.log(this.deviceId);
-    this.http.get('/api/data/path/1').subscribe(
-      // this.http.get('/assets/device.json').subscribe(
-      response => {
-        const j = response.json();
-        const bounds = new google.maps.LatLngBounds();
-        if (j.Incidends) {
-          this.overlays = j.Incidends.map(incident => {
-            const marker = this.toMarker(incident);
-            bounds.extend(marker.getPosition());
-            return marker;
-          });
-
-        }
-
-        if (j.Current) {
-          // const current = this.toMarker(j.Current);
-          // current.setAnimation(google.maps.Animation.BOUNCE);
-          // current.setIcon('/assets/map-pin-17.png');
-          // bounds.extend(current.getPosition());
-          // this.overlays.push(current);
-          // this.gmap.setCenter(current.getPosition());
-        }
-
-        if (j.Path) {
-          const flightPath = new google.maps.Polyline({
-            path: j.Path,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-          });
-          flightPath.setMap(this.gmap);
-        }
-
-        // center the map to see all the overlays
-        setTimeout(() => { // map will need some time to load
-          this.gmap.fitBounds(bounds); // Map object used directly
-        }, 1000);
-        this.deviceInfo = j.Path[0].lng; // JSON.stringify(j.Path, null , 2);
+    this.http.get(environment.baseUrl + `devices/${this.deviceId}/currentTrip`).subscribe(
+      (response) => {
+        this.displayTrip(response.json().id);
       },
-      error => {
-        console.log(error);
-      }
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Request Error',
+          detail: error.json().message
+          });
+      },
     );
-    this.options = {
-      center: {lat: 0, lng: 0},
-      zoom: 8
-    };
-
     this.infoWindow = new google.maps.InfoWindow();
-    // TimerObservable.create(0, 1000).subscribe(() => console.log(1));
   }
 
   private toMarker(incident): any {

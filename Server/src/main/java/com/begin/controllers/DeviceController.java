@@ -114,7 +114,7 @@ public class DeviceController {
       throws ResourceNotFoundException {
     Device device = getDevice(id);
 
-    Trip trip = tripRepository.findByDeviceOrderByIdDesc(device);
+    Trip trip = tripRepository.findByEndTimeIsNullAndDevice(device);
     if (trip == null) {
       throw new ResourceNotFoundException("Could not find a trip!");
     }
