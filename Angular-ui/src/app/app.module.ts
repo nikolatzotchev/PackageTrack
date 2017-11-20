@@ -10,48 +10,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
-import {DeviceViewComponent} from './device-view/device-view.component';
-
-import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
-  MatFormFieldModule
-} from '@angular/material';
-
-import {DeviceConfigComponent} from './device-config/device-config.component';
-
-import {CdkTableModule} from '@angular/cdk/table';
 
 // primeng modules
+import {MessageService} from 'primeng/components/common/messageservice';
+
 import {
   GMapModule,
   InputTextModule,
@@ -73,17 +35,14 @@ import {
   SharedModule
 } from 'primeng/primeng';
 
-import {MessageService} from 'primeng/components/common/messageservice';
-import {SetDeviceDialogComponent} from './device-config/set-device-config/set-device-config.component';
 import {TripComponent} from './trip/trip.component';
 import {CreateTripComponent} from './trip/create-trip/create-trip.component';
-import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
-import {DeleteDeviceDialogComponent} from './device-config/delete-device-dialog/delete-device-dialog.component';
-import {ErrorHandlingComponent} from './error-handling/error-handling.component';
 import {ManageTripsComponent} from './trip/manage-trips/manage-trips.component';
 import {DeviceDisplayComponent} from './devices-display/devices-display.component';
 import {DeviceInfoComponent} from './device-info/device-info.component';
 import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
+import {DeviceViewComponent} from './device-view/device-view.component';
+
 
 
 @NgModule({
@@ -91,13 +50,8 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     AppComponent,
     DeviceViewComponent,
     // device components
-    DeviceConfigComponent,
-    DeleteDeviceDialogComponent,
-    SetDeviceDialogComponent,
     TripComponent,
     CreateTripComponent,
-    ConfirmDialogComponent,
-    ErrorHandlingComponent,
     ManageTripsComponent,
     DeviceDisplayComponent,
     DeviceInfoComponent,
@@ -109,6 +63,7 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpModule,
+    FormsModule,
     // primeng modules
     GMapModule,
     GrowlModule,
@@ -128,30 +83,11 @@ import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
     TabViewModule,
     DataTableModule,
     SharedModule,
-    // material modules
-    MatDialogModule,
-    MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatIconModule,
-    MatStepperModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    MatCardModule
   ],
   entryComponents: [
-    SetDeviceDialogComponent,
-    DeleteDeviceDialogComponent,
     CreateTripComponent,
-    ConfirmDialogComponent,
-    ErrorHandlingComponent,
-    ManageTripsComponent
+    ManageTripsComponent,
+    TripComponent
   ],
   providers: [
     MessageService,
