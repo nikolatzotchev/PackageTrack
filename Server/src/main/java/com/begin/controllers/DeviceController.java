@@ -86,7 +86,7 @@ public class DeviceController {
     if(trip == null) {
       throw new ResourceNotFoundException("Could not find current trip!");
     }
-    return tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
+    return trip;
   }
 
   @GetMapping(path = "/{id}/endedTrips")
@@ -96,7 +96,7 @@ public class DeviceController {
     if (trips == null) {
       throw new ResourceNotFoundException("Could not find any completed trips!");
     }
-    return tripRepository.findByEndTimeIsNotNullAndDevice(device);
+    return trips;
   }
   @GetMapping(path = "/{id}/lastTrip")
   public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
