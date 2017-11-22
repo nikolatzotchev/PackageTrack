@@ -10,8 +10,6 @@ import {MenuItem} from 'primeng/primeng';
 import {MessageService} from 'primeng/components/common/messageservice';
 
 import {environment} from '../../environments/environment';
-import {ActivatedRoute} from '@angular/router';
-
 
 
 declare var google: any;
@@ -35,8 +33,7 @@ export class DeviceViewComponent implements OnInit {
   // inputs
   @Input() deviceId: any;
 
-  constructor(private http: Http, private messageService: MessageService,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private http: Http, private messageService: MessageService) {
   }
 
   setGMap(event) {
@@ -97,6 +94,10 @@ export class DeviceViewComponent implements OnInit {
           });
       },
     );
+    this.options = {
+      center: {lat: 0, lng: 0},
+      zoom: 8
+    };
     this.infoWindow = new google.maps.InfoWindow();
   }
 
