@@ -20,7 +20,9 @@
                   pTooltip="Device Info"></button>
           <button pButton type="button" (click)="dellDeviceDialog(device.id)" icon="fa fa-ban" pTooltip="Delete Device"
                   class="ui-button-danger"></button>
-          {{device.inATrip}}
+          <hr class="ui-widget-content" style="border-top:0">
+          <span *ngIf="device.inATrip;else notInUseMessage">Device is currently in use.</span>
+          <ng-template #notInUseMessage>Device is not in use.</ng-template>
         </p-panel>
       </div>
     </ng-template>
