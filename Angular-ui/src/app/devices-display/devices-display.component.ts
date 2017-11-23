@@ -30,20 +30,49 @@ export class DeviceDisplayComponent implements OnInit {
   }
 
   ngOnInit() {
+    let devices;
     // get all devices
     this.http.get(environment.baseUrl + 'devices')
-      .map(resp => resp.json())
-      .subscribe(
-        response => {
-          this.devices = response;
-        },
-        (error) => this.messageService.add(
-          {severity: 'error', summary: 'Request Error', detail: error.json().error}
-        ),
-        () => {
-          this.progressSpinner = false;
-        }
-      );
+    .map(resp => resp.json())
+    .finally(() => {
+      this.checkForCurrentTrip(devices);
+      console.log(this.devices);
+    })
+    .subscribe(
+      response => {
+        this.devices = [];
+        devices = response;
+      },
+      (error) => this.messageService.add(
+        {severity: 'error', summary: 'Request Error', detail: error.json().error}
+      )
+    );
+  }
+
+  checkForCurrentTrip(devices) {
+    const requests = devices.map(device => {
+      return new Promise((resolve) => {
+        let inATrip = false;
+        this.http.get(environment.baseUrl + `devices/${device.id}/currentTrip`)
+        .finally(() => {
+          this.devices.push({
+            'id': device.id,
+            'serialNo': device.serialNo,
+            'inATrip': inATrip
+          });
+          resolve();
+        })
+        .subscribe(
+          () => {
+            inATrip = true;
+          },
+          () => {
+            inATrip = false;
+          }
+        );
+      });
+    });
+    Promise.all(requests).then(() => this.progressSpinner = false);
   }
 
   addDeviceDialog() {
@@ -64,12 +93,21 @@ export class DeviceDisplayComponent implements OnInit {
     this.http.post(environment.baseUrl + 'devices', this.serialNum, options).subscribe(
       () => {
       },
-      (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
+      (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Request Error',
+        detail: error
+      }),
       () => (
         // close dialog
         this.displayConfirmDialogSet = false,
-          this.messageService.add({severity: 'success', summary: 'device added', detail: this.serialNum}),
+          this.messageService.add({
+            severity: 'success',
+            summary: 'device added',
+            detail: this.serialNum
+          }),
           this.serialNum = null,
+          this.progressSpinner = true,
           this.ngOnInit()
       )
     );
@@ -79,10 +117,15 @@ export class DeviceDisplayComponent implements OnInit {
     this.http.delete(environment.baseUrl + `devices/${id}/`).subscribe(
       () => {
       },
-      (error) => this.messageService.add({severity: 'error', summary: 'Request Error', detail: error}),
+      (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Request Error',
+        detail: error
+      }),
       () => (
         this.displayConfirmDialogDel = false,
           this.messageService.add({severity: 'success', summary: 'device deleted', detail: id}),
+          this.progressSpinner = true,
           this.ngOnInit()
       )
     );
@@ -96,4 +139,5 @@ export class DeviceDisplayComponent implements OnInit {
 export interface Device {
   id;
   serialNo;
+  inATrip;
 }

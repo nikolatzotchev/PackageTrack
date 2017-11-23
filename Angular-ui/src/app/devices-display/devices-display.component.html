@@ -20,6 +20,7 @@
                   pTooltip="Device Info"></button>
           <button pButton type="button" (click)="dellDeviceDialog(device.id)" icon="fa fa-ban" pTooltip="Delete Device"
                   class="ui-button-danger"></button>
+          {{device.inATrip}}
         </p-panel>
       </div>
     </ng-template>
