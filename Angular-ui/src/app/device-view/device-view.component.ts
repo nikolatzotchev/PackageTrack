@@ -91,7 +91,7 @@ export class DeviceViewComponent implements OnInit {
           severity: 'error',
           summary: 'Request Error',
           detail: error.json().message
-          });
+        });
       },
     );
     this.options = {
@@ -115,7 +115,17 @@ export class DeviceViewComponent implements OnInit {
 
   handleOverlayClick(event) {
     const incident = event.overlay.customInfo;
-    this.infoWindow.setContent('<h1>Sensor Information:</h1><pre>' + incident + '</pre>');
+    const incidentValues = incident.incidentValues;
+    let metricContent = '';
+    incidentValues.forEach(
+      v => {
+        metricContent = metricContent.concat(v.metric.toString())
+        .concat(': ').concat(v.value.toString().concat('<br>'));
+      }
+    );
+    this.infoWindow.setContent(
+      '<span id="content">' + metricContent + '</span>'
+    );
     this.infoWindow.open(event.map, event.overlay);
     event.map.setCenter(event.overlay.getPosition());
   }

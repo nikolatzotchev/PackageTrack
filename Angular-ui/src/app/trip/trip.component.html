@@ -14,11 +14,11 @@
     <span class="ui-g-5 id_deviceid_current">TripId: {{currentTrip.tripId}}</span>
     <span class="ui-g-5 id_deviceid_current">DeviceId: {{currentTrip.deviceId}}</span>
     <span class="ui-g-5 description_current">{{currentTrip.description}}</span>
-    <span class="ui-g-5">StartTime: {{currentTrip.startTime.toLocaleString()}}</span>
+    <span class="ui-g-2">StartTime: {{currentTrip.startTime.toLocaleString()}}</span>
     <br>
     <div class="dialog_buttons">
       <button type="button" pButton icon="fa fa-map"
-              label="Display Trip On Gmap" (click)="notifyGmap(currentTrip.tripId)"></button>
+              label="Display Trip On Map" (click)="notifyGmap(currentTrip.tripId)"></button>
       <button class="ui-button-warning" type="button" pButton icon="fa-hourglass-end"
               (click)="endTrip(currentTrip.tripId)" label="End Trip"></button>
     </div>
