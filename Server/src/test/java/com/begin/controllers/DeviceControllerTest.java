@@ -164,7 +164,7 @@ public class DeviceControllerTest {
 
     TripConfigurationDTO tripConfigurationDTO = new TripConfigurationDTO();
     tripConfigurationDTO.setMetric(Metric.Temperature);
-    tripConfigurationDTO.setMax(30.0);
+    tripConfigurationDTO.setMax(Double.valueOf(30));
     tripConfigurationDTO.setMin(Double.valueOf(10));
 
     RestAssured
@@ -188,7 +188,7 @@ public class DeviceControllerTest {
     ReportDTO reportDTO = new ReportDTO();
     Value value = new Value();
     value.setMetric(Metric.Temperature);
-    value.setValue(20.5);
+    value.setValue(Double.valueOf(31));
     List<Value> list = new LinkedList<>();
     list.add(value);
     reportDTO.setIncidentValues(list);

@@ -21,3 +21,11 @@ li {
 .serialNo {
   word-wrap: break-word;
 }
+
+.device_in_trip {
+  color: #F93030;
+}
+
+.device_available {
+  color: #258B25;
+}
