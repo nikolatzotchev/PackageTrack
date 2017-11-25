@@ -1,6 +1,6 @@
 package com.begin.controllers;
 
-import com.begin.ResourceNotFoundException;
+import com.begin.exeptions.ResourceNotFoundException;
 import com.begin.dto.CreateTripDTO;
 import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.Device;

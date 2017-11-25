@@ -1,6 +1,6 @@
 package com.begin.controllers;
 
-import com.begin.ResourceNotFoundException;
+import com.begin.exeptions.ResourceNotFoundException;
 import com.begin.dto.ReportDTO;
 import com.begin.entities.Device;
 import com.begin.entities.Report;
