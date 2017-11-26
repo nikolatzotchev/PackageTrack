@@ -15,7 +15,7 @@ case "$1" in
         ;;
     "build-docker")
         shift
-        docker build -t package-track-ui ../package-track-ui
+        docker build -t package-track-ui ../Angular-ui
         docker build -t package-track-server .
         ;;
     "run-all")
