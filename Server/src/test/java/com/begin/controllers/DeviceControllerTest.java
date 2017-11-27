@@ -48,7 +48,6 @@ public class DeviceControllerTest {
         .when()
         .post(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body("serialNo", equalTo("aa-bb-cc-dd"))
         .extract().path("id");
@@ -57,7 +56,6 @@ public class DeviceControllerTest {
         .when()
         .get(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .body("serialNo", hasItem("aa-bb-cc-dd"))
         .body("id", hasItem(deviceId));
   }
@@ -65,19 +63,16 @@ public class DeviceControllerTest {
 
   @Test
   public void register_device_without_SerialNo_should_Pass() {
-    int deviceId = RestAssured
+   RestAssured
         .when()
         .post(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
-        .statusCode(HttpStatus.OK.value())
-        .extract().path("id");
+        .statusCode(HttpStatus.OK.value());
 
     RestAssured
         .when()
         .get(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
   }
 
@@ -95,7 +90,6 @@ public class DeviceControllerTest {
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
-        .time(lessThan(2000L))
         .extract()
         .body().jsonPath().getInt("id");
 
@@ -103,8 +97,7 @@ public class DeviceControllerTest {
         .when()
         .get(deviceControllerUrl + "/" + deviceId + "/trips")
         .then()
-        .statusCode(HttpStatus.OK.value())
-        .time(lessThan(2000L));
+        .statusCode(HttpStatus.OK.value());
 
     RestAssured
         .when()
@@ -120,7 +113,6 @@ public class DeviceControllerTest {
         .when()
         .post(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .extract().path("id");
 
@@ -143,7 +135,6 @@ public class DeviceControllerTest {
         .when()
         .post(deviceControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .extract().path("id");
 
@@ -159,7 +150,6 @@ public class DeviceControllerTest {
         .when()
         .post(tripControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .extract().jsonPath().getInt("id");
 
     TripConfigurationDTO tripConfigurationDTO = new TripConfigurationDTO();
@@ -174,7 +164,6 @@ public class DeviceControllerTest {
         .when()
         .post(tripControllerUrl + "/" + tripId + "/configurations")
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
 
     //start trip
@@ -182,7 +171,6 @@ public class DeviceControllerTest {
         .when()
         .post(tripControllerUrl + "/" + tripId + "/startTrip")
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value());
 
     ReportDTO reportDTO = new ReportDTO();
@@ -201,7 +189,6 @@ public class DeviceControllerTest {
         .when()
         .post(deviceControllerUrl + "/" + deviceId + "/reports")
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body("incidentValues.get(0).metric", equalTo(Metric.Temperature.toString()));
   }

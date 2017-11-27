@@ -45,7 +45,6 @@ public class TripControllerTest {
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
-        .time(lessThan(2000L))
         .extract()
         .body().jsonPath().getInt("id");
 
@@ -60,7 +59,6 @@ public class TripControllerTest {
         .when()
         .post(tripControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body("description", equalTo("trip to sofia"))
         .extract().jsonPath().getInt("id");
@@ -69,7 +67,6 @@ public class TripControllerTest {
         .when()
         .get(tripControllerUrl + "/" + tripId + "/")
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body("description", equalTo("trip to sofia"))
         .body("startTime", equalTo(null));
@@ -80,7 +77,6 @@ public class TripControllerTest {
         .when()
         .post(tripControllerUrl +"/" + tripId + "/startTrip")
         .then()
-        .time(lessThan(2000L))
         .body("startTime", notNullValue());
   }
 
@@ -93,7 +89,6 @@ public class TripControllerTest {
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("id", notNullValue())
-        .time(lessThan(2000L))
         .extract()
         .body().jsonPath().getInt("id");
 
@@ -108,7 +103,6 @@ public class TripControllerTest {
         .when()
         .post(tripControllerUrl)
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body("description", equalTo("trip to sofia"))
         .extract().jsonPath().getInt("id");
@@ -125,7 +119,6 @@ public class TripControllerTest {
         .when()
         .post(tripControllerUrl + "/" + tripId + "/configurations")
         .then()
-        .time(lessThan(2000L))
         .statusCode(HttpStatus.OK.value())
         .body( "metric", equalTo(Metric.Temperature.toString()));
   }
