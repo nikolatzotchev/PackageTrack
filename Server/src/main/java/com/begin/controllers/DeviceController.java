@@ -54,6 +54,15 @@ public class DeviceController {
     return deviceRepository.findAll();
   }
 
+  @GetMapping(path = "/{deviceId}")
+  public Device getDevice(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = deviceRepository.findOne(deviceId);
+    if (device == null) {
+      throw new ResourceNotFoundException("Device not found");
+    }
+    return device;
+  }
+
   @PostMapping
   public Device registerNewDevice(
       @RequestBody(required = false) String serialNo) {
@@ -142,7 +151,7 @@ public class DeviceController {
     newPosition = reportRepository.save(newPosition);
 
     // store the reports now
-
+    System.out.println();
     return newPosition;
   }
 
@@ -152,14 +161,5 @@ public class DeviceController {
         .findByTripAndMetric(trip, metric);
     //check if the value is in the range of valid values
     return tripConfiguration.checkValidValue(value.getValue());
-  }
-
-
-  private Device getDevice(Long deviceId) throws ResourceNotFoundException {
-    Device device = deviceRepository.findOne(deviceId);
-    if (device == null) {
-      throw new ResourceNotFoundException("Device not found");
-    }
-    return device;
   }
 }
