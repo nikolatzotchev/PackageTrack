@@ -6,5 +6,9 @@
     (onOverlayClick)="handleOverlayClick($event)"
 >
 </p-gmap>
+<div class="ui-widget">
+  <span *ngIf="tripDescription"> Currently displaying trip: {{tripDescription}}</span>
+  <span *ngIf="!tripDescription">No trip is currently displayed</span>
+</div>
 <br>
 <app-trip (displayTrip)="displayTrip($event)"></app-trip>

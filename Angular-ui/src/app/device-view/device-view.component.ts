@@ -29,6 +29,7 @@ export class DeviceViewComponent implements OnInit {
 
   // own data
   path = [];
+  tripDescription: string;
 
   // inputs
   @Input() deviceId: any;
@@ -46,8 +47,12 @@ export class DeviceViewComponent implements OnInit {
       response => {
         this.path = [];
         this.overlays = [];
+
         const bounds = new google.maps.LatLngBounds();
         const res = response.json();
+        // getting trip description to show displayed trip
+        this.tripDescription = res[0].trip.description;
+
         res.forEach(element => {
           if (element.incidentValues.length !== 0) {
             const marker = this.toMarker(element)

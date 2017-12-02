@@ -1,9 +1,4 @@
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.heading {
-  font-size: 25px;
+.ui-widget {
+  font-size: 1em;
+  float: right;
 }
