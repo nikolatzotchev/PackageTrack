@@ -7,8 +7,8 @@
 >
 </p-gmap>
 <div class="ui-widget">
-  <span *ngIf="tripDescription"> Currently displaying trip: {{tripDescription}}</span>
-  <span *ngIf="!tripDescription">No trip is currently displayed</span>
+  <span *ngIf="tripDescription" style="color: #258B25"> Currently displaying trip: {{tripDescription}}</span>
+  <span *ngIf="!tripDescription" style="color: #F93030">No trip is currently displayed</span>
 </div>
 <br>
 <app-trip (displayTrip)="displayTrip($event)"></app-trip>
