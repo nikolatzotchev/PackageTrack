@@ -33,9 +33,8 @@ export class TripComponent implements OnInit {
             'tripId': resp.json().id,
             'deviceId': resp.json().device.id,
             'description': resp.json().description,
-            'startTime': new Date(resp.json().startTime * 1000)
+            'startTime': new Date(resp.json().startTime)
           };
-          console.log(this.currentTrip);
         },
         (error) => {
           this.messageService.add({
@@ -101,4 +100,3 @@ export interface Trip {
   description: string;
   startTime: Date;
 }
-

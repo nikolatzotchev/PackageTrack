@@ -40,8 +40,8 @@ export class ManageTripsComponent implements OnInit {
             'tripId': trip.id,
             'deviceId': trip.device.id,
             'description': trip.description,
-            'startTime': new Date(trip.startTime * 1000),
-            'endTime': new Date(trip.endTime * 1000)
+            'startTime': new Date(trip.startTime),
+            'endTime': new Date(trip.endTime)
           });
         });
       },
