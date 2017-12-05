@@ -19,6 +19,7 @@ export class ManageTripsComponent implements OnInit {
   endedTrips: Trip[] = [];
   deviceId: number;
   display = false;
+  emptyMessage = 'There are currently no finished trips!';
 
   constructor(private http: Http,
               private activatedRoute: ActivatedRoute,
