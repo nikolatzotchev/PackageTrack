@@ -155,6 +155,13 @@ public class DeviceController {
     return newPosition;
   }
 
+  @GetMapping(path = "/currentTrip")
+  public boolean currentTrip(@RequestBody String serialNo) {
+    Device device = deviceRepository.findBySerialNo(serialNo);
+    Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
+    return trip != null;
+  }
+
   private boolean checkIfIncident(Value value, Trip trip) {
     Metric metric = value.getMetric();
     TripConfiguration tripConfiguration = tripConfigurationRepository

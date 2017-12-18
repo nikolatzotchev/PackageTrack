@@ -6,6 +6,8 @@
 #include <DHT.h>
 #include "FS.h"
 
+//device serial number
+const char* serialNo = "0123a";
 // gps 
 static const int RXPin = 5, TXPin = 4;
 static const uint32_t GPSBaud = 9600;
@@ -47,19 +49,31 @@ void setup() {
 }
 
 void loop() {
-  while (ss.available() > 0)
-  if (gps.encode(ss.read())) { 
-    if ( gps.date.isValid() && gps.time.isValid()) {
-      sendInfo();
-    }
-  }
+	if (checkIfStartedTrip()) {
+	  if (ss.available() > 0)
+	  if (gps.encode(ss.read())) { 
+		if ( gps.date.isValid() && gps.time.isValid()) {
+		  sendInfo();
+		}
+	  }
 
-  if (millis() > 5000 && gps.charsProcessed() < 10)
-  {
-    Serial.println(F("No GPS detected: check wiring."));
-    while(true);
-  }
+	  if (millis() > 5000 && gps.charsProcessed() < 10)
+	  {
+		Serial.println(F("No GPS detected: check wiring."));
+		while(true);
+	  }
+	}
 }
+
+boolean checkIfStartedTrip() {
+	HTTPClient http;
+	http.begin("/api/v1/devices/currentTrip");
+	http.sendRequest("GET", serialNo);
+	String payload = http.getString();
+	Serial.println(payload);    
+	delay(1000);
+}
+
 
 void httpPost(JsonObject& json) {
   HTTPClient http;
