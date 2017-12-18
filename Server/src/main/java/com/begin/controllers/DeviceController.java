@@ -13,7 +13,6 @@ import com.begin.repositories.ReportRepository;
 import com.begin.repositories.TripConfigurationRepository;
 import com.begin.repositories.TripRepository;
 import com.begin.repositories.ValueRepository;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +91,7 @@ public class DeviceController {
   public Trip currentTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
-    if(trip == null) {
+    if (trip == null) {
       throw new ResourceNotFoundException("Could not find current trip!");
     }
     return trip;
@@ -107,6 +106,7 @@ public class DeviceController {
     }
     return trips;
   }
+
   @GetMapping(path = "/{id}/lastTrip")
   public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
@@ -146,7 +146,7 @@ public class DeviceController {
     newPosition.setTrip(trip);
     newPosition.setLatitude(report.getLatitude());
     newPosition.setLongitude(report.getLongitude());
-    newPosition.setTimestamp(ZonedDateTime.now());
+    newPosition.setTimestamp(report.getTimestamp());
     newPosition.setIncidentValues(incidentValues);
     newPosition = reportRepository.save(newPosition);
 
