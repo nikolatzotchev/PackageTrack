@@ -12,6 +12,7 @@ import com.begin.entities.Value;
 import com.begin.entities.Value.Metric;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.Before;
@@ -139,7 +140,7 @@ public class DeviceControllerTest {
         .extract().path("id");
 
     CreateTripDTO createTripDTO = new CreateTripDTO();
-    createTripDTO.setDeviceId(Long.valueOf(deviceId));
+    createTripDTO.setDeviceId((long) deviceId);
     createTripDTO.setDescription("trip to sofia");
 
     //create trip
@@ -154,8 +155,8 @@ public class DeviceControllerTest {
 
     TripConfigurationDTO tripConfigurationDTO = new TripConfigurationDTO();
     tripConfigurationDTO.setMetric(Metric.Temperature);
-    tripConfigurationDTO.setMax(Double.valueOf(30));
-    tripConfigurationDTO.setMin(Double.valueOf(10));
+    tripConfigurationDTO.setMax(30d);
+    tripConfigurationDTO.setMin(10d);
 
     RestAssured
         .given()
@@ -176,10 +177,11 @@ public class DeviceControllerTest {
     ReportDTO reportDTO = new ReportDTO();
     Value value = new Value();
     value.setMetric(Metric.Temperature);
-    value.setValue(Double.valueOf(31));
+    value.setValue(31d);
     List<Value> list = new LinkedList<>();
     list.add(value);
     reportDTO.setIncidentValues(list);
+    reportDTO.setTimestamp(ZonedDateTime.now());
 
     //post report and check if report is accepted
     RestAssured
