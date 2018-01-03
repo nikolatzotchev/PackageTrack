@@ -30,18 +30,17 @@ export class DeviceDisplayComponent implements OnInit {
   }
 
   ngOnInit() {
-    let devices;
     // get all devices
     this.http.get(environment.baseUrl + 'devices')
     .map(resp => resp.json())
     .finally(() => {
-      this.checkForCurrentTrip(devices);
+      this.checkForCurrentTrip(this.devices);
       console.log(this.devices);
     })
     .subscribe(
       response => {
         this.devices = [];
-        devices = response;
+        this.devices = response;
       },
       (error) => this.messageService.add(
         {severity: 'error', summary: 'Request Error', detail: error.json().error}
@@ -55,11 +54,7 @@ export class DeviceDisplayComponent implements OnInit {
         let inATrip = false;
         this.http.get(environment.baseUrl + `devices/${device.id}/currentTrip`)
         .finally(() => {
-          this.devices.push({
-            'id': device.id,
-            'serialNo': device.serialNo,
-            'inATrip': inATrip
-          });
+          device.inATrip = inATrip;
           resolve();
         })
         .subscribe(
