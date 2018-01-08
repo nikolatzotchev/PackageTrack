@@ -22,7 +22,7 @@ int Sensor = 2 ;
 DHT dht(Sensor, DHT11);
 
 // not sure yet where the server will be hosted
-String url = "/api/v1/devices/1/reports";
+String url = "/api/v1/devices/reports";
 
 StaticJsonBuffer<500> JSONbuffer;   
 JsonObject& root = JSONbuffer.createObject(); 
@@ -49,19 +49,12 @@ void setup() {
 }
 
 void loop() {
-	if (checkIfStartedTrip()) {
-	  if (ss.available() > 0)
-	  if (gps.encode(ss.read())) { 
-		if ( gps.date.isValid() && gps.time.isValid()) {
-		  sendInfo();
+	while (ss.available() > 0)
+	if (gps.encode(ss.read())) { 
+		if ( gps.date.isValid() && gps.time.isValid()) { 
+			if (checkIfStartedTrip() == true)
+			sendInfo();
 		}
-	  }
-
-	  if (millis() > 5000 && gps.charsProcessed() < 10)
-	  {
-		Serial.println(F("No GPS detected: check wiring."));
-		while(true);
-	  }
 	}
 }
 
@@ -136,8 +129,9 @@ char* getDateInIso8601() {
 void sendInfo() {
     double temperature = dht.readTemperature();
     double humidity = dht.readHumidity();
-    temp["value"] = 12;
-    humd["value"] = 20;
+    temp["value"] = temperature;
+    humd["value"] = humidity;
+	root["serialNo"] = serialNo;
     root["latitude"] = gps.location.lat();
     root["longitude"] = gps.location.lng();
     char isoTime[100];

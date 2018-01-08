@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class ReportDTO {
 
+  private String serialNo;
+
   private double latitude;
 
   private double longitude;
@@ -15,6 +17,14 @@ public class ReportDTO {
 
   // optional, only if we have incident at the current position
   private List<Value> incidentValues;
+
+  public String getSerialNo() {
+    return serialNo;
+  }
+
+  public void setSerialNo(String serialNo) {
+    this.serialNo = serialNo;
+  }
 
   public double getLatitude() {
     return latitude;

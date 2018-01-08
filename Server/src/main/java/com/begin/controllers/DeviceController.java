@@ -118,10 +118,10 @@ public class DeviceController {
     return trip;
   }
 
-  @PostMapping(path = "/{id}/reports")
-  public Report addReport(@PathVariable Long id, @RequestBody ReportDTO report)
+  @PostMapping(path = "/reports")
+  public Report addReport(@RequestBody ReportDTO report)
       throws ResourceNotFoundException {
-    Device device = getDevice(id);
+    Device device = deviceRepository.findBySerialNo(report.getSerialNo());
 
     Trip trip = tripRepository.findByEndTimeIsNullAndDevice(device);
     if (trip == null) {
