@@ -13,6 +13,7 @@ import com.begin.repositories.ReportRepository;
 import com.begin.repositories.TripConfigurationRepository;
 import com.begin.repositories.TripRepository;
 import com.begin.repositories.ValueRepository;
+import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +49,14 @@ public class DeviceController {
     this.tripConfigurationRepository = tripConfigurationRepository;
   }
 
-  @GetMapping
+  @GetMapping(produces = "application/json")
+  @ApiOperation(value = "Връща всички устройства.")
   public List<Device> listDevices() {
     return deviceRepository.findAll();
   }
 
-  @GetMapping(path = "/{deviceId}")
+  @GetMapping(path = "/{deviceId}", produces = "application/json")
+  @ApiOperation(value = "Връща дадено устройство.")
   public Device getDevice(@PathVariable Long deviceId) throws ResourceNotFoundException {
     Device device = deviceRepository.findOne(deviceId);
     if (device == null) {
@@ -62,32 +65,37 @@ public class DeviceController {
     return device;
   }
 
-  @PostMapping
+  @PostMapping(produces = "application/json")
+  @ApiOperation(value = "Добавяне на ново устройство.")
   public Device registerNewDevice(
-      @RequestBody(required = false) String serialNo) {
+      @RequestBody String serialNo) {
     Device device = new Device();
     device.setSerialNo(serialNo);
     return deviceRepository.saveAndFlush(device);
   }
 
   @Transactional
-  @DeleteMapping(path = "/{id}")
-  public void deleteDevice(@PathVariable Long id) throws ResourceNotFoundException {
-    Device device = getDevice(id);
+  @DeleteMapping(path = "/{deviceId}")
+  @ApiOperation(value = "Изтриване на дадено устройство.",
+      notes = "Заедно с устройството се изтриват и всички пътувания свързани към него.")
+  public void deleteDevice(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = getDevice(deviceId);
     List<Trip> trips = tripRepository.findByDevice(device);
     tripConfigurationRepository.deleteByTripIn(trips);
     tripRepository.deleteByDevice(device);
     reportRepository.deleteByTripIn(trips);
-    deviceRepository.delete(id);
+    deviceRepository.delete(deviceId);
   }
 
-  @GetMapping(path = "/{id}/trips")
+  @GetMapping(path = "/{id}/trips", produces = "application/json")
+  @ApiOperation(value = "Връща всички пътувания свързани с дадено устройство.")
   public List<Trip> allTrips(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     return tripRepository.findByDevice(device);
   }
 
-  @GetMapping(path = "/{id}/currentTrip")
+  @GetMapping(path = "/{id}/currentTrip", produces = "application/json")
+  @ApiOperation(value = "Ако устройството се използва, връща сегашното пътуване.")
   public Trip currentTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
@@ -97,7 +105,8 @@ public class DeviceController {
     return trip;
   }
 
-  @GetMapping(path = "/{id}/endedTrips")
+  @GetMapping(path = "/{id}/endedTrips", produces = "application/json")
+  @ApiOperation(value = "Връща всички завършени пътувания на дадено устройство.")
   public List<Trip> endedTrips(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     List<Trip> trips = tripRepository.findByEndTimeIsNotNullAndDevice(device);
@@ -107,7 +116,8 @@ public class DeviceController {
     return trips;
   }
 
-  @GetMapping(path = "/{id}/lastTrip")
+  @GetMapping(path = "/{id}/lastTrip", produces = "application/json")
+  @ApiOperation(value = "Връща последното завършено пътуване.")
   public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Device device = getDevice(id);
     Trip trip = tripRepository.findFirstByDeviceOrderByEndTime(device);
@@ -118,7 +128,9 @@ public class DeviceController {
     return trip;
   }
 
-  @PostMapping(path = "/reports")
+  @PostMapping(path = "/reports", produces = "application/json")
+  @ApiOperation(value = "Добавяне на отчет към дадено устройство.",
+      notes = "Отчета се праща към започнато пътуване, което може да има само едно.")
   public Report addReport(@RequestBody ReportDTO report)
       throws ResourceNotFoundException {
     Device device = deviceRepository.findBySerialNo(report.getSerialNo());
@@ -156,6 +168,7 @@ public class DeviceController {
   }
 
   @GetMapping(path = "/currentTrip")
+  @ApiOperation(value = "Проверява по сериен номер дали дадено устройство има започнато пътуване.")
   public boolean currentTrip(@RequestBody String serialNo) {
     Device device = deviceRepository.findBySerialNo(serialNo);
     Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);

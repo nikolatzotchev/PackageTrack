@@ -1,6 +1,7 @@
 package com.begin.controllers;
 
 import com.begin.ResourceNotFoundException;
+import io.swagger.annotations.ApiOperation;
 import com.begin.dto.CreateTripDTO;
 import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.Device;
@@ -49,7 +50,9 @@ public class TripController {
     this.tripConfigurationRepository = tripConfigurationRepository;
   }
 
-  @GetMapping
+  @GetMapping(produces = "application/json")
+  @ApiOperation(value = "Връща всички пътувания.",
+      notes = "Съдържа параметър, който определя дали да се включат завършените, по подразбиране не ги.")
   public List<Trip> listTrips(
       @RequestParam(required = false, defaultValue = "false") boolean includeCompletedTrips) {
     if (includeCompletedTrips) {
@@ -59,12 +62,9 @@ public class TripController {
     }
   }
 
-  @GetMapping(path = "/not-started")
-  public List<Trip> listNotStartedTrips() {
-    return tripRepository.findByStartTimeIsNull();
-  }
-
-  @GetMapping(path = "/{id}")
+  @GetMapping(path = "/{id}", produces = "application/json")
+  @ApiOperation(value = "Връща дадено пътуване.",
+  notes = "Намира го по дадено id")
   public Trip getTrip(@PathVariable Long id) throws ResourceNotFoundException {
     if (tripRepository.findOne(id) == null) {
       throw new ResourceNotFoundException("No such trip");
@@ -72,7 +72,8 @@ public class TripController {
     return tripRepository.findOne(id);
   }
 
-  @PostMapping
+  @PostMapping(produces = "application/json")
+  @ApiOperation(value = "Създаване на ново пътуване.")
   public Trip createTrip(@RequestBody @Valid CreateTripDTO request) {
     Device device = deviceRepository.findOne(request.getDeviceId());
     if (null == device) {
@@ -96,13 +97,17 @@ public class TripController {
 
   @Transactional
   @DeleteMapping(path="/{id}/deleteTrip")
+  @ApiOperation(value = "Изтриване на дадено пътуване.",
+  notes = "Заедно с пътуването се изтрива и конфигурацията му.")
   public void deleteTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
     this.tripConfigurationRepository.deleteByTrip(trip);
     this.tripRepository.delete(trip);
   }
 
-  @PostMapping(path = "/{id}/startTrip")
+  @PostMapping(path = "/{id}/startTrip", produces = "application/json")
+  @ApiOperation(value = "Стартиране на дедено пътуване.",
+      notes = "Прави се проверка дали устройството вече няма стартирано пътуване.")
   public Trip startTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
     //check if trip can be started
@@ -114,14 +119,16 @@ public class TripController {
     return tripRepository.save(trip);
   }
 
-  @PostMapping(path = "/{id}/endTrip")
+  @PostMapping(path = "/{id}/endTrip", produces = "application/json")
+  @ApiOperation(value = "Приключване на дадено пътуване.")
   public Trip endTrip(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
     trip.setEndTime(ZonedDateTime.now());
     return tripRepository.save(trip);
   }
 
-  @GetMapping(path = "/{id}/reports")
+  @GetMapping(path = "/{id}/reports", produces = "application/json")
+  @ApiOperation(value = "Връща всички отчети за дадено пътуване.")
   public List<Report> getReports(@PathVariable Long id) throws ResourceNotFoundException {
     Trip trip = getTrip(id);
     List<Report> reports = reportRepository.findByTripOrderByTimestamp(trip);
@@ -131,7 +138,8 @@ public class TripController {
     return reports;
   }
 
-  @GetMapping(path = "/{id}/configurations")
+  @GetMapping(path = "/{id}/configurations", produces = "application/json")
+  @ApiOperation(value = "Връща конфигурацията на дедено пътуване.")
   public List<TripConfiguration> getConfiguration(@PathVariable Long id)
       throws ResourceNotFoundException {
     Trip trip = tripRepository.findOne(id);
@@ -141,7 +149,8 @@ public class TripController {
     return tripConfigurationRepository.findByTrip(trip);
   }
 
-  @PostMapping(path = "/{id}/configurations")
+  @PostMapping(path = "/{id}/configurations", produces = "application/json")
+  @ApiOperation(value = "Създаване на нова конфигурация на дадено пътуване.")
   public TripConfiguration setConfiguration(@PathVariable Long id,
      @RequestBody TripConfigurationDTO tripConfigurationDTO) throws ResourceNotFoundException {
 
@@ -165,6 +174,7 @@ public class TripController {
   }
 
   @DeleteMapping(path = "/{id}/configurations")
+  @ApiOperation(value = "Премахване на конфигурация на дадено пътуване.")
   public void deleteConfiguration(@PathVariable Long id){
     Trip trip = tripRepository.findOne(id);
     if (trip.getStartTime() != null) {
