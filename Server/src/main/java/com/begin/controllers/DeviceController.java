@@ -87,17 +87,17 @@ public class DeviceController {
     deviceRepository.delete(deviceId);
   }
 
-  @GetMapping(path = "/{id}/trips", produces = "application/json")
+  @GetMapping(path = "/{deviceId}/trips", produces = "application/json")
   @ApiOperation(value = "Връща всички пътувания свързани с дадено устройство.")
-  public List<Trip> allTrips(@PathVariable Long id) throws ResourceNotFoundException {
-    Device device = getDevice(id);
+  public List<Trip> allTrips(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = getDevice(deviceId);
     return tripRepository.findByDevice(device);
   }
 
-  @GetMapping(path = "/{id}/currentTrip", produces = "application/json")
+  @GetMapping(path = "/{deviceId}/currentTrip", produces = "application/json")
   @ApiOperation(value = "Ако устройството се използва, връща сегашното пътуване.")
-  public Trip currentTrip(@PathVariable Long id) throws ResourceNotFoundException {
-    Device device = getDevice(id);
+  public Trip currentTrip(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = getDevice(deviceId);
     Trip trip = tripRepository.findByStartTimeIsNotNullAndEndTimeIsNullAndDevice(device);
     if (trip == null) {
       throw new ResourceNotFoundException("Could not find current trip!");
@@ -105,10 +105,10 @@ public class DeviceController {
     return trip;
   }
 
-  @GetMapping(path = "/{id}/endedTrips", produces = "application/json")
+  @GetMapping(path = "/{deviceId}/endedTrips", produces = "application/json")
   @ApiOperation(value = "Връща всички завършени пътувания на дадено устройство.")
-  public List<Trip> endedTrips(@PathVariable Long id) throws ResourceNotFoundException {
-    Device device = getDevice(id);
+  public List<Trip> endedTrips(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = getDevice(deviceId);
     List<Trip> trips = tripRepository.findByEndTimeIsNotNullAndDevice(device);
     if (trips == null) {
       throw new ResourceNotFoundException("Could not find any completed trips!");
@@ -116,10 +116,10 @@ public class DeviceController {
     return trips;
   }
 
-  @GetMapping(path = "/{id}/lastTrip", produces = "application/json")
+  @GetMapping(path = "/{deviceId}/lastTrip", produces = "application/json")
   @ApiOperation(value = "Връща последното завършено пътуване.")
-  public Trip lastTrip(@PathVariable Long id) throws ResourceNotFoundException {
-    Device device = getDevice(id);
+  public Trip lastTrip(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    Device device = getDevice(deviceId);
     Trip trip = tripRepository.findFirstByDeviceOrderByEndTime(device);
     if (null == trip) {
       // there is no current trip with that device, so simply ignore the reportings
