@@ -3,11 +3,13 @@ package com.begin;
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import java.util.Date;
-import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +28,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Application {
 
+  private final TypeResolver typeResolver;
+
   @Autowired
-  private TypeResolver typeResolver;
+  public Application(TypeResolver typeResolver) {
+    this.typeResolver = typeResolver;
+  }
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
@@ -66,6 +72,14 @@ public class Application {
         .useDefaultResponseMessages(true)
         .enableUrlTemplating(false)
         ;
+  }
+
+  @Bean
+  public Jackson2ObjectMapperBuilderCustomizer dateSerializationCustomized() {
+    return (builder) -> builder
+        .dateFormat(new ISO8601DateFormat())
+        .featuresToDisable(
+            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 
 }
