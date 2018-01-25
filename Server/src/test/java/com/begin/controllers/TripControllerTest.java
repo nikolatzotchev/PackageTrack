@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 
+import com.begin.Application;
 import com.begin.dto.CreateTripDTO;
 import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.TripConfiguration;
@@ -40,6 +41,9 @@ public class TripControllerTest {
   public void create_device_trip_with_description() {
 
     int deviceId = RestAssured
+        .given()
+        .contentType(ContentType.JSON)
+        .body("123")
         .when()
         .post(deviceControllerUrl)
         .then()
@@ -84,6 +88,9 @@ public class TripControllerTest {
   public void trip_configuration_should_pass() {
 
     int deviceId = RestAssured
+        .given()
+        .body("123")
+        .contentType(ContentType.JSON)
         .when()
         .post(deviceControllerUrl)
         .then()

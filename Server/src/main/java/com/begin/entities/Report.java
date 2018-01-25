@@ -6,8 +6,8 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -26,7 +26,7 @@ public class Report {
   @NotNull
   private ZonedDateTime timestamp;
 
-  @OneToOne
+  @ManyToOne
   private Trip trip;
 
   // optional, only if we have incident at the current position

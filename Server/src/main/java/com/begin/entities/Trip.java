@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Trip {
@@ -14,7 +14,7 @@ public class Trip {
   @GeneratedValue
   private Long id;
 
-  @OneToOne
+  @ManyToOne
   private Device device;
 
   private String description;

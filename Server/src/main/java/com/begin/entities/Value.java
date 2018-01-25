@@ -15,9 +15,11 @@ public class Value {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @NotNull
   @Enumerated(value = EnumType.ORDINAL)
   private Metric metric; // e.g. "Temperature"
+
   @NotNull
   private double value;
 

@@ -61,22 +61,6 @@ public class DeviceControllerTest {
         .body("id", hasItem(deviceId));
   }
 
-
-  @Test
-  public void register_device_without_SerialNo_should_Pass() {
-   RestAssured
-        .when()
-        .post(deviceControllerUrl)
-        .then()
-        .statusCode(HttpStatus.OK.value());
-
-    RestAssured
-        .when()
-        .get(deviceControllerUrl)
-        .then()
-        .statusCode(HttpStatus.OK.value());
-  }
-
   @Test
   public void allTrips_with_InexistentDevice_should_404() {
     RestAssured
@@ -86,6 +70,9 @@ public class DeviceControllerTest {
         .statusCode(HttpStatus.NOT_FOUND.value());
 
     int deviceId = RestAssured
+        .given()
+        .contentType(ContentType.JSON)
+        .body("123abc")
         .when()
         .post(deviceControllerUrl)
         .then()
@@ -111,10 +98,14 @@ public class DeviceControllerTest {
   @Test
   public void addReport_should_404() {
     int deviceId = RestAssured
+        .given()
+        .body("123abc")
+        .contentType(ContentType.JSON)
         .when()
         .post(deviceControllerUrl)
         .then()
         .statusCode(HttpStatus.OK.value())
+        .body("serialNo", equalTo("123abc"))
         .extract().path("id");
 
     ReportDTO reportDTO = new ReportDTO();
@@ -131,8 +122,12 @@ public class DeviceControllerTest {
 
   @Test
   public void addReport_should_Pass() {
+    String serialNo = "123abcd";
     //register device
     int deviceId = RestAssured
+        .given()
+        .body(serialNo)
+        .contentType(ContentType.JSON)
         .when()
         .post(deviceControllerUrl)
         .then()
@@ -180,6 +175,7 @@ public class DeviceControllerTest {
     value.setValue(31d);
     List<Value> list = new LinkedList<>();
     list.add(value);
+    reportDTO.setSerialNo(serialNo);
     reportDTO.setIncidentValues(list);
     reportDTO.setTimestamp(ZonedDateTime.now());
 
@@ -189,7 +185,7 @@ public class DeviceControllerTest {
         .body(reportDTO)
         .contentType(ContentType.JSON)
         .when()
-        .post(deviceControllerUrl + "/" + deviceId + "/reports")
+        .post(deviceControllerUrl  + "/reports")
         .then()
         .statusCode(HttpStatus.OK.value())
         .body("incidentValues.get(0).metric", equalTo(Metric.Temperature.toString()));
