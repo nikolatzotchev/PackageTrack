@@ -1,0 +1,24 @@
+version: '2'
+
+# define private network between containers - more secure
+networks:
+   default:
+     external:
+       name: bridge
+
+services:
+  REMOTE_API_HOST: # the name is important! Do not change!
+    image: ntzotchev/packagetrack:Back-end
+    network_mode: bridge
+    expose:
+        - 8080
+    restart: unless-stopped
+
+  ui:
+    image: ntzotchev/packagetrack:Front-End
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 80:80
+    links:
+      - REMOTE_API_HOST
