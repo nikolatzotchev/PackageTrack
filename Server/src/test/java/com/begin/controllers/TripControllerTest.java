@@ -43,7 +43,7 @@ public class TripControllerTest {
     int deviceId = RestAssured
         .given()
         .contentType(ContentType.JSON)
-        .body("123")
+        .body("1234")
         .when()
         .post(deviceControllerUrl)
         .then()
@@ -53,7 +53,7 @@ public class TripControllerTest {
         .body().jsonPath().getInt("id");
 
     CreateTripDTO createTripDTO = new CreateTripDTO();
-    createTripDTO.setDeviceId(Long.valueOf(deviceId));
+    createTripDTO.setDeviceId((long) deviceId);
     createTripDTO.setDescription("trip to sofia");
 
     int tripId = RestAssured
@@ -100,7 +100,7 @@ public class TripControllerTest {
         .body().jsonPath().getInt("id");
 
     CreateTripDTO createTripDTO = new CreateTripDTO();
-    createTripDTO.setDeviceId(Long.valueOf(deviceId));
+    createTripDTO.setDeviceId((long) deviceId);
     createTripDTO.setDescription("trip to sofia");
 
     int tripId = RestAssured

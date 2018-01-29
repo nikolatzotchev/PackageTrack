@@ -72,7 +72,7 @@ public class DeviceControllerTest {
     int deviceId = RestAssured
         .given()
         .contentType(ContentType.JSON)
-        .body("123abc")
+        .body("123ab")
         .when()
         .post(deviceControllerUrl)
         .then()
