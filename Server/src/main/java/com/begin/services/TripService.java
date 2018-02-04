@@ -11,10 +11,8 @@ import com.begin.repositories.DeviceRepository;
 import com.begin.repositories.ReportRepository;
 import com.begin.repositories.TripConfigurationRepository;
 import com.begin.repositories.TripRepository;
-import com.begin.repositories.ValueRepository;
 import java.time.ZonedDateTime;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,19 +21,15 @@ public class TripService {
   private final DeviceRepository deviceRepository;
   private final TripRepository tripRepository;
   private final ReportRepository reportRepository;
-  private final ValueRepository valueRepository;
   private final TripConfigurationRepository tripConfigurationRepository;
 
-  @Autowired
   public TripService(DeviceRepository deviceRepository,
       TripRepository tripRepository,
       ReportRepository reportRepository,
-      ValueRepository valueRepository,
       TripConfigurationRepository tripConfigurationRepository) {
     this.deviceRepository = deviceRepository;
     this.tripRepository = tripRepository;
     this.reportRepository = reportRepository;
-    this.valueRepository = valueRepository;
     this.tripConfigurationRepository = tripConfigurationRepository;
   }
 

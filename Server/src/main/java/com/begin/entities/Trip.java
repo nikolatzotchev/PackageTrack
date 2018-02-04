@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Trip {
@@ -17,6 +18,7 @@ public class Trip {
   @ManyToOne
   private Device device;
 
+  @Size(max = 1500)
   private String description;
 
   private ZonedDateTime startTime;
@@ -28,7 +30,7 @@ public class Trip {
   }
 
   public void setId(Long id) {
-    id = id;
+    this.id = id;
   }
 
   public Device getDevice() {

@@ -1,9 +1,12 @@
 package com.begin.entities;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Device {
@@ -12,6 +15,9 @@ public class Device {
   @GeneratedValue
   private Long id;
 
+  @NotNull
+  @Column(unique = true)
+  @Size(max = 50)
   private String serialNo;
 
   public String getSerialNo() {
@@ -21,7 +27,6 @@ public class Device {
   public void setSerialNo(String serialNo) {
     this.serialNo = serialNo;
   }
-
 
   public Long getId() {
     return id;

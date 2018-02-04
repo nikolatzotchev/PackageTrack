@@ -24,7 +24,6 @@ public class DeviceController {
 
   private final DeviceService deviceService;
 
-  @Autowired
   public DeviceController(DeviceService deviceService) {
     this.deviceService = deviceService;
   }

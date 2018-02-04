@@ -8,10 +8,8 @@ import com.begin.dto.TripConfigurationDTO;
 import com.begin.entities.Report;
 import com.begin.entities.Trip;
 import com.begin.entities.TripConfiguration;
-import java.time.ZonedDateTime;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +26,6 @@ public class TripController {
 
   private final TripService tripService;
 
-  @Autowired
   public TripController(TripService tripService) {
     this.tripService = tripService;
   }
