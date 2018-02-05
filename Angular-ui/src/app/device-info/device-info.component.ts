@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {
-  Http, Request, RequestOptionsArgs, RequestOptions,
-  Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
-} from '@angular/http';
-import {environment} from '../../environments/environment';
+import {ActivatedRoute} from '@angular/router';
 
+import {DeviceService} from '../services/device/device.service';
 
 @Component({
   selector: 'app-device-info',
@@ -18,17 +14,16 @@ export class DeviceInfoComponent implements OnInit {
   deviceId: number;
   deviceSerialNo: string;
 
-  constructor(private route: ActivatedRoute, private http: Http) {
+  constructor(private route: ActivatedRoute, private deviceService: DeviceService) {
   }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.deviceId = +params['deviceId']; // (+) converts string 'id' to a number
     });
-    console.log(this.deviceId);
-    this.http.get(environment.baseUrl + 'devices/' + `${this.deviceId}`).subscribe(
-      response => {
-        this.deviceSerialNo = response.json().serialNo;
+    this.deviceService.getDevice(this.deviceId).subscribe(
+      data => {
+        this.deviceSerialNo = data.serialNo;
       }
     );
   }

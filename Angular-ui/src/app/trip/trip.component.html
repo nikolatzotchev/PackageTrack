@@ -11,8 +11,8 @@
 <div *ngIf="currentTrip; else noTripMessage">
   <div class="ui-widget" style="font-size: 2em; text-align:center">Current Trip</div>
   <div class="current_trip">
-    <span class="ui-g-5 id_deviceid_current">TripId: {{currentTrip.tripId}}</span>
-    <span class="ui-g-5 id_deviceid_current">DeviceId: {{currentTrip.deviceId}}</span>
+    <span class="ui-g-5 id_deviceid_current">TripId: {{currentTrip.id}}</span>
+    <span class="ui-g-5 id_deviceid_current">DeviceId: {{currentTrip.device.id}}</span>
     <span class="ui-g-5 description_current">{{currentTrip.description}}</span>
     <span class="ui-g-2">StartTime: {{currentTrip.startTime.toLocaleString()}}</span>
     <br>
@@ -20,7 +20,7 @@
       <button type="button" pButton icon="fa fa-map"
               label="Display Trip On Map" (click)="notifyGmap(currentTrip.tripId)"></button>
       <button class="ui-button-warning" type="button" pButton icon="fa-hourglass-end"
-              (click)="endTrip(currentTrip.tripId)" label="End Trip"></button>
+              (click)="endTrip(currentTrip.id)" label="End Trip"></button>
     </div>
   </div>
 </div>

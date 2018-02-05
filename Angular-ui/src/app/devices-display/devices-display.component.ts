@@ -1,12 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  Http, Request, RequestOptionsArgs, RequestOptions,
-  Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
-} from '@angular/http';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 
-import {environment} from '../../environments/environment';
+import {Device, DeviceService} from '../services/device/device.service';
 
 @Component({
   selector: 'app-devices-display',
@@ -23,47 +19,33 @@ export class DeviceDisplayComponent implements OnInit {
   // id when deleting device
   deviceId: number;
 
-  // messege to display when there are no devices configured
+  // message to display when there are no devices configured
   emptyMsg = 'Database is empty, please add a device first!';
 
-  constructor(private http: Http, private router: Router, private messageService: MessageService) {
+  constructor(private deviceService: DeviceService,
+              private router: Router, private messageService: MessageService) {
   }
 
   ngOnInit() {
-    // get all devices
-    this.http.get(environment.baseUrl + 'devices')
-    .map(resp => resp.json())
-    .finally(() => {
-      this.checkForCurrentTrip(this.devices);
-      console.log(this.devices);
-    })
-    .subscribe(
-      response => {
-        this.devices = [];
-        this.devices = response;
-      },
-      (error) => this.messageService.add(
-        {severity: 'error', summary: 'Request Error', detail: error.json().error}
-      )
-    );
+    this.deviceService.getAllDevices().subscribe( data => {
+      this.devices = [];
+      this.devices = data;
+      this.checkForCurrentTrip(data);
+    });
   }
 
   checkForCurrentTrip(devices) {
     const requests = devices.map(device => {
       return new Promise((resolve) => {
         let inATrip = false;
-        this.http.get(environment.baseUrl + `devices/${device.id}/currentTrip`)
+        this.deviceService.checkCurrentTrip(device.id)
         .finally(() => {
           device.inATrip = inATrip;
           resolve();
         })
         .subscribe(
-          () => {
-            inATrip = true;
-          },
-          () => {
-            inATrip = false;
-          }
+          () => inATrip = true,
+          () => inATrip = false
         );
       });
     });
@@ -81,58 +63,33 @@ export class DeviceDisplayComponent implements OnInit {
   }
 
   setNewDevice(): void {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({headers: headers});
-
-    this.http.post(environment.baseUrl + 'devices', this.serialNum, options).subscribe(
-      () => {
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error
-      }),
-      () => (
-        // close dialog
-        this.displayConfirmDialogSet = false,
-          this.messageService.add({
-            severity: 'success',
-            summary: 'device added',
-            detail: this.serialNum
-          }),
-          this.serialNum = null,
-          this.progressSpinner = true,
-          this.ngOnInit()
-      )
-    );
+    this.deviceService.setNewDevice(this.serialNum).subscribe(data => {
+      this.displayConfirmDialogSet = false,
+        this.messageService.add({
+          severity: 'success',
+          summary: 'device added',
+          detail: data.serialNo
+        }),
+        this.serialNum = null,
+        this.progressSpinner = true,
+        this.ngOnInit();
+    });
   }
 
   deleteDevice(id) {
-    this.http.delete(environment.baseUrl + `devices/${id}/`).subscribe(
-      () => {
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error
+    this.deviceService.deleteDevice(id).subscribe( data => {
+      this.displayConfirmDialogDel = false,
+      this.messageService.add({
+        severity: 'success',
+        summary: 'device deleted',
+        detail: data.serialNo
       }),
-      () => (
-        this.displayConfirmDialogDel = false,
-          this.messageService.add({severity: 'success', summary: 'device deleted', detail: id}),
-          this.progressSpinner = true,
-          this.ngOnInit()
-      )
-    );
+      this.progressSpinner = true,
+      this.ngOnInit();
+    });
   }
 
   deviceInfo(deviceId) {
     this.router.navigate(['/device-info', deviceId]);
   }
-}
-
-export interface Device {
-  id;
-  serialNo;
-  inATrip;
 }

@@ -8,7 +8,6 @@ import com.begin.entities.Trip;
 import com.begin.services.DeviceService;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,8 +50,8 @@ public class DeviceController {
   @DeleteMapping(path = "/{deviceId}")
   @ApiOperation(value = "Изтриване на дадено устройство.",
       notes = "Заедно с устройството се изтриват и всички пътувания свързани към него.")
-  public void deleteDevice(@PathVariable Long deviceId) throws ResourceNotFoundException {
-    deviceService.deleteDevice(deviceId);
+  public Device deleteDevice(@PathVariable Long deviceId) throws ResourceNotFoundException {
+    return deviceService.deleteDevice(deviceId);
   }
 
   @GetMapping(path = "/{deviceId}/trips", produces = "application/json")

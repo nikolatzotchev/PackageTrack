@@ -1,9 +1,8 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Http, RequestOptions, Headers} from '@angular/http';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs/Rx';
+import {TripService} from '../../services/trip/trip.service';
 
 @Component({
   selector: 'app-create-trip',
@@ -17,7 +16,7 @@ export class CreateTripComponent implements OnInit {
   rangeTemperatureValues: number[] = [5, 25];
   rangeHumidityValues: number[] = [30, 80];
 
-  constructor(private http: Http,
+  constructor(private tripService: TripService,
               private activatedRoute: ActivatedRoute,
               private messageService: MessageService) {
   }
@@ -34,49 +33,24 @@ export class CreateTripComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.deviceId = +params['deviceId'];
     });
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({headers: headers});
     // push device id and description
-    const data = {'deviceId': this.deviceId, 'description': this.tripDescription};
-    this.http.post(environment.baseUrl + 'trips', JSON.stringify(data), options)
-    .subscribe(
-      (response) => {
-        const tripId = response.json().id;
-        this.setRangesAndStart(tripId, options);
-      },
-      (error) => {
-        // display error message
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Request Error',
-          detail: error.json().message
-        });
-      },
+    const trip = {'deviceId': this.deviceId, 'description': this.tripDescription};
+    this.tripService.createTrip(trip).subscribe(
+      data => {
+        const tripId = data.id;
+        this.setRangesAndStart(tripId);
+      }
     );
   }
 
-  setRangesAndStart(tripId, options) {
+  setRangesAndStart(tripId) {
     Observable.forkJoin(
-      this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-        JSON.stringify(this.getConfig('Temp')), options),
+      // setting range for temperature
+      this.tripService.setRanges(tripId, this.getConfig('Temp')),
       // setting range for humidity
-      this.http.post(environment.baseUrl + `trips/${tripId}/configurations`,
-        JSON.stringify(this.getConfig('Humid')), options),
-      // start the trip if wanted
-      this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, options)
-    ).subscribe(
-      () => {},
-      (error) => {
-        // display error message
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Request Error',
-          detail: error.json().message
-        });
-      },
-      () => this.notifyTrip.emit(true)
-    );
+      this.tripService.setRanges(tripId, this.getConfig('Humid')),
+      this.tripService.startTrip(tripId)
+    ).finally(() => this.notifyTrip.emit(true)).subscribe();
   }
 
   getConfig(opt): any {

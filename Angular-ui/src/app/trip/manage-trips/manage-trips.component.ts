@@ -1,12 +1,9 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
-import {
-  Http, Request, RequestOptionsArgs, RequestOptions,
-  Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
-} from '@angular/http';
-import {environment} from '../../../environments/environment';
 import {ActivatedRoute} from '@angular/router';
 import {MessageService} from 'primeng/components/common/messageservice';
 import 'rxjs/add/operator/toPromise';
+import {TripService, Trip} from '../../services/trip/trip.service';
+import {DeviceService} from '../../services/device/device.service';
 
 @Component({
   selector: 'app-manage-trips',
@@ -18,10 +15,11 @@ export class ManageTripsComponent implements OnInit {
   @Output() notifyGmap = new EventEmitter<number>();
   endedTrips: Trip[] = [];
   deviceId: number;
-  display = false;
+  displayTrips = false;
   emptyMessage = 'There are currently no finished trips!';
 
-  constructor(private http: Http,
+  constructor(private tripService: TripService,
+              private deviceService: DeviceService,
               private activatedRoute: ActivatedRoute,
               private messageService: MessageService) {
   }
@@ -30,28 +28,24 @@ export class ManageTripsComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.deviceId = +params['deviceId'];
     });
-    this.getEndedTrip();
+    this.getEndedTrips();
   }
 
-  getEndedTrip() {
-    this.http.get(environment.baseUrl + `devices/${this.deviceId}/endedTrips`).subscribe(
-      (resp) => {
-        resp.json().forEach(trip => {
+  getEndedTrips() {
+    this.deviceService.getEndedTrips(this.deviceId)
+    .finally(() => this.displayTrips = true)
+    .subscribe(
+      data => {
+        data.forEach(trip => {
           this.endedTrips.push({
-            'tripId': trip.id,
-            'deviceId': trip.device.id,
+            'id': trip.id,
+            'device': trip.device,
             'description': trip.description,
             'startTime': new Date(trip.startTime),
             'endTime': new Date(trip.endTime)
           });
         });
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error.json().message
-      }),
-      () => this.display = true
+      }
     );
   }
 
@@ -64,37 +58,25 @@ export class ManageTripsComponent implements OnInit {
   }
 
   deleteTrip(trip) {
-    this.http.delete(environment.baseUrl + `trips/${trip.tripId}/deleteTrip`).subscribe(
-      () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: `trip ${trip.tripId} has been deleted`
-        });
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error.json().message
-      }),
+    this.tripService.deleteTrip(trip.id)
+    .finally(
       () => {
         const index = this.endedTrips.indexOf(trip);
         if (index !== -1) {
           this.endedTrips.splice(index, 1);
         }
       }
+    )
+    .subscribe(
+      data => {
+        this.messageService.add({
+          severity: 'success',
+          summary: `trip has been deleted`
+        });
+      }
     );
   }
-
   dateToLocalString(date) {
     return date.toLocaleString();
   }
-
-}
-
-export interface Trip {
-  tripId: number;
-  deviceId: number;
-  description: string;
-  startTime: Date;
-  endTime: Date;
 }

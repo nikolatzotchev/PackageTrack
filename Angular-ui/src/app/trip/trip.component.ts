@@ -1,11 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {
-  Http, Request, RequestOptionsArgs, RequestOptions,
-  Response, Headers, ConnectionBackend, XHRBackend, JSONPBackend
-} from '@angular/http';
-import {environment} from '../../environments/environment';
 import {ActivatedRoute} from '@angular/router';
+import {TripService, Trip} from '../services/trip/trip.service';
+import {DeviceService} from '../services/device/device.service';
 
 @Component({
   selector: 'app-trip',
@@ -20,28 +17,23 @@ export class TripComponent implements OnInit {
 
 
   constructor(private messageService: MessageService,
-              private http: Http,
+              private tripService: TripService,
+              private deviceService: DeviceService,
               private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       const deviceId = +params['deviceId'];
-      this.http.get(environment.baseUrl + `devices/${deviceId}/currentTrip`).subscribe(
-        resp => {
+      this.deviceService.checkCurrentTrip(deviceId).subscribe(
+        data => {
           this.currentTrip = {
-            'tripId': resp.json().id,
-            'deviceId': resp.json().device.id,
-            'description': resp.json().description,
-            'startTime': new Date(resp.json().startTime)
+            'id': data.id,
+            'device': data.device,
+            'description': data.description,
+            'startTime': new Date(data.startTime),
+            'endTime': null
           };
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Request Error',
-            detail: error.json().message
-          });
         }
       );
     });
@@ -75,28 +67,8 @@ export class TripComponent implements OnInit {
   }
 
   endTrip(id) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({headers: headers});
-    this.http.post(environment.baseUrl + `trips/${id}/endTrip`, options).subscribe(
-      () => {
-      },
-      (error) => this.messageService.add({
-        severity: 'error',
-        summary: 'Request Error',
-        detail: error.json().message
-      }),
-      () => {
-        this.currentTrip = null;
-      }
+    this.tripService.endTrip(id).subscribe(
+      () => this.currentTrip = null,
     );
   }
-
-}
-
-export interface Trip {
-  tripId: number;
-  deviceId: number;
-  description: string;
-  startTime: Date;
 }

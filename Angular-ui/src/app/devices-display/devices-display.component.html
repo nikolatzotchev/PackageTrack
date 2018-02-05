@@ -32,7 +32,7 @@
 
   <p-dialog header="Add new Device" [(visible)]="displayConfirmDialogSet" [modal]="true" [dismissableMask]="true">
     <div class="ui-inputgroup">
-      <input type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="10">
+      <input (keyup.enter)="setNewDevice()" type="text" pInputText placeholder="SerialNumber" [(ngModel)]="serialNum" #input maxlength="10">
     </div>
     <div class="dialog_buttons">
       <button class="mat-typography heading" pButton type="button" (click)="setNewDevice()" label="set"></button>

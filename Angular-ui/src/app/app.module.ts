@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {HttpModule, Http} from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
@@ -9,7 +9,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-
 
 // primeng modules
 import {MessageService} from 'primeng/components/common/messageservice';
@@ -35,6 +34,7 @@ import {
   SharedModule
 } from 'primeng/primeng';
 
+// components
 import {TripComponent} from './trip/trip.component';
 import {CreateTripComponent} from './trip/create-trip/create-trip.component';
 import {ManageTripsComponent} from './trip/manage-trips/manage-trips.component';
@@ -43,6 +43,10 @@ import {DeviceInfoComponent} from './device-info/device-info.component';
 import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
 import {DeviceViewComponent} from './device-view/device-view.component';
 
+// services
+import {ErrorService} from './services/error.service';
+import {DeviceService} from './services/device/device.service';
+import {TripService} from './services/trip/trip.service';
 
 
 @NgModule({
@@ -60,9 +64,9 @@ import {DeviceViewComponent} from './device-view/device-view.component';
   imports: [
     // angular modules
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    HttpModule,
     FormsModule,
     // primeng modules
     GMapModule,
@@ -84,15 +88,14 @@ import {DeviceViewComponent} from './device-view/device-view.component';
     DataTableModule,
     SharedModule,
   ],
-  entryComponents: [
-    CreateTripComponent,
-    ManageTripsComponent,
-    TripComponent
-  ],
   providers: [
     MessageService,
+    DeviceService,
+    ErrorService,
+    TripService,
     {provide: LocationStrategy, useClass: HashLocationStrategy} // othwise nging reload doesn't work
   ],
+  schemas: [ NO_ERRORS_SCHEMA ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
