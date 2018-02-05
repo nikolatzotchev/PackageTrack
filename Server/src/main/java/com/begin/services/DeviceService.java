@@ -55,13 +55,14 @@ public class DeviceService {
     return deviceRepository.saveAndFlush(device);
   }
 
-  public void deleteDevice(Long deviceId) throws ResourceNotFoundException {
+  public Device deleteDevice(Long deviceId) throws ResourceNotFoundException {
     Device device = returnDevice(deviceId);
     List<Trip> trips = tripRepository.findByDevice(device);
     tripConfigurationRepository.deleteByTripIn(trips);
     tripRepository.deleteByDevice(device);
     reportRepository.deleteByTripIn(trips);
     deviceRepository.delete(deviceId);
+    return device;
   }
 
   public List<Trip> returnAllTrips(Long deviceId) throws ResourceNotFoundException {

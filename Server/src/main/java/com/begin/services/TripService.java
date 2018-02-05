@@ -69,10 +69,11 @@ public class TripService {
     return trip;
   }
 
-  public void deleteTrip(Long tripId) throws ResourceNotFoundException {
+  public Trip deleteTrip(Long tripId) throws ResourceNotFoundException {
     Trip trip = returnTrip(tripId);
     this.tripConfigurationRepository.deleteByTrip(trip);
     this.tripRepository.delete(trip);
+    return trip;
   }
 
   public Trip startTrip(Long tripId) throws ResourceNotFoundException {
@@ -129,11 +130,11 @@ public class TripService {
     return tripConfiguration;
   }
 
-  public void deleteConfiguration(Long tripId) {
+  public List<TripConfiguration> deleteConfiguration(Long tripId) {
     Trip trip = tripRepository.findOne(tripId);
     if (trip.getStartTime() != null) {
       throw new IllegalStateException("Cannot delete Configuration when trip is started.");
     }
-    tripConfigurationRepository.delete(tripConfigurationRepository.findByTrip(trip));
+    return tripConfigurationRepository.deleteByTrip(trip);
   }
 }
