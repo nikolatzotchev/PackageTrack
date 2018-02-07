@@ -6,13 +6,13 @@ import { catchError, retry } from 'rxjs/operators';
 
 import {ErrorService} from '../error.service';
 import {Trip} from '../trip/trip.service';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
 export class DeviceService {
 
-  constructor(private http: HttpClient,
-              private messageService: MessageService, private errorService: ErrorService) { }
+  constructor(private http: HttpClient) { }
 
   setNewDevice(serialNum: string)  {
     const httpOptions = {
@@ -21,26 +21,19 @@ export class DeviceService {
       })
     };
 
-   return this.http.post(environment.baseUrl + 'devices', serialNum, httpOptions)
+   return this.http.post<Device>(environment.baseUrl + 'devices', serialNum, httpOptions)
      .pipe(
        retry(3), // retry a failed request up to 3 times
-       catchError(this.errorService.handleError) // then handle the error
      );
   }
 
-  deleteDevice(id: Number) {
-   return this.http.delete(environment.baseUrl + `devices/${id}`)
-      .pipe(
-        catchError(this.errorService.handleError) // handle the error
-      );
+  deleteDevice(id: Number): Observable<any> {
+   return this.http.delete<Device>(environment.baseUrl + `devices/${id}`);
   }
 
   getAllDevices() {
     // get all devices
-    return this.http.get<Device[]>(environment.baseUrl + 'devices')
-      .pipe(
-        catchError(this.errorService.handleError)
-      );
+    return this.http.get<Device[]>(environment.baseUrl + 'devices');
   }
 
   checkCurrentTrip(deviceId) {
@@ -50,7 +43,7 @@ export class DeviceService {
   getDevice(deviceId) {
     return  this.http.get<Device>(environment.baseUrl + 'devices/' + `${deviceId}`)
       .pipe(
-        catchError(this.errorService.handleError)
+
       );
   }
 
@@ -58,7 +51,7 @@ export class DeviceService {
     return this.http.get<Trip[]>(environment.baseUrl + `devices/${deviceId}/endedTrips`)
       .pipe(
         retry(3),
-        catchError(this.errorService.handleError)
+
       );
   }
 }

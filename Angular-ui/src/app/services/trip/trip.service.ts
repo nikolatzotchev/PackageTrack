@@ -16,14 +16,13 @@ export class TripService {
     })
   };
 
-  constructor(private http: HttpClient,
-  private messageService: MessageService, private errorService: ErrorService) { }
+  constructor(private http: HttpClient) { }
 
   getTripReports(tripId: number) {
     return this.http.get<Report[]>(environment.baseUrl + `trips/${tripId}/reports`)
       .pipe(
         retry(3), // retry a failed request up to 3 times
-        catchError(this.errorService.handleError) // handling the error
+
       );
   }
 
@@ -31,7 +30,7 @@ export class TripService {
     return this.http.post(environment.baseUrl + `trips/${tripId}/endTrip`, this.httpOptions)
       .pipe(
         retry(3),
-        catchError(this.errorService.handleError)
+
       );
   }
 
@@ -39,15 +38,15 @@ export class TripService {
     return this.http.delete(environment.baseUrl + `trips/${tripId}/deleteTrip`)
       .pipe(
         retry(3),
-        catchError(this.errorService.handleError)
+
       );
   }
 
   createTrip(trip) {
-    return this.http.post(environment.baseUrl + 'trips', JSON.stringify(trip), this.httpOptions)
+    return this.http.post<Trip>(environment.baseUrl + 'trips', JSON.stringify(trip), this.httpOptions)
       .pipe(
         retry(3),
-        catchError(this.errorService.handleError)
+
       );
   }
 
@@ -56,7 +55,7 @@ export class TripService {
       JSON.stringify(data), this.httpOptions)
     .pipe(
       retry(3),
-      catchError(this.errorService.handleError)
+
     );
   }
 
@@ -64,7 +63,7 @@ export class TripService {
     return this.http.post(environment.baseUrl + `trips/${tripId}/startTrip`, this.httpOptions)
       .pipe(
         retry(3),
-        catchError(this.errorService.handleError)
+
       );
   }
 }
@@ -83,4 +82,3 @@ export interface Report {
   timestamp;
   incidentValues;
 }
-
