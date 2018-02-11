@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';

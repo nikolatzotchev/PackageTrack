@@ -59,7 +59,7 @@ export class DeviceViewComponent implements OnInit {
           strokeWeight: 2
         });
         this.overlays.push(tripPath);
-    })
+      })
     .subscribe(
       data => {
         this.path = [];

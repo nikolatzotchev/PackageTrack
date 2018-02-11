@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {MessageService} from 'primeng/components/common/messageservice';
 import {ActivatedRoute} from '@angular/router';
 import {TripService, Trip} from '../services/trip/trip.service';
@@ -10,7 +10,7 @@ import {DeviceService} from '../services/device/device.service';
   styleUrls: ['./trip.component.css']
 })
 export class TripComponent implements OnInit {
-  @Output() displayTrip = new EventEmitter();
+  @Output() displayTrip = new EventEmitter<number>();
   displayCreateTrip = false;
   displayManageTrips = false;
   currentTrip: Trip;

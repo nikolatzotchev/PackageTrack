@@ -40,7 +40,7 @@ public class TripController {
 
   @GetMapping(path = "/{tripId}", produces = "application/json")
   @ApiOperation(value = "Връща дадено пътуване.",
-  notes = "Намира го по дадено id")
+      notes = "Намира го по дадено id")
   public Trip getTrip(@PathVariable Long tripId) throws ResourceNotFoundException {
     return tripService.returnTrip(tripId);
   }
@@ -52,9 +52,9 @@ public class TripController {
   }
 
   @Transactional
-  @DeleteMapping(path="/{tripId}/deleteTrip")
+  @DeleteMapping(path = "/{tripId}/deleteTrip")
   @ApiOperation(value = "Изтриване на дадено пътуване.",
-  notes = "Заедно с пътуването се изтрива и конфигурацията му.")
+      notes = "Заедно с пътуването се изтрива и конфигурацията му.")
   public void deleteTrip(@PathVariable Long tripId) throws ResourceNotFoundException {
     tripService.deleteTrip(tripId);
   }
@@ -88,13 +88,13 @@ public class TripController {
   @PostMapping(path = "/{tripId}/configurations", produces = "application/json")
   @ApiOperation(value = "Създаване на нова конфигурация на дадено пътуване.")
   public TripConfiguration setConfiguration(@PathVariable Long tripId,
-     @RequestBody TripConfigurationDTO tripConfigurationDTO) throws ResourceNotFoundException {
-      return tripService.setConfiguration(tripId, tripConfigurationDTO);
+      @RequestBody TripConfigurationDTO tripConfigurationDTO) throws ResourceNotFoundException {
+    return tripService.setConfiguration(tripId, tripConfigurationDTO);
   }
 
   @DeleteMapping(path = "/{tripId}/configurations")
   @ApiOperation(value = "Премахване на конфигурация на дадено пътуване.")
-  public void deleteConfiguration(@PathVariable Long tripId){
+  public void deleteConfiguration(@PathVariable Long tripId) {
     tripService.deleteConfiguration(tripId);
   }
 }
