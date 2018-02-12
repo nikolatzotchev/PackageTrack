@@ -16,10 +16,10 @@ TinyGPSPlus gps;
 
 // The serial connection to the GPS device
 SoftwareSerial ss(RXPin, TXPin);
-
-int Sensor = 2 ;
-
-DHT dht(Sensor, DHT11);
+// dht pin 
+int dhtSensorPin = 2 ;
+//initialize dht sensor
+DHT dht(dhtSensorPin, DHT11);
 
 // not sure yet where the server will be hosted
 String url = "/api/v1/devices/reports";
@@ -35,6 +35,7 @@ void setup() {
   // mounting the filesystem
   bool result = SPIFFS.begin();
   Serial.println("SPIFFS opened: " + result);
+  // remove the file if it exists
   SPIFFS.remove("/reports.txt");
   ss.begin(GPSBaud);
   temp["metric"] = "Temperature";
