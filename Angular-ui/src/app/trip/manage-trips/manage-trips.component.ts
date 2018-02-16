@@ -54,7 +54,7 @@ export class ManageTripsComponent implements OnInit {
   }
 
   displayTrip(trip) {
-    this.notifyGmap.emit(trip.tripId);
+    this.notifyGmap.emit(trip);
   }
 
   deleteTrip(trip) {

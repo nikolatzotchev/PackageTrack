@@ -24,7 +24,7 @@ export class DeviceViewComponent implements OnInit {
   tripDescription: string;
 
   // inputs
-  @Input() deviceId: any;
+  @Input() deviceId: number;
 
   constructor(private messageService: MessageService,
               private tripService: TripService,
@@ -47,10 +47,11 @@ export class DeviceViewComponent implements OnInit {
     this.gmap = event.map;
   }
 
-  displayTrip(tripId) {
-    this.tripService.getTripReports(tripId)
+  displayTrip(trip) {
+    this.tripService.getTripReports(trip.id)
     .finally(
       () => {
+        this.tripDescription = trip.description;
         const tripPath = new google.maps.Polyline({
           path: this.path,
           geodesic: true,
@@ -64,7 +65,6 @@ export class DeviceViewComponent implements OnInit {
       data => {
         this.path = [];
         this.overlays = [];
-
         const bounds = new google.maps.LatLngBounds();
 
         data.forEach(element => {
@@ -86,7 +86,7 @@ export class DeviceViewComponent implements OnInit {
   ngOnInit() {
     this.deviceService.checkCurrentTrip(this.deviceId).subscribe(
       data => {
-        this.displayTrip(data.id);
+        this.displayTrip(data);
         this.tripDescription = data.description;
       }
     );
@@ -100,7 +100,7 @@ export class DeviceViewComponent implements OnInit {
   handleOverlayClick(event) {
     const incident = event.overlay.customInfo;
     const incidentValues = incident.incidentValues;
-    let metricContent = '';
+    let metricContent = 'Incident Values <br>';
     incidentValues.forEach(
       v => {
         metricContent = metricContent.concat(v.metric.toString())
