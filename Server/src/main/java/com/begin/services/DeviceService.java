@@ -52,7 +52,7 @@ public class DeviceService {
   public Device registerDevice(String serialNo) {
     Device device = new Device();
     device.setSerialNo(serialNo);
-    return deviceRepository.saveAndFlush(device);
+    return deviceRepository.save(device);
   }
 
   public Device deleteDevice(Long deviceId) throws ResourceNotFoundException {
