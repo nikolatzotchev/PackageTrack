@@ -92,6 +92,7 @@ public class TripService {
     trip.setEndTime(ZonedDateTime.now());
     return tripRepository.save(trip);
   }
+
   public List<Report> returnReports(Long tripId) throws ResourceNotFoundException {
     Trip trip = returnTrip(tripId);
     List<Report> reports = reportRepository.findByTripOrderByTimestamp(trip);

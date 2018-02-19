@@ -59,9 +59,11 @@ void loop() {
 }
 
 boolean checkIfStartedTrip() {
+	char path[50] = "/api/v1/devices/currentTrip/";
+	strncpy(path, serialNo, 6);
 	HTTPClient http;
-	http.begin("/api/v1/devices/currentTrip");
-	http.sendRequest("GET", serialNo);
+	http.begin(path);
+	http.sendRequest("GET");
 	String payload = http.getString();
 	Serial.println(payload);    
 	delay(1000);
