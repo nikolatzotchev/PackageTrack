@@ -56,18 +56,22 @@ void loop() {
 			if (checkIfStartedTrip() == true)
 			sendInfo();
 		}
+		delay(1000);
 	}
 }
 
 boolean checkIfStartedTrip() {
-	char path[50] = "/api/v1/devices/currentTrip/";
-	strncpy(path, serialNo, 6);
+	char path[100] = "/api/v1/devices/currentTrip/";
+	strcat(path, serialNo);
 	HTTPClient http;
 	http.begin(path);
 	http.sendRequest("GET");
 	String payload = http.getString();
 	Serial.println(payload);    
-	delay(1000);
+	if (payload == "true") {
+		return true;
+	}
+	return false;
 }
 
 
