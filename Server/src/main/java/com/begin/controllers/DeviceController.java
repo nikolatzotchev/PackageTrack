@@ -89,7 +89,7 @@ public class DeviceController {
 
   @GetMapping(path = "/currentTrip/{serialNo}")
   @ApiOperation(value = "Проверява по сериен номер дали дадено устройство има започнато пътуване.")
-  public boolean hasCurrentTrip(@RequestParam String serialNo) {
+  public boolean hasCurrentTrip(@PathVariable String serialNo) {
     return deviceService.hasCurrentTrip(serialNo);
   }
 
