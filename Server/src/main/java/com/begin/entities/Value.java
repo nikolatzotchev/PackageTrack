@@ -60,6 +60,7 @@ public class Value {
   public enum Metric {
     Temperature("C"),
     Temperature_Fahrenheit("F"),
+    Opened("Boolean"),
     Humidity("%");
 
     private String unit;
