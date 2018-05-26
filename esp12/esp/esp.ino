@@ -6,6 +6,21 @@
 #include <DHT.h>
 #include "FS.h"
 
+/*
+//display -------------------------------------------------------------------
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define OLED_RESET LED_BUILTIN
+Adafruit_SSD1306 display(OLED_RESET);
+// ---------------------------------------------------------------------------
+*/
+// photoresistor pin
+int lightPin = 0;
+
+
 //device serial number
 const char* serialNo = "0123a";
 // gps 
@@ -22,65 +37,90 @@ int dhtSensorPin = 2 ;
 DHT dht(dhtSensorPin, DHT11);
 
 // not sure yet where the server will be hosted
-String url = "/api/v1/devices/reports";
+String url = "api/v1/devices/reports";
 
-StaticJsonBuffer<500> JSONbuffer;   
-JsonObject& root = JSONbuffer.createObject(); 
-JsonArray& values = root.createNestedArray("incidentValues");
-JsonObject& temp = values.createNestedObject();
-JsonObject& humd = values.createNestedObject();
- 
+
 void setup() {
   Serial.begin(9600);
+  /*// ----------------------------------------------------------------------
+   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
+  // init done
+  display.display();
+  delay(2000);
+
+  // Clear the buffer.
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.print("No: ");
+  display.println(serialNo);
+  display.display();
+  delay(1000); */
+  // -------------------------------------------------
   // mounting the filesystem
   bool result = SPIFFS.begin();
   Serial.println("SPIFFS opened: " + result);
   // remove the file if it exists
   SPIFFS.remove("/reports.txt");
   ss.begin(GPSBaud);
-  temp["metric"] = "Temperature";
-  humd["metric"] = "Humidity";
-  dht.begin();                         
+  dht.begin();          
+  WiFi.persistent(false);
+	WiFi.mode(WIFI_OFF);   // this is a temporary line, to be removed after SDK update to 1.5.4
+	WiFi.mode(WIFI_STA);
   WiFi.begin("your ssid", "pass");    
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+	  Serial.println(WiFi.status());
+      delay(500);
     Serial.println("Waiting for connection");
   }
    Serial.println("connected");
 }
 
 void loop() {
-	while (ss.available() > 0)
-	if (gps.encode(ss.read())) { 
-		if ( gps.date.isValid() && gps.time.isValid()) { 
-			if (checkIfStartedTrip() == true)
-			sendInfo();
-		}
-		delay(1000);
-	}
+	 if (checkIfStartedTrip() == true) {
+	  sendInfo();
+	 // delay(100);
+	  Serial.println(ESP.getFreeHeap());
+
+	 }
+	delay(2000);
+	/*
+  while (ss.available() > 0)
+  if (gps.encode(ss.read())) { 
+    if ( gps.date.isValid() && gps.time.isValid()) { 
+      if (checkIfStartedTrip() == true)
+      sendInfo();
+    }
+    delay(1000);
+  }
+  */
 }
 
 boolean checkIfStartedTrip() {
-	char path[100] = "/api/v1/devices/currentTrip/";
-	strcat(path, serialNo);
-	HTTPClient http;
-	http.begin(path);
-	http.sendRequest("GET");
-	String payload = http.getString();
-	Serial.println(payload);    
-	if (payload == "true") {
-		return true;
-	}
-	return false;
+  char path[100] = "api/v1/devices/currentTrip/";
+  strcat(path, serialNo);
+  // Serial.println(path);
+  HTTPClient http;
+  http.begin(path);
+  http.sendRequest("GET");
+  String payload = http.getString();
+  http.end();
+  Serial.println(payload);    
+  if (payload == "true") {
+    return true;
+  }
+  return false;
 }
 
 
 void httpPost(JsonObject& json) {
   HTTPClient http;
   http.begin(url);
-  char JSONmessageBuffer[300];
+  char JSONmessageBuffer[750];
   json.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
   Serial.println(JSONmessageBuffer);
+  delay(2000);
   http.addHeader("Content-Type", "application/json");
   http.POST(JSONmessageBuffer);
   String payload = http.getString();
@@ -132,42 +172,91 @@ char* getDateInIso8601() {
   strcat(isoTime, "Z");
   return isoTime;
 }
-
-void sendInfo() {
-    double temperature = dht.readTemperature();
-    double humidity = dht.readHumidity();
-    temp["value"] = temperature;
-    humd["value"] = humidity;
-	root["serialNo"] = serialNo;
-    root["latitude"] = gps.location.lat();
-    root["longitude"] = gps.location.lng();
-    char isoTime[100];
-    strcpy(isoTime, getDateInIso8601());
-    root["timestamp"] = isoTime;
-    // make the post request
-    if (WiFi.status() == WL_CONNECTED) {
-    if(SPIFFS.exists("/reports.txt")) {
-        File file = SPIFFS.open("/reports.txt", "r");
-        if (file) {
-          while(file.available()) {
-      StaticJsonBuffer<500> JSONbufferForFile;   
-            JsonObject& json =  JSONbufferForFile.parseObject(file.readStringUntil('\n'));
-            httpPost(json);
-          }
-        }
-      SPIFFS.remove("/reports.txt");
-      }
-      httpPost(root);
-    } else {
-     // save locally 
-    File file = SPIFFS.open("/reports.txt", "a");
-    if (!file) {
-      Serial.println("file creation failed");
+/*
+void displayWifiStatus(char *wifiStatus) {
+	  display.setTextSize(2);
+	  Serial.println("------------------------");
+	  
+   for (int x = 0; x <= 14; x++) {
+    for (int y = 0; y < 128;y++) {
+      display.drawPixel(y,50+x, BLACK);
     }
-        root.printTo(file);
-    file.println("");
-    }
-    delay(1000); 
+      display.display();
+  } 
+  delay(500);
+  display.setCursor(0, 50);
+  display.println("wifi: ");
+  display.print(wifiStatus);
+  display.display();
+  delay(500);
 }
+*/
+void sendInfo() {
+	while (ss.available() > 0) {
+		if (gps.encode(ss.read())) { 
+			float temperature = dht.readTemperature();
+			float humidity = dht.readHumidity();
+			Serial.println(temperature);
+			if (!isnan(temperature) || !isnan(humidity) && gps.date.isValid() && gps.time.isValid()) { 
+				Serial.println(ESP.getFreeHeap());
+				StaticJsonBuffer<750> JSONbuffer;   
+				JsonObject& root = JSONbuffer.createObject(); 
+				JsonArray& values = root.createNestedArray("incidentValues");
+				JsonObject& temp = values.createNestedObject();
+				JsonObject& humd = values.createNestedObject();
+				temp["metric"] = "Temperature";
+				humd["metric"] = "Humidity";
+				if (analogRead(lightPin) > 100) {
+					JsonObject& opened = values.createNestedObject();
+					opened["metric"] = "Opened";
+					opened["value"] = 1;
+				}
+				temp["value"] = temperature;
+				humd["value"] = humidity;
+				root["serialNo"] = serialNo;
+				root["latitude"] = gps.location.lat();
+				root["longitude"] = gps.location.lng();
+				char isoTime[100];
+				strcpy(isoTime, getDateInIso8601());
+				Serial.println(isoTime);
+				root["timestamp"] = isoTime;
+				// make the post request
+				if (WiFi.status() == WL_CONNECTED) {
+					// return when there is no trip
+					if (checkIfStartedTrip() == false) {
+						return;
+					}
+				//  displayWifiStatus("on");
+				  if(SPIFFS.exists("/reports.txt")) {
+					  File file = SPIFFS.open("/reports.txt", "r");
+					  if (file) {
+						while(file.available()) {
+					      StaticJsonBuffer<500> JSONbufferForFile;   
+						  JsonObject& json =  JSONbufferForFile.parseObject(file.readStringUntil('\n'));
+						  httpPost(json);
+						}
+					  }
+					SPIFFS.remove("/reports.txt");
+				  }
+				  httpPost(root);
+				} else {
+				 // save locally
+				// displayWifiStatus("off"); 
+				File file = SPIFFS.open("/reports.txt", "a");
+				if (!file) {
+				  Serial.println("file creation failed");
+				}
+					root.printTo(file);
+				    file.println("");
+				}
+				delay(1000); 
+			}
+			delay(1000);
+		}
+	}
+}
+
+
+
 
 
