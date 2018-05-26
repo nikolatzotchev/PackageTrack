@@ -68,7 +68,7 @@ void setup() {
   WiFi.persistent(false);
 	WiFi.mode(WIFI_OFF);   // this is a temporary line, to be removed after SDK update to 1.5.4
 	WiFi.mode(WIFI_STA);
-  WiFi.begin("your ssid", "pass");    
+  WiFi.begin("yourssid", "yourpass");    
   while (WiFi.status() != WL_CONNECTED) {
 	  Serial.println(WiFi.status());
       delay(500);
@@ -82,9 +82,8 @@ void loop() {
 	  sendInfo();
 	 // delay(100);
 	  Serial.println(ESP.getFreeHeap());
-
 	 }
-	delay(2000);
+	 delay(200);
 	/*
   while (ss.available() > 0)
   if (gps.encode(ss.read())) { 
@@ -106,7 +105,6 @@ boolean checkIfStartedTrip() {
   http.sendRequest("GET");
   String payload = http.getString();
   http.end();
-  Serial.println(payload);    
   if (payload == "true") {
     return true;
   }
@@ -192,14 +190,16 @@ void displayWifiStatus(char *wifiStatus) {
 }
 */
 void sendInfo() {
+	while(true)
 	while (ss.available() > 0) {
 		if (gps.encode(ss.read())) { 
-			float temperature = dht.readTemperature();
-			float humidity = dht.readHumidity();
-			Serial.println(temperature);
-			if (!isnan(temperature) || !isnan(humidity) && gps.date.isValid() && gps.time.isValid()) { 
-				Serial.println(ESP.getFreeHeap());
-				StaticJsonBuffer<750> JSONbuffer;   
+			 float temperature = dht.readTemperature();
+			 float humidity = dht.readHumidity();
+			// Serial.println(temperature);
+			 if (!isnan(temperature) || !isnan(humidity) && gps.date.isValid() 
+				 && gps.time.isValid() && gps.location.isValid() && gps.location.isUpdated()) { 
+			//if (gps.date.isValid() && gps.time.isValid() && gps.location.isValid() && gps.location.isUpdated()) { 
+			 	StaticJsonBuffer<750> JSONbuffer;   
 				JsonObject& root = JSONbuffer.createObject(); 
 				JsonArray& values = root.createNestedArray("incidentValues");
 				JsonObject& temp = values.createNestedObject();
@@ -249,14 +249,12 @@ void sendInfo() {
 					root.printTo(file);
 				    file.println("");
 				}
-				delay(1000); 
+				delay(10000); 
 			}
 			delay(1000);
 		}
 	}
 }
-
-
 
 
 
