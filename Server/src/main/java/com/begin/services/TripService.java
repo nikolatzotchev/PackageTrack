@@ -72,6 +72,7 @@ public class TripService {
   public Trip deleteTrip(Long tripId) throws ResourceNotFoundException {
     Trip trip = returnTrip(tripId);
     this.tripConfigurationRepository.deleteByTrip(trip);
+    this.reportRepository.deleteByTrip(trip);
     this.tripRepository.delete(trip);
     return trip;
   }
