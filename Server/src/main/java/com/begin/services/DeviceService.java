@@ -133,6 +133,9 @@ public class DeviceService {
 
   private boolean checkIfIncident(Value value, Trip trip) {
     Metric metric = value.getMetric();
+    if(metric == Metric.Opened) {
+      return true;
+    }
     TripConfiguration tripConfiguration = tripConfigurationRepository
         .findByTripAndMetric(trip, metric);
     //check if the value is in the range of valid values
