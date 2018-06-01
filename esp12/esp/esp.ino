@@ -64,11 +64,12 @@ void setup() {
   // remove the file if it exists
   SPIFFS.remove("/reports.txt");
   ss.begin(GPSBaud);
-  dht.begin();          
+  dht.begin();     
+  delay(200);
   WiFi.persistent(false);
 	WiFi.mode(WIFI_OFF);   // this is a temporary line, to be removed after SDK update to 1.5.4
 	WiFi.mode(WIFI_STA);
-  WiFi.begin("yourssid", "yourpass");    
+  WiFi.begin("yourssid", "yourpass"); 
   while (WiFi.status() != WL_CONNECTED) {
 	  Serial.println(WiFi.status());
       delay(500);
@@ -190,14 +191,13 @@ void displayWifiStatus(char *wifiStatus) {
 }
 */
 void sendInfo() {
-	while(true)
-	while (ss.available() > 0) {
+	while(true) {
+  while (ss.available() > 0) {
 		if (gps.encode(ss.read())) { 
-			 float temperature = dht.readTemperature();
-			 float humidity = dht.readHumidity();
-			// Serial.println(temperature);
-			 if (!isnan(temperature) || !isnan(humidity) && gps.date.isValid() 
-				 && gps.time.isValid() && gps.location.isValid() && gps.location.isUpdated()) { 
+			float temperature = dht.readTemperature();
+			float humidity = dht.readHumidity();
+			if (!isnan(temperature) && !isnan(humidity) && gps.date.isValid() 
+				&& gps.time.isValid() && gps.location.isValid() && gps.location.isUpdated()) { 
 			//if (gps.date.isValid() && gps.time.isValid() && gps.location.isValid() && gps.location.isUpdated()) { 
 			 	StaticJsonBuffer<750> JSONbuffer;   
 				JsonObject& root = JSONbuffer.createObject(); 
@@ -231,7 +231,7 @@ void sendInfo() {
 					  File file = SPIFFS.open("/reports.txt", "r");
 					  if (file) {
 						while(file.available()) {
-					      StaticJsonBuffer<500> JSONbufferForFile;   
+					     StaticJsonBuffer<500> JSONbufferForFile;   
 						  JsonObject& json =  JSONbufferForFile.parseObject(file.readStringUntil('\n'));
 						  httpPost(json);
 						}
@@ -251,10 +251,9 @@ void sendInfo() {
 				}
 				delay(10000); 
 			}
-			delay(1000);
 		}
+		yield();
 	}
+	yield();
+  }
 }
-
-
-
